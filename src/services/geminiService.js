@@ -2,7 +2,7 @@ import { GEMINI_CHAPTER_RESPONSE_SCHEMA } from '../types/schema';
 import { getPriorityLearningWords } from './storageService';
 
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent';
 
 const DIFFICULTY_INSTRUCTIONS = {
   simplify: {
@@ -439,49 +439,81 @@ export function generateOfflineBonusChapter(
     targetChapterNumber || (profile.chapters?.length || 0) + 1;
   const langBank = BONUS_SCENE_BANK[profile.id] || [];
   const baseChapters = profile.chapters || [];
+  const existingTitles = new Set(
+    baseChapters.map((c) => (c.chapterTitle || '').toLowerCase())
+  );
 
   offlineRegenerateCounter += 1;
 
-  if (langBank.length > 0) {
-    let pickedIdx = offlineRegenerateCounter % langBank.length;
-    let pickedScene = langBank[pickedIdx];
-    if (
-      langBank.length > 1 &&
-      currentChapter?.chapterTitle &&
-      currentChapter.chapterTitle.includes(pickedScene.title)
-    ) {
-      pickedIdx = (offlineRegenerateCounter + 1) % langBank.length;
-      pickedScene = langBank[pickedIdx];
-    }
+  // 1. First pick any unused bonus scene from BONUS_SCENE_BANK
+  const unusedBonusIdx = langBank.findIndex(
+    (scene) =>
+      !Array.from(existingTitles).some((t) =>
+        t.includes(scene.title.toLowerCase())
+      ) &&
+      (!currentChapter?.chapterTitle ||
+        !currentChapter.chapterTitle.includes(scene.title))
+  );
+
+  if (unusedBonusIdx !== -1) {
+    const pickedScene = langBank[unusedBonusIdx];
+    const extraSentences = CHALLENGE_EXTENSION_BANK[profile.id] || [];
+    const combinedSentences =
+      pickedScene.sentences.length < 6 && extraSentences.length > 0
+        ? [...pickedScene.sentences, ...extraSentences]
+        : pickedScene.sentences;
 
     return {
       id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
-      preRenderedAudioId: `${profile.id}-bonus-${pickedIdx}`,
+      preRenderedAudioId: `${profile.id}-bonus-${unusedBonusIdx}`,
       chapterNumber: chapterNum,
       difficultyLabel: `${profile.cefrLevel} • Fresh Story & Vocabulary`,
       chapterTitle: `Chapter ${chapterNum} : ${pickedScene.title}`,
       updatedArcSummary: pickedScene.summary,
       recycledWordsUsed: pickedScene.recycled,
-      sentences: structuredClone(pickedScene.sentences),
+      sentences: structuredClone(combinedSentences),
     };
   }
 
-  // Fallback alternate story from other chapters if offline without Gemini key
-  const otherChapters = baseChapters.filter((c) => c.id !== currentChapter?.id);
-  const pool = otherChapters.length > 0 ? otherChapters : baseChapters;
-  const sourceChapter = pool[offlineRegenerateCounter % pool.length];
-  const rawTitle = (sourceChapter.chapterTitle || '').replace(
-    /^(Chapter|Chapitre|Capitolo|Capítulo|제\d+장|第\d+章|บทที่\s*\d+)\s*\d*\s*[:：]?\s*/i,
-    ''
+  // 2. If all built-in bonus scenes have been used, recombine distinct story sentences + extension scenes
+  //    into a unique progressive episode so it never duplicates the previous chapter verbatim!
+  const allSentencesPool = [];
+  langBank.forEach((scene) => {
+    (scene.sentences || []).forEach((s) => allSentencesPool.push(s));
+  });
+  (CHALLENGE_EXTENSION_BANK[profile.id] || []).forEach((s) =>
+    allSentencesPool.push(s)
   );
+  baseChapters.forEach((ch) => {
+    if (ch.id !== currentChapter?.id) {
+      (ch.sentences || []).forEach((s) => allSentencesPool.push(s));
+    }
+  });
+
+  const episodeOffset = (chapterNum * 3 + offlineRegenerateCounter * 2) % Math.max(1, allSentencesPool.length);
+  const pickedSentences = [];
+  for (let i = 0; i < Math.min(7, allSentencesPool.length); i++) {
+    const candidate = allSentencesPool[(episodeOffset + i * 2) % allSentencesPool.length];
+    if (!pickedSentences.some((p) => p.fullSentence === candidate.fullSentence)) {
+      pickedSentences.push(structuredClone(candidate));
+    }
+  }
+
+  const episodeTitles = {
+    fr: `Nouvelle Piste à Paris — Épisode ${chapterNum} (New Clue in Paris — Episode ${chapterNum})`,
+    it: `Nuovo Indizio in Città — Episodio ${chapterNum} (New Clue in Town — Episode ${chapterNum})`,
+    ja: `第${chapterNum}章：新たな手掛かり (New Clue — Episode ${chapterNum})`,
+    es: `Nueva Pista en la Costa — Episodio ${chapterNum} (New Clue on the Coast — Episode ${chapterNum})`,
+  };
 
   return {
-    ...structuredClone(sourceChapter),
     id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
-    preRenderedAudioId: sourceChapter.preRenderedAudioId || sourceChapter.id,
     chapterNumber: chapterNum,
-    difficultyLabel: `${profile.cefrLevel} • Fresh Story & Vocabulary`,
-    chapterTitle: `Chapter ${chapterNum} : ${rawTitle}`,
+    difficultyLabel: `${profile.cefrLevel} • Episode ${chapterNum}`,
+    chapterTitle: `Chapter ${chapterNum} : ${episodeTitles[profile.id] || `Episode ${chapterNum}`}`,
+    updatedArcSummary: `${profile.storyArcSummary} In Chapter ${chapterNum}, new clues and conversations deepen the investigation.`,
+    recycledWordsUsed: (profile.vocabBank || []).slice(0, 4).map((w) => w.baseForm),
+    sentences: pickedSentences,
   };
 }
 
@@ -562,30 +594,53 @@ ENGLISH TRANSLATION & GRAMMAR NOTE RULES:
 - Every sentence MUST include "englishTranslation" with a clear, natural English translation of the full sentence.
 - Every sentence MUST include a "grammarNote" consisting of a single, plain-English sentence explaining the core recurring sentence pattern used in that sentence, avoiding dense academic jargon.
 
-CHAPTER LENGTH:
-- Write 8 to 9 cohesive, character-and-dialogue-driven sentences with fresh, practical vocabulary that advance the plot naturally.`;
+CHAPTER LENGTH & LEARNING MODULE:
+- Write 8 to 9 cohesive, character-and-dialogue-driven sentences with fresh, practical vocabulary that advance the plot naturally.
+- In "recapModule", generate a complete Chapter Consolidation & Transfer Lab tailored to this chapter:
+  1. "subtitle": brief summary of the grammar and lexical focus of this chapter.
+  2. "vocabReuses": 3 key expressions from this chapter, showing "storyContext" (the sentence from the story) and "newPhrase" + "english" (a brand-new everyday sentence transferring that expression into a fresh real-life context).
+  3. "construction": 1 core grammatical pattern from this chapter ("patternName", plain-English "explanation", 3-4 chip "formula", and 3 fresh "examples" each with "target", "english", and "highlight").`;
 
-  const response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: systemPrompt }],
-        },
-      ],
-      generationConfig: {
-        responseMimeType: 'application/json',
-        responseSchema: GEMINI_CHAPTER_RESPONSE_SCHEMA,
-        temperature: 0.75,
+  const requestBody = JSON.stringify({
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: systemPrompt }],
       },
-    }),
+    ],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: GEMINI_CHAPTER_RESPONSE_SCHEMA,
+      temperature: 0.75,
+    },
   });
 
+  let response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: requestBody,
+  });
+
+  // Automatic retry if Gemini 3.8 Flash returns a temporary 503 high-demand spike
+  if (response.status === 503 || response.status === 429) {
+    await new Promise((r) => setTimeout(r, 1500));
+    response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody,
+    });
+  }
+
   if (!response.ok) {
+    // Graceful fallback to offline procedural generator if API is temporarily unavailable
+    if (response.status === 503) {
+      return generateOfflineBonusChapter(
+        profile,
+        adjustment,
+        nextChapterNumber,
+        currentChapter
+      );
+    }
     let errorDetail = `HTTP ${response.status}`;
     try {
       const errJson = await response.json();
@@ -623,6 +678,7 @@ CHAPTER LENGTH:
     recycledWordsUsed: Array.isArray(parsedChapter.recycledWordsUsed)
       ? parsedChapter.recycledWordsUsed
       : [],
+    recapModule: parsedChapter.recapModule || null,
     sentences: parsedChapter.sentences.map((s) => ({
       fullSentence: s.fullSentence || '',
       englishTranslation: s.englishTranslation || '',

@@ -5229,56 +5229,250 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
   return buildDynamicFallbackExercises(chapter, seedBase);
 }
 
+function buildDynamicRecapMetadata(chapter) {
+  if (chapter?.recapModule?.vocabReuses?.length && chapter?.recapModule?.construction) {
+    return chapter.recapModule;
+  }
+
+  const sentences = chapter?.sentences || [];
+  const vocabReuses = [];
+  const seenBase = new Set();
+
+  for (const s of sentences) {
+    if (vocabReuses.length >= 3) break;
+    const rawTarget = s.fullSentence || '';
+    const rawEn = s.englishTranslation || '';
+    const cleanTarget = anonymizeCharacterNames(rawTarget, 'target');
+    const cleanEn = anonymizeCharacterNames(rawEn, 'en');
+    const validToks = (s.tokens || []).filter(
+      (t) =>
+        t?.surface &&
+        t.surface.replace(/[.,!?;:«»"“”「」『』]/g, '').length >= 3 &&
+        !isProperNounOrNonLexicalToken(t) &&
+        t.contextualMeaning
+    );
+    const chosen = validToks.find((t) => !seenBase.has((t.baseForm || t.surface).toLowerCase()));
+    if (chosen) {
+      const cleanWord = (chosen.baseForm || chosen.surface).replace(/[.,!?;:«»"“”「」『』]/g, '');
+      seenBase.add(cleanWord.toLowerCase());
+      vocabReuses.push({
+        word: `${cleanWord} (${chosen.contextualMeaning})`,
+        storyContext: rawTarget,
+        newPhrase: cleanTarget,
+        english: cleanEn,
+      });
+    }
+  }
+
+  const firstWithGrammar = sentences.find((s) => s.grammarNote) || sentences[0] || {};
+  const examples = sentences.slice(0, 3).map((s) => {
+    const cleanTarget = anonymizeCharacterNames(s.fullSentence || '', 'target');
+    const cleanEn = anonymizeCharacterNames(s.englishTranslation || '', 'en');
+    const tok = (s.tokens || []).find(
+      (t) => t?.surface && t.surface.length >= 3 && !isProperNounOrNonLexicalToken(t)
+    );
+    const highlight = tok ? tok.surface.replace(/[.,!?;:«»"“”「」『』]/g, '') : '';
+    return {
+      target: cleanTarget,
+      english: cleanEn,
+      highlight,
+    };
+  });
+
+  return {
+    subtitle:
+      chapter?.recycledWordsUsed?.length > 0
+        ? `Contextual Transfer & Active Recall: ${chapter.recycledWordsUsed.join(', ')}`
+        : 'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall',
+    vocabReuses,
+    construction: {
+      patternName: `Chapter ${chapter?.chapterNumber || ''} Core Sentence Pattern`,
+      explanation:
+        firstWithGrammar.grammarNote ||
+        'Notice how these building blocks combine to express actions, dialogue, and context naturally.',
+      formula: ['Context / Subject', 'Core Verb Phrase', 'Complement / Detail'],
+      examples,
+    },
+  };
+}
+
 function buildDynamicFallbackExercises(chapter, seedBase) {
   const sentences = chapter?.sentences || [];
+  if (sentences.length === 0) return [];
+
   const allLexicalTokens = [];
   sentences.forEach((s) => {
     (s.tokens || []).forEach((tok) => {
+      const cleanedSurface = (tok?.surface || '').replace(/[.,!?;:«»"“”「」『』]/g, '').trim();
       if (
-        tok?.surface &&
-        tok.surface.length >= 2 &&
+        cleanedSurface.length >= 2 &&
         !isProperNounOrNonLexicalToken(tok) &&
         tok.contextualMeaning
       ) {
-        allLexicalTokens.push(tok);
+        allLexicalTokens.push({ ...tok, cleanSurface: cleanedSurface });
       }
     });
   });
 
-  const exercises = [];
-  sentences.forEach((s, idx) => {
-    const rawTarget = s.fullSentence || s.target || '';
-    const rawEn = s.englishTranslation || s.english || '';
-    const cleanTarget = anonymizeCharacterNames(rawTarget, 'target');
-    const cleanEn = anonymizeCharacterNames(rawEn, 'en');
-    const validTokens = (s.tokens || []).filter(
-      (tok) => tok?.surface && tok.surface.length >= 2 && !isProperNounOrNonLexicalToken(tok)
-    );
-    if (validTokens.length >= 3) {
-      const targetTok = validTokens[Math.floor(validTokens.length / 2)];
-      const answer = targetTok.surface;
+  const cleanSentences = sentences.map((s) => {
+    const target = anonymizeCharacterNames(s.fullSentence || '', 'target');
+    const en = anonymizeCharacterNames(s.englishTranslation || '', 'en');
+    const validTokens = (s.tokens || [])
+      .map((t) => ({
+        ...t,
+        cleanSurface: (t?.surface || '').replace(/[.,!?;:«»"“”「」『』]/g, '').trim(),
+      }))
+      .filter((t) => t.cleanSurface.length >= 2 && !isProperNounOrNonLexicalToken(t));
+    return {
+      ...s,
+      cleanTarget: target,
+      cleanEn: en,
+      validTokens,
+    };
+  });
+
+  const clozeList = [];
+  const dialogueList = [];
+  const audioList = [];
+  const grammarList = [];
+  const orderList = [];
+
+  for (let i = 0; i < 6; i++) {
+    const s = cleanSentences[i % cleanSentences.length];
+    const nextS = cleanSentences[(i + 1) % cleanSentences.length];
+
+    // 1. Cloze
+    const tokIdx = s.validTokens.length > 0 ? (i + Math.floor(s.validTokens.length / 2)) % s.validTokens.length : -1;
+    const targetTok = tokIdx >= 0 ? s.validTokens[tokIdx] : null;
+    if (targetTok && s.cleanTarget.includes(targetTok.cleanSurface)) {
+      const answer = targetTok.cleanSurface;
       const distractors = allLexicalTokens
-        .map((t) => t.surface)
-        .filter((w, i, self) => w.toLowerCase() !== answer.toLowerCase() && self.indexOf(w) === i)
-        .slice(idx, idx + 3);
-      while (distractors.length < 3) distractors.push(`mot-${distractors.length + 1}`);
-      const parts = cleanTarget.split(answer);
-      if (parts.length >= 2) {
-        exercises.push({
-          id: `dyn-cloze-${idx}`,
-          type: 'cloze',
-          badgeLabel: 'Context Transfer (Cloze)',
-          promptEnglish: cleanEn,
-          sentenceParts: [parts[0], parts.slice(1).join(answer)],
-          correctAnswer: answer,
-          options: deterministicShuffle([answer, ...distractors.slice(0, 3)], seedBase + idx),
-          fullSentence: cleanTarget,
-          explanation: `« ${answer} » means '${targetTok.contextualMeaning || ''}'.`
-        });
+        .map((t) => t.cleanSurface)
+        .filter((w, idx, self) => w.toLowerCase() !== answer.toLowerCase() && self.indexOf(w) === idx);
+      while (distractors.length < 3) distractors.push(`option-${distractors.length + 1}`);
+      const pickedDistractors = deterministicShuffle(distractors, seedBase + i * 7).slice(0, 3);
+      const splitIdx = s.cleanTarget.indexOf(answer);
+      const before = s.cleanTarget.slice(0, splitIdx);
+      const after = s.cleanTarget.slice(splitIdx + answer.length);
+      clozeList.push({
+        id: `dyn-cloze-${i}`,
+        type: 'cloze',
+        badgeLabel: 'Context Transfer (Cloze)',
+        promptEnglish: s.cleanEn,
+        sentenceParts: [before, after],
+        correctAnswer: answer,
+        options: deterministicShuffle([answer, ...pickedDistractors], seedBase + i * 11 + 1),
+        fullSentence: s.cleanTarget,
+        explanation: `« ${answer} » (${targetTok.baseForm || answer}) means "${targetTok.contextualMeaning || ''}" in this context.`,
+      });
+    }
+
+    // 2. Pragmatic Mini-Dialogue
+    const otherAnswers = cleanSentences
+      .filter((_, idx) => idx !== (i + 1) % cleanSentences.length)
+      .map((item) => item.cleanTarget);
+    while (otherAnswers.length < 3) otherAnswers.push(s.cleanTarget);
+    dialogueList.push({
+      id: `dyn-dialogue-${i}`,
+      type: 'dialogue',
+      badgeLabel: 'Pragmatic Mini-Dialogue',
+      speakerA: s.cleanTarget,
+      speakerAEnglish: s.cleanEn,
+      promptEnglish: `Continue the scene by expressing: "${nextS.cleanEn}"`,
+      correctAnswer: nextS.cleanTarget,
+      options: deterministicShuffle(
+        [nextS.cleanTarget, ...otherAnswers.slice(0, 3)],
+        seedBase + i * 13 + 2
+      ),
+      fullSentence: nextS.cleanTarget,
+      explanation: nextS.grammarNote || `Matches the meaning: "${nextS.cleanEn}".`,
+    });
+
+    // 3. Blind Audio Decoding
+    const audioS = cleanSentences[(i + 2) % cleanSentences.length];
+    const otherEnglish = cleanSentences
+      .filter((_, idx) => idx !== (i + 2) % cleanSentences.length)
+      .map((item) => item.cleanEn);
+    while (otherEnglish.length < 3) otherEnglish.push(s.cleanEn);
+    audioList.push({
+      id: `dyn-audio-${i}`,
+      type: 'audio_comprehension',
+      badgeLabel: 'Blind Audio Decoding',
+      promptEnglish: 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
+      audioSentence: audioS.cleanTarget,
+      correctAnswer: audioS.cleanEn,
+      options: deterministicShuffle(
+        [audioS.cleanEn, ...otherEnglish.slice(0, 3)],
+        seedBase + i * 17 + 3
+      ),
+      fullSentence: audioS.cleanTarget,
+      explanation: `« ${audioS.cleanTarget} » means "${audioS.cleanEn}".`,
+    });
+
+    // 4. Form-Focused Pattern Check
+    const gramS = cleanSentences[(i + 3) % cleanSentences.length];
+    const gramDistractors = cleanSentences
+      .filter((_, idx) => idx !== (i + 3) % cleanSentences.length)
+      .map((item) => item.cleanTarget);
+    while (gramDistractors.length < 3) gramDistractors.push(s.cleanTarget);
+    grammarList.push({
+      id: `dyn-grammar-${i}`,
+      type: 'grammar_contrast',
+      badgeLabel: 'Form-Focused Pattern Check',
+      promptEnglish: `Which sentence accurately expresses: "${gramS.cleanEn}"?`,
+      correctAnswer: gramS.cleanTarget,
+      options: deterministicShuffle(
+        [gramS.cleanTarget, ...gramDistractors.slice(0, 3)],
+        seedBase + i * 19 + 4
+      ),
+      fullSentence: gramS.cleanTarget,
+      explanation: gramS.grammarNote || `Correct structure for "${gramS.cleanEn}".`,
+    });
+
+    // 5. Interactive Sentence Assembly
+    const ordS = cleanSentences[(i + 4) % cleanSentences.length];
+    const words = ordS.cleanTarget.split(/\s+/).filter(Boolean);
+    const chunks = [];
+    if (words.length >= 4) {
+      const chunkSize = Math.max(1, Math.ceil(words.length / 4));
+      for (let c = 0; c < words.length; c += chunkSize) {
+        chunks.push(words.slice(c, c + chunkSize).join(' '));
+      }
+    } else {
+      const surfaceToks = (ordS.tokens || []).map((t) => t.surface).filter(Boolean);
+      const step = Math.max(1, Math.ceil(surfaceToks.length / 4));
+      for (let c = 0; c < surfaceToks.length; c += step) {
+        chunks.push(surfaceToks.slice(c, c + step).join(''));
       }
     }
-  });
-  return exercises;
+    if (chunks.length >= 2) {
+      let shuffled = deterministicShuffle(chunks, seedBase + i * 23 + 5);
+      if (shuffled.every((c, idx) => c === chunks[idx])) {
+        shuffled = [shuffled[1], shuffled[0], ...shuffled.slice(2)];
+      }
+      orderList.push({
+        id: `dyn-order-${i}`,
+        type: 'sentence_order',
+        badgeLabel: 'Interactive Sentence Assembly',
+        promptEnglish: ordS.cleanEn,
+        correctChunks: chunks,
+        shuffledChunks: shuffled,
+        correctAnswer: chunks.join(' '),
+        fullSentence: ordS.cleanTarget,
+        explanation: ordS.grammarNote || `Full sentence: « ${ordS.cleanTarget} »`,
+      });
+    }
+  }
+
+  const interleaved = [];
+  for (let round = 0; round < 6; round++) {
+    if (clozeList[round]) interleaved.push(clozeList[round]);
+    if (dialogueList[round]) interleaved.push(dialogueList[round]);
+    if (audioList[round]) interleaved.push(audioList[round]);
+    if (grammarList[round]) interleaved.push(grammarList[round]);
+    if (orderList[round]) interleaved.push(orderList[round]);
+  }
+  return interleaved;
 }
 
 export default function ChapterRecapSection({
@@ -5299,7 +5493,10 @@ export default function ChapterRecapSection({
   const bcp47 = profile?.bcp47 || 'fr-FR';
   const chapterNum = chapter?.chapterNumber || chapter?.number || (chapterIndex ?? 0) + 1;
   const langBank = COURSE_RECAP_BANK[languageCode] || {};
-  const curatedData = langBank[chapterNum];
+  const curatedData = useMemo(
+    () => langBank[chapterNum] || buildDynamicRecapMetadata(chapter),
+    [langBank, chapterNum, chapter]
+  );
 
   const hasNextChapter =
     propHasNextChapter !== undefined
@@ -5345,7 +5542,7 @@ export default function ChapterRecapSection({
     setExerciseCountMode(15);
     setFilterType('all');
     setCurrentStepIdx(0);
-  }, [languageCode, chapterNum]);
+  }, [languageCode, chapterNum, chapter?.id]);
 
   const activeExercises = useMemo(() => {
     const sliced = allExercises.slice(0, exerciseCountMode);

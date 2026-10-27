@@ -36,7 +36,7 @@ export default function TopReaderBar({
   const [showQrCode, setShowQrCode] = useState(false);
   const menuRef = useRef(null);
 
-  const mobileBaseUrl = 'http://192.168.1.62:8080/preview.html';
+  const mobileBaseUrl = 'https://tcandeu-afk.github.io/thialogue/';
   let mobileSyncUrl = mobileBaseUrl;
   try {
     if (

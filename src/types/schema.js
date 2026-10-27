@@ -154,6 +154,58 @@ export const GEMINI_CHAPTER_RESPONSE_SCHEMA = {
         required: ['fullSentence', 'englishTranslation', 'romanisation', 'grammarNote', 'tokens'],
       },
     },
+    recapModule: {
+      type: 'OBJECT',
+      description: 'Complete end-of-chapter learning consolidation & active-recall module tailored to this chapter.',
+      properties: {
+        subtitle: {
+          type: 'STRING',
+          description: 'Short summary of the key grammar & vocabulary focus of this chapter.',
+        },
+        vocabReuses: {
+          type: 'ARRAY',
+          description: '3 key words/phrases from this chapter transferred into fresh everyday sentences.',
+          items: {
+            type: 'OBJECT',
+            properties: {
+              word: { type: 'STRING', description: 'Target word/phrase with English gloss in parentheses, e.g. "la clé (the key)"' },
+              storyContext: { type: 'STRING', description: 'Exact sentence from this chapter where the word appeared.' },
+              newPhrase: { type: 'STRING', description: 'Brand-new everyday sentence in the target language using this word in a different context.' },
+              english: { type: 'STRING', description: 'English translation of newPhrase.' },
+            },
+            required: ['word', 'storyContext', 'newPhrase', 'english'],
+          },
+        },
+        construction: {
+          type: 'OBJECT',
+          description: 'Core sentence pattern blueprint from this chapter with formula and 3 highlighted examples.',
+          properties: {
+            patternName: { type: 'STRING', description: 'Clear name of the grammatical pattern.' },
+            explanation: { type: 'STRING', description: 'Plain-English 1-2 sentence explanation of how the pattern works.' },
+            formula: {
+              type: 'ARRAY',
+              description: '3 to 4 formula building block chips showing how the pattern is constructed.',
+              items: { type: 'STRING' },
+            },
+            examples: {
+              type: 'ARRAY',
+              description: '3 fresh example sentences illustrating this pattern.',
+              items: {
+                type: 'OBJECT',
+                properties: {
+                  target: { type: 'STRING', description: 'Example sentence in the target language.' },
+                  english: { type: 'STRING', description: 'English translation of the example sentence.' },
+                  highlight: { type: 'STRING', description: 'Exact substring inside target to highlight.' },
+                },
+                required: ['target', 'english', 'highlight'],
+              },
+            },
+          },
+          required: ['patternName', 'explanation', 'formula', 'examples'],
+        },
+      },
+      required: ['subtitle', 'vocabReuses', 'construction'],
+    },
   },
-  required: ['chapterTitle', 'updatedArcSummary', 'recycledWordsUsed', 'sentences'],
+  required: ['chapterTitle', 'updatedArcSummary', 'recycledWordsUsed', 'sentences', 'recapModule'],
 };
