@@ -211,14 +211,17 @@ export default function AudioPlayerBar({
       return;
     }
 
-    if (!hasElevenLabsKey) {
+    const el = htmlAudioRef.current;
+
+    // Check if we have pre-rendered static audio bundled in audio/{chapter.id}.wav
+    const preRenderedAudioUrl = chapter?.id ? `audio/${chapter.id}.wav` : null;
+
+    if (!hasElevenLabsKey && !preRenderedAudioUrl) {
       setAudioError(
         'Please add your ElevenLabs API Key in Menu → API Keys & Audio Settings to play neural narration.'
       );
       return;
     }
-
-    const el = htmlAudioRef.current;
 
     // 2. If paused mid-chapter on the same stream, resume (or seek & resume) immediately inside the gesture!
     if (
@@ -254,11 +257,20 @@ export default function AudioPlayerBar({
       if (ok) return;
     }
 
+    // 4. If no ElevenLabs API key is entered, play the bundled pre-rendered audio file!
+    if (!hasElevenLabsKey && preRenderedAudioUrl) {
+      const ok = await playUrlOnHtmlAudio(
+        preRenderedAudioUrl,
+        hasExplicitSeek ? overrideSeekRatio : null
+      );
+      if (ok) return;
+    }
+
     if (hasExplicitSeek) {
       pendingSeekRatioRef.current = overrideSeekRatio;
     }
 
-    // 4. Unlock <audio> synchronously with a 0.25s silent Blob URL
+    // 5. Unlock <audio> synchronously with a 0.25s silent Blob URL
     //    AND fetch the ElevenLabs neural MP3 directly from the browser (`https://api.elevenlabs.io/...`)!
     if (el) {
       try {
@@ -583,6 +595,17 @@ export default function AudioPlayerBar({
               </span>
             </div>
           )}
+        </div>
+      )}
+
+      {!hasElevenLabsKey && (
+        <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-[#C6D8E4] bg-[#F1F6FA] px-3 py-1.5 text-xs text-[#1E3F54]">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#234E68]" />
+            <span>
+              <strong>Pre-recorded audio ready</strong> — click <em>Play Full Chapter</em> to listen. (To use live AI voices, add your ElevenLabs API Key in <em>Menu → Settings</em>).
+            </span>
+          </div>
         </div>
       )}
 
