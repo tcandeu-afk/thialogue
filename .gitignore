@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.DS_Store
+.shared_settings.json
+generate_all_audio.py
+generate_audio.mjs

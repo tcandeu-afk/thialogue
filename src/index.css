@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F2F4F3;
+    color: #181D1B;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  /* Japanese Furigana (<ruby> / <rt>) styling */
+  ruby {
+    ruby-align: center;
+    ruby-position: over;
+    display: inline-ruby;
+    line-height: 2.35;
+  }
+
+  rt {
+    font-family: 'Inter', 'Noto Serif JP', sans-serif;
+    font-size: 0.62em;
+    font-weight: 500;
+    color: #5C6661;
+    letter-spacing: 0.02em;
+    user-select: none;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+}
+
+/* Quiet Scandinavian minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D0D7D4;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AEB8B4;
+}
