@@ -615,58 +615,69 @@ CHAPTER LENGTH & LEARNING MODULE:
     },
   });
 
-  let response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: requestBody,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  // Automatic retry if Gemini 3.8 Flash returns a temporary 503 high-demand spike
-  if (response.status === 503 || response.status === 429) {
-    await new Promise((r) => setTimeout(r, 1500));
+  let response;
+  try {
     response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
       method: 'POST',
+      signal: controller.signal,
       headers: { 'Content-Type': 'application/json' },
       body: requestBody,
     });
+  } catch {
+    clearTimeout(timeoutId);
+    return generateOfflineBonusChapter(
+      profile,
+      adjustment,
+      nextChapterNumber,
+      currentChapter
+    );
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   if (!response.ok) {
-    // Graceful fallback to offline procedural generator if API is temporarily unavailable
-    if (response.status === 503) {
-      return generateOfflineBonusChapter(
-        profile,
-        adjustment,
-        nextChapterNumber,
-        currentChapter
-      );
-    }
-    let errorDetail = `HTTP ${response.status}`;
-    try {
-      const errJson = await response.json();
-      errorDetail = errJson?.error?.message || errorDetail;
-    } catch {
-      // ignore json parse failure
-    }
-    throw new Error(`Gemini API Error: ${errorDetail}`);
+    return generateOfflineBonusChapter(
+      profile,
+      adjustment,
+      nextChapterNumber,
+      currentChapter
+    );
   }
 
   const data = await response.json();
   const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
   if (!rawText) {
-    throw new Error('Gemini returned an empty response. Please try again.');
+    return generateOfflineBonusChapter(
+      profile,
+      adjustment,
+      nextChapterNumber,
+      currentChapter
+    );
   }
 
   let parsedChapter;
   try {
     parsedChapter = JSON.parse(rawText);
-  } catch (err) {
-    throw new Error(`Failed to parse Gemini JSON output: ${err.message}`);
+  } catch {
+    return generateOfflineBonusChapter(
+      profile,
+      adjustment,
+      nextChapterNumber,
+      currentChapter
+    );
   }
 
   if (!Array.isArray(parsedChapter.sentences) || parsedChapter.sentences.length === 0) {
-    throw new Error('Generated chapter did not contain valid pre-tokenised sentences.');
+    return generateOfflineBonusChapter(
+      profile,
+      adjustment,
+      nextChapterNumber,
+      currentChapter
+    );
   }
 
   return {

@@ -258,10 +258,20 @@ export default function InteractiveReader({
                 type="button"
                 disabled={isGeneratingChapter}
                 onClick={() => onGenerateNextChapter('maintain')}
-                className="inline-flex items-center gap-1 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-2.5 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-50 cursor-pointer"
-                title="Generate next chapter with AI"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-70 cursor-pointer"
+                title="Generate next chapter"
               >
-                <span>+ Ch. {totalChapters + 1}</span>
+                {isGeneratingChapter ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
+                    <span className="text-[#EA580C]">Generating Ch. {totalChapters + 1}...</span>
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Ch. {totalChapters + 1}</span>
+                  </>
+                )}
               </button>
             )}
 
