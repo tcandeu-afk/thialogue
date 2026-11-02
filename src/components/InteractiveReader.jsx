@@ -487,10 +487,10 @@ export default function InteractiveReader({
         </div>
       )}
 
-      {/* Main Pre-Tokenised Story Body (Independent Auto-Scroll Container so Right-Hand Panels Never Move!) */}
+      {/* Main Pre-Tokenised Story Body (Independent Auto-Scroll Container with Visible Right-Edge Scrollbar) */}
       <div
         ref={storyScrollContainerRef}
-        className="max-h-[64vh] overflow-y-auto pr-2 space-y-5 scroll-smooth rounded-xl"
+        className="story-scroll-box max-h-[58vh] overflow-y-scroll pr-3 space-y-5 scroll-smooth rounded-xl border border-[#E6ECE9] bg-[#F9FBF9]/60 p-3"
       >
         {(chapter.sentences || []).map((sentence, sIdx) => {
           const isGrammarOpen = Boolean(openGrammarNotes[sIdx]);
