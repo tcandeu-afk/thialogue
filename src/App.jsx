@@ -612,7 +612,7 @@ export default function App() {
           </div>
 
           {showSidebar && (
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-4 lg:sticky lg:top-[152px] lg:max-h-[calc(100vh-168px)] lg:overflow-y-auto lg:pr-1">
               <VocabSidebar
                 profile={activeProfile}
                 chapter={currentChapter}
