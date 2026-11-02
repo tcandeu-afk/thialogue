@@ -57,6 +57,7 @@ export default function InteractiveReader({
     tokenIndex: null,
   });
   const popupCardRef = useRef(null);
+  const storyScrollContainerRef = useRef(null);
   const sentenceCardRefs = useRef({});
   const lastScrolledSentenceRef = useRef(null);
 
@@ -65,9 +66,12 @@ export default function InteractiveReader({
     stopSentenceAudio();
     setSentenceAudioState({ sentenceKey: null, status: 'idle', tokenIndex: null });
     lastScrolledSentenceRef.current = null;
+    if (storyScrollContainerRef.current) {
+      storyScrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [strictMode, chapter?.id, profile?.id]);
 
-  // Smoothly auto-scroll the active narrated sentence into comfortable view as narration progresses
+  // Smoothly auto-scroll ONLY the left-hand story container (never the whole page or right-hand panels!)
   useEffect(() => {
     let targetSentenceIdx = null;
     if (activeSpokenSentenceIdx !== null && activeSpokenSentenceIdx !== undefined) {
@@ -95,16 +99,21 @@ export default function InteractiveReader({
     if (lastScrolledSentenceRef.current === scrollKey) return;
     lastScrolledSentenceRef.current = scrollKey;
 
+    const containerEl = storyScrollContainerRef.current;
     const cardEl = sentenceCardRefs.current[targetSentenceIdx];
-    if (cardEl && typeof cardEl.getBoundingClientRect === 'function') {
-      const rect = cardEl.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      // Account for sticky top header (~145px) and bottom breathing room
-      const topSafeBoundary = 155;
-      const bottomSafeBoundary = viewportHeight - 120;
-      if (rect.top < topSafeBoundary || rect.bottom > bottomSafeBoundary) {
-        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+
+    if (containerEl && cardEl) {
+      const containerRect = containerEl.getBoundingClientRect();
+      const cardRect = cardEl.getBoundingClientRect();
+      const relativeTop = cardRect.top - containerRect.top + containerEl.scrollTop;
+      const targetScrollTop = Math.max(
+        0,
+        relativeTop - containerEl.clientHeight / 2 + cardRect.height / 2
+      );
+      containerEl.scrollTo({
+        top: targetScrollTop,
+        behavior: 'smooth',
+      });
     }
   }, [
     activeSpokenSentenceIdx,
@@ -478,8 +487,11 @@ export default function InteractiveReader({
         </div>
       )}
 
-      {/* Main Pre-Tokenised Story Body */}
-      <div className="space-y-5">
+      {/* Main Pre-Tokenised Story Body (Independent Auto-Scroll Container so Right-Hand Panels Never Move!) */}
+      <div
+        ref={storyScrollContainerRef}
+        className="max-h-[64vh] overflow-y-auto pr-2 space-y-5 scroll-smooth rounded-xl"
+      >
         {(chapter.sentences || []).map((sentence, sIdx) => {
           const isGrammarOpen = Boolean(openGrammarNotes[sIdx]);
           const sentenceKey = `${chapter.id}-${sIdx}`;

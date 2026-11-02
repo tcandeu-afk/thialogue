@@ -582,10 +582,10 @@ export default function App() {
         {/* Responsive Layout: Interactive Story Reader + Independent Sticky Dictionary & Vocab Sidebar */}
         <div
           className={`grid grid-cols-1 items-start gap-6 ${
-            showSidebar ? 'lg:grid-cols-12' : 'lg:grid-cols-1'
+            showSidebar ? 'md:grid-cols-12' : 'md:grid-cols-1'
           }`}
         >
-          <div className={showSidebar ? 'lg:col-span-8' : 'mx-auto w-full max-w-3xl'}>
+          <div className={showSidebar ? 'md:col-span-7 lg:col-span-8' : 'mx-auto w-full max-w-3xl'}>
             <InteractiveReader
               profile={activeProfile}
               chapter={currentChapter}
@@ -612,7 +612,7 @@ export default function App() {
           </div>
 
           {showSidebar && (
-            <div className="lg:col-span-4 lg:sticky lg:top-[152px] lg:max-h-[calc(100vh-168px)] lg:overflow-y-auto lg:pr-1">
+            <div className="md:col-span-5 lg:col-span-4 md:sticky md:top-[148px] self-start">
               <VocabSidebar
                 profile={activeProfile}
                 chapter={currentChapter}
