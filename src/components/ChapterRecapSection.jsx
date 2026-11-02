@@ -6810,16 +6810,41 @@ export default function ChapterRecapSection({
       ? propHasNextChapter
       : (chapterIndex ?? 0) + 1 < (totalChapters || 1);
 
+  const scrollPageAndStoryToTop = () => {
+    if (typeof window === 'undefined') return;
+    const doScroll = () => {
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+        const storyBox = document.querySelector('.story-scroll-box');
+        if (storyBox) storyBox.scrollTop = 0;
+      } catch {
+        // ignore
+      }
+    };
+    doScroll();
+    requestAnimationFrame(doScroll);
+    setTimeout(doScroll, 80);
+  };
+
   const onNextChapter =
     propNextChapter ||
     (() => {
       if (onSelectChapterIndex) {
         onSelectChapterIndex((chapterIndex ?? 0) + 1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+      scrollPageAndStoryToTop();
     });
 
-  const onGenerateChapter = propGenerateChapter || onGenerateNextChapter;
+  const onGenerateChapter =
+    propGenerateChapter ||
+    (onGenerateNextChapter
+      ? async () => {
+          await onGenerateNextChapter('maintain');
+          scrollPageAndStoryToTop();
+        }
+      : null);
 
   const onPlaySentenceAudio =
     propPlaySentenceAudio ||

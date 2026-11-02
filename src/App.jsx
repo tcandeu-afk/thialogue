@@ -145,9 +145,21 @@ export default function App() {
   };
 
   const scrollToReaderTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    if (typeof window === 'undefined') return;
+    const doScroll = () => {
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+        const storyBox = document.querySelector('.story-scroll-box');
+        if (storyBox) storyBox.scrollTop = 0;
+      } catch {
+        // ignore
+      }
+    };
+    doScroll();
+    requestAnimationFrame(doScroll);
+    setTimeout(doScroll, 80);
   };
 
   const handleSelectChapterIndex = (nextIdx) => {
@@ -158,6 +170,7 @@ export default function App() {
         activeChapterIndex: nextIdx,
       },
     }));
+    scrollToReaderTop();
   };
 
   /**
