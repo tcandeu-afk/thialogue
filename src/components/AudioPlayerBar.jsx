@@ -307,6 +307,14 @@ export default function AudioPlayerBar({
       );
     } catch (err) {
       console.warn('ElevenLabs synthesis error:', err);
+      // If ElevenLabs fails (e.g. quota or network), fall back to pre-rendered chapter WAV if available!
+      if (preRenderedAudioUrl) {
+        const fallbackOk = await playUrlOnHtmlAudio(
+          preRenderedAudioUrl,
+          hasExplicitSeek ? overrideSeekRatio : pendingSeekRatioRef.current
+        );
+        if (fallbackOk) return;
+      }
       setAudioError(err?.message || 'ElevenLabs narration failed. Please try again.');
     } finally {
       setIsGeneratingAudio(false);
