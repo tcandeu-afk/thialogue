@@ -26211,7 +26211,7 @@ function VocabSidebar({
         )}
       </div>
 
-      {/* 2. Independent Vocabulary Bank Card (Warm Ochre Learning + Pine-Sage Acquired) */}
+      {/* 2. Independent Vocabulary Bank Card */}
       <div className="rounded-2xl border border-[#E2E7E4] bg-[#FFFFFF] p-4 shadow-2xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#785420]">
@@ -26227,196 +26227,51 @@ function VocabSidebar({
           </span>
         </div>
 
-        {/* Next Chapter Priority Queue Banner with X remove buttons */}
-        {priorityNextFive.length > 0 && (
-          <div className="mt-3 rounded-xl border border-[#E6D6B8] bg-[#FBF7F0] p-2.5">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#785420]">
-              <Sparkles className="h-3.5 w-3.5 text-[#B88328]" />
-              <span>
-                {isPtBr
-                  ? `Praticar no Próximo Capítulo (${priorityNextFive.length}):`
-                  : `Queued for Next Chapter (Top ${priorityNextFive.length}):`}
-              </span>
-            </div>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {priorityNextFive.map((item, idx) => (
-                <span
-                  key={`${item.baseForm}-${idx}`}
-                  className="inline-flex items-center gap-1 rounded-md border border-[#E6D6B8] bg-[#FFFFFF] pl-2 pr-1 py-0.5 text-[11px] font-medium text-[#181D1B] shadow-2xs"
-                >
-                  <span>{item.baseForm}</span>
-                  <span className="text-[10px] font-semibold text-[#9C6F23]">
-                    ({item.exposures}/5)
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => onRemoveWord(item.baseForm)}
-                    className="ml-0.5 rounded p-0.5 text-[#87928D] transition hover:bg-red-100 hover:text-red-800"
-                    title={
-                      isPtBr
-                        ? `Remover "${item.baseForm}" do Banco de Vocabulário`
-                        : `Remove "${item.baseForm}" from queue and Vocab Bank`
-                    }
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Tabs: Learning (Warm Ochre) vs Acquired (Pine-Sage) */}
-        <div className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-[#F3F6F4] p-1">
-          <button
-            type="button"
-            onClick={() => setActiveTab('learning')}
-            className={`rounded-lg py-1.5 text-xs font-semibold transition ${
-              activeTab === 'learning'
-                ? 'bg-[#8F6523] text-white shadow-2xs'
-                : 'text-[#5C6661] hover:text-[#181D1B]'
-            }`}
-          >
-            {isPtBr
-              ? `Aprendendo (${learningWords.length})`
-              : `Learning (${learningWords.length})`}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('acquired')}
-            className={`rounded-lg py-1.5 text-xs font-semibold transition ${
-              activeTab === 'acquired'
-                ? 'bg-[#2D5A46] text-white shadow-2xs'
-                : 'text-[#5C6661] hover:text-[#181D1B]'
-            }`}
-          >
-            {isPtBr
-              ? `Aprendidas (${acquiredWords.length})`
-              : `Acquired (${acquiredWords.length})`}
-          </button>
-        </div>
-
         {/* Independent Scrollable Word List */}
-        <div className="mt-3 max-h-[260px] space-y-2 overflow-y-auto pr-1">
-          {displayedWords.length === 0 ? (
+        <div className="mt-3 max-h-[280px] space-y-2 overflow-y-auto pr-1">
+          {vocabBank.length === 0 ? (
             <div className="rounded-xl border border-dashed border-[#D5DDD9] p-5 text-center text-xs text-[#737F79]">
-              {activeTab === 'learning'
-                ? isPtBr
-                  ? 'Clique em qualquer palavra na história ou use o Dicionário acima para salvar palavras que você está aprendendo.'
-                  : 'Click any word in the story or use the Dictionary box above to save words to your Learning bank.'
-                : isPtBr
-                ? 'As palavras passam automaticamente para "Aprendidas" depois que você as encontra 5 vezes nos capítulos.'
-                : 'Words automatically graduate to Acquired once they reach 5 contextual exposures across chapters.'}
+              {isPtBr
+                ? 'Clique em qualquer palavra na história ou use o Dicionário acima para salvar palavras no seu Banco de Vocabulário.'
+                : 'Click any word in the story or use the Dictionary box above to save words to your Vocab Bank.'}
             </div>
           ) : (
-            displayedWords.map((entry, idx) => {
-              const isQueued =
-                entry.status === 'learning' && priorityBaseForms.has(entry.baseForm);
-              const progressPct = Math.min(
-                100,
-                Math.round(((entry.exposures || 0) / ACQUISITION_EXPOSURE_THRESHOLD) * 100)
-              );
-
-              return (
-                <div
-                  key={`${entry.baseForm}-${idx}`}
-                  className="rounded-xl border border-[#E6ECE9] bg-[#F9FBF9] p-2.5 transition hover:border-[#C9D6D0]"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="flex flex-wrap items-baseline gap-1.5">
-                        <span className="font-serif text-base font-bold text-[#181D1B]">
-                          {entry.word}
-                        </span>
-                        {entry.reading && (
-                          <span className="text-[11px] font-medium text-[#464E70]">
-                            [{entry.reading}]
-                          </span>
-                        )}
-                        {entry.baseForm && entry.baseForm !== entry.word && (
-                          <span className="text-[11px] text-[#737F79]">
-                            ({entry.baseForm})
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-0.5 text-xs font-medium text-[#2C3531]">
-                        {entry.contextualMeaning}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-0.5">
-                      <button
-                        type="button"
-                        onClick={() => speakSingleWord(entry.word, profile.bcp47)}
-                        className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E4EFF6] hover:text-[#234E68]"
-                        title={isPtBr ? 'Ouvir pronúncia' : `Pronounce (${profile.bcp47})`}
-                      >
-                        <Volume2 className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onToggleWordStatus(entry.baseForm)}
-                        className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E5F0EA] hover:text-[#2D5A46]"
-                        title={
-                          entry.status === 'learning'
-                            ? isPtBr
-                              ? 'Marcar como Aprendida agora'
-                              : 'Mark as Acquired now'
-                            : isPtBr
-                            ? 'Voltar para Aprendendo'
-                            : 'Move back to Learning'
-                        }
-                      >
-                        {entry.status === 'learning' ? (
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                        ) : (
-                          <RefreshCw className="h-3.5 w-3.5" />
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onRemoveWord(entry.baseForm)}
-                        className="rounded-md p-1.5 text-[#87928D] hover:bg-red-100 hover:text-red-800"
-                        title={
-                          isPtBr ? 'Remover do Banco de Vocabulário' : 'Remove from Vocab Bank'
-                        }
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
+            vocabBank.map((entry, idx) => (
+              <div
+                key={`${entry.baseForm}-${idx}`}
+                className="flex items-center justify-between gap-2 rounded-xl border border-[#E6ECE9] bg-[#F9FBF9] px-3 py-2.5 transition hover:border-[#C9D6D0]"
+              >
+                <div className="min-w-0">
+                  <div className="font-serif text-base font-bold text-[#181D1B]">
+                    {entry.word}
                   </div>
-
-                  {/* Exposure Progress Bar */}
-                  <div className="mt-2">
-                    <div className="flex items-center justify-between text-[10px] font-medium text-[#5C6661]">
-                      <span>
-                        {isPtBr ? 'Vezes vista:' : 'Exposures:'}{' '}
-                        <strong>{entry.exposures}</strong> /{' '}
-                        {ACQUISITION_EXPOSURE_THRESHOLD}
-                      </span>
-                      {isQueued && (
-                        <span className="rounded border border-[#E6D6B8] bg-[#FDF8EE] px-1.5 py-0.2 font-semibold text-[#785420]">
-                          {isPtBr ? 'Meta do Próx. Capítulo' : 'Next Chapter Target'}
-                        </span>
-                      )}
-                      {entry.status === 'acquired' && (
-                        <span className="rounded border border-[#C2DFD0] bg-[#EFF6F2] px-1.5 py-0.2 font-semibold text-[#285943]">
-                          {isPtBr ? 'Aprendida' : 'Acquired'}
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#E6ECE9]">
-                      <div
-                        className={`h-full transition-all duration-300 ${
-                          entry.status === 'acquired' ? 'bg-[#3B7A57]' : 'bg-[#C9963E]'
-                        }`}
-                        style={{ width: `${progressPct}%` }}
-                      />
-                    </div>
-                  </div>
+                  <p className="mt-0.5 text-xs font-medium text-[#2C3531]">
+                    {entry.contextualMeaning}
+                  </p>
                 </div>
-              );
-            })
+
+                <div className="flex shrink-0 items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => speakSingleWord(entry.word, profile.bcp47)}
+                    className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E4EFF6] hover:text-[#234E68] cursor-pointer"
+                    title={isPtBr ? 'Ouvir pronúncia' : `Pronounce (${profile.bcp47})`}
+                  >
+                    <Volume2 className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onRemoveWord(entry.baseForm)}
+                    className="rounded-md p-1.5 text-[#87928D] hover:bg-red-100 hover:text-red-800 cursor-pointer"
+                    title={
+                      isPtBr ? 'Remover do Banco de Vocabulário' : 'Remove from Vocab Bank'
+                    }
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </div>
       </div>
