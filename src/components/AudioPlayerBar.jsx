@@ -76,6 +76,7 @@ function getSentenceIndexAtTime(sentences = [], currentTime = 0, duration = 0) {
 export default function AudioPlayerBar({
   chapter,
   bcp47,
+  langId,
   settings,
   audioBlobUrls,
   onCacheChapterBlobUrl,
@@ -84,6 +85,7 @@ export default function AudioPlayerBar({
   activeSpokenTokenIdx,
   setActiveSpokenTokenIdx,
 }) {
+  const isPtBr = langId === 'en';
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -223,7 +225,9 @@ export default function AudioPlayerBar({
 
     if (!hasElevenLabsKey && !preRenderedAudioUrl) {
       setAudioError(
-        'Please add your ElevenLabs API Key in Menu → API Keys & Audio Settings to play neural narration.'
+        isPtBr
+          ? 'Por favor, adicione sua chave API da ElevenLabs em Menu → Configurações para ouvir a narração neural.'
+          : 'Please add your ElevenLabs API Key in Menu → API Keys & Audio Settings to play neural narration.'
       );
       return;
     }
@@ -439,18 +443,24 @@ export default function AudioPlayerBar({
             {isGeneratingAudio ? (
               <>
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                <span>Loading Audio...</span>
+                <span>{isPtBr ? 'Carregando Áudio...' : 'Loading Audio...'}</span>
               </>
             ) : isPlaying ? (
               <>
                 <Pause className="h-3.5 w-3.5" />
-                <span>Pause Narration</span>
+                <span>{isPtBr ? 'Pausar Narração' : 'Pause Narration'}</span>
               </>
             ) : (
               <>
                 <Play className="h-3.5 w-3.5 fill-current" />
                 <span>
-                  {currentTime > 0.1 ? 'Resume Narration' : 'Play Full Chapter'}
+                  {currentTime > 0.1
+                    ? isPtBr
+                      ? 'Continuar Narração'
+                      : 'Resume Narration'
+                    : isPtBr
+                    ? 'Ouvir Capítulo Inteiro'
+                    : 'Play Full Chapter'}
                 </span>
               </>
             )}
@@ -464,10 +474,10 @@ export default function AudioPlayerBar({
                 onClick={() => handleJumpToSentence(Math.max(0, currentSentenceIdx - 1))}
                 disabled={isGeneratingAudio || currentSentenceIdx <= 0}
                 className="flex items-center gap-0.5 rounded-md px-2 py-1 text-[11px] font-medium text-[#355263] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Previous sentence"
+                title={isPtBr ? 'Frase anterior' : 'Previous sentence'}
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Prev</span>
+                <span className="hidden sm:inline">{isPtBr ? 'Ant.' : 'Prev'}</span>
               </button>
 
               <button
@@ -475,10 +485,18 @@ export default function AudioPlayerBar({
                 onClick={() => handleJumpToSentence(currentSentenceIdx)}
                 disabled={isGeneratingAudio}
                 className="flex items-center gap-1 border-x border-[#E6ECEA] px-2.5 py-1 text-[11px] font-semibold text-[#234E68] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Restart current sentence from the beginning"
+                title={
+                  isPtBr
+                    ? 'Repetir a frase atual desde o início'
+                    : 'Restart current sentence from the beginning'
+                }
               >
                 <RotateCcw className="h-3 w-3" />
-                <span>Replay S{currentSentenceIdx + 1}</span>
+                <span>
+                  {isPtBr
+                    ? `Repetir F${currentSentenceIdx + 1}`
+                    : `Replay S${currentSentenceIdx + 1}`}
+                </span>
               </button>
 
               <button
@@ -492,9 +510,9 @@ export default function AudioPlayerBar({
                   isGeneratingAudio || currentSentenceIdx >= sentenceSegments.length - 1
                 }
                 className="flex items-center gap-0.5 rounded-md px-2 py-1 text-[11px] font-medium text-[#355263] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Next sentence"
+                title={isPtBr ? 'Próxima frase' : 'Next sentence'}
               >
-                <span className="hidden sm:inline">Next</span>
+                <span className="hidden sm:inline">{isPtBr ? 'Próx.' : 'Next'}</span>
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -505,10 +523,10 @@ export default function AudioPlayerBar({
               type="button"
               onClick={() => stopAllPlayback(true)}
               className="flex items-center gap-1 rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-medium text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-              title="Stop and reset to 00:00"
+              title={isPtBr ? 'Parar e voltar ao início (00:00)' : 'Stop and reset to 00:00'}
             >
               <Square className="h-3 w-3 fill-current" />
-              <span>Stop</span>
+              <span>{isPtBr ? 'Parar' : 'Stop'}</span>
             </button>
           )}
         </div>
@@ -516,28 +534,33 @@ export default function AudioPlayerBar({
         {/* Speed Selector */}
         <div className="flex flex-wrap items-center gap-1.5">
           <Volume2 className="h-4 w-4 text-[#87928D]" />
-          <span className="text-[11px] font-medium text-[#5C6661]">Speed:</span>
+          <span className="text-[11px] font-medium text-[#5C6661]">
+            {isPtBr ? 'Velocidade:' : 'Speed:'}
+          </span>
           <div className="flex flex-wrap rounded-lg border border-[#D5E1E8] bg-[#F4F8FA] p-0.5">
             {[
-              { rate: 0.5, label: '0.5x (Very Slow)' },
-              { rate: 0.65, label: '0.65x (Slow)' },
+              { rate: 0.5, label: isPtBr ? '0.5x (Muito Lento)' : '0.5x (Very Slow)' },
+              { rate: 0.65, label: isPtBr ? '0.65x (Lento)' : '0.65x (Slow)' },
               { rate: 0.75, label: '0.75x' },
               { rate: 0.85, label: '0.85x' },
-              { rate: 1.0, label: '1.0x' },
-              { rate: 1.15, label: '1.15x' },
+              { rate: 1.0, label: isPtBr ? '1.0x (Normal)' : '1.0x' },
             ].map(({ rate, label }) => (
               <button
                 key={rate}
                 type="button"
                 onClick={() => handleSpeedChange(rate)}
-                title={`Set narration speed to ${label}`}
+                title={
+                  isPtBr
+                    ? `Mudar velocidade da voz para ${label}`
+                    : `Set narration speed to ${label}`
+                }
                 className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition cursor-pointer ${
                   playbackRate === rate
                     ? 'bg-[#234E68] text-white shadow-2xs'
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                {rate === 0.5 ? '0.5x' : rate === 0.65 ? '0.65x' : `${rate}x`}
+                {`${rate}x`}
               </button>
             ))}
           </div>
@@ -584,7 +607,11 @@ export default function AudioPlayerBar({
                     type="button"
                     onClick={() => handleJumpToSentence(seg.index)}
                     style={{ flexGrow: Math.max(1, Math.round(seg.weightRatio * 100)) }}
-                    title={`Sentence ${seg.index + 1}: "${seg.text}"`}
+                    title={
+                      isPtBr
+                        ? `Frase ${seg.index + 1}: "${seg.text}"`
+                        : `Sentence ${seg.index + 1}: "${seg.text}"`
+                    }
                     className={`group relative h-1.5 hover:h-2.5 transition-all rounded-[2px] bg-[#D5E1E8] overflow-visible focus:outline-none ${
                       isCurrentSentence ? 'h-2 bg-[#C8D8E2]' : ''
                     }`}
@@ -619,11 +646,15 @@ export default function AudioPlayerBar({
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#EA580C] animate-ping" />
                 <span className="truncate">
-                  Sentence {activeSpokenSentenceIdx + 1} of {sentenceSegments.length}
+                  {isPtBr
+                    ? `Frase ${activeSpokenSentenceIdx + 1} de ${sentenceSegments.length}`
+                    : `Sentence ${activeSpokenSentenceIdx + 1} of ${sentenceSegments.length}`}
                 </span>
               </div>
               <span className="text-[10px] text-[#6C7A74] shrink-0">
-                Click any marked segment on the line to restart that sentence
+                {isPtBr
+                  ? 'Clique em qualquer pedacinho na linha acima para repetir aquela frase'
+                  : 'Click any marked segment on the line to restart that sentence'}
               </span>
             </div>
           )}
@@ -634,9 +665,16 @@ export default function AudioPlayerBar({
         <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-[#C6D8E4] bg-[#F1F6FA] px-3 py-1.5 text-xs text-[#1E3F54]">
           <div className="flex items-center gap-2">
             <span className="inline-block h-2 w-2 rounded-full bg-[#234E68]" />
-            <span>
-              <strong>Pre-recorded audio ready</strong> — click <em>Play Full Chapter</em> to listen. (To use live AI voices, add your ElevenLabs API Key in <em>Menu → Settings</em>).
-            </span>
+            {isPtBr ? (
+              <span>
+                <strong>Áudio gravado pronto</strong> — clique em{' '}
+                <em>Ouvir Capítulo Inteiro</em> para escutar a história em inglês.
+              </span>
+            ) : (
+              <span>
+                <strong>Pre-recorded audio ready</strong> — click <em>Play Full Chapter</em> to listen. (To use live AI voices, add your ElevenLabs API Key in <em>Menu → Settings</em>).
+              </span>
+            )}
           </div>
         </div>
       )}

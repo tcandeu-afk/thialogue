@@ -6415,13 +6415,14 @@ function anonymizeCharacterNames(text, mode = 'en') {
  */
 function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapterNum) {
   const seedBase = (chapterNum || 1) * 37 + (languageCode?.charCodeAt(0) || 100);
+  const isPtBr = languageCode === 'en';
   const drills = curatedData?.drills;
 
   if (drills && drills.cloze && drills.dialogue && drills.audio_comprehension && drills.grammar_contrast && drills.sentence_order) {
     const clozeList = drills.cloze.map((q, idx) => ({
       id: `cloze-${idx}`,
       type: 'cloze',
-      badgeLabel: 'Context Transfer (Cloze)',
+      badgeLabel: isPtBr ? 'Completar a Frase' : 'Context Transfer (Cloze)',
       promptEnglish: q.promptEnglish,
       sentenceParts: q.sentenceParts,
       correctAnswer: q.correctAnswer,
@@ -6433,7 +6434,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const dialogueList = drills.dialogue.map((q, idx) => ({
       id: `dialogue-${idx}`,
       type: 'dialogue',
-      badgeLabel: 'Pragmatic Mini-Dialogue',
+      badgeLabel: isPtBr ? 'Mini-Diálogo Prático' : 'Pragmatic Mini-Dialogue',
       speakerA: q.speakerA,
       speakerAEnglish: q.speakerAEnglish,
       promptEnglish: q.promptEnglish,
@@ -6446,8 +6447,10 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const audioList = drills.audio_comprehension.map((q, idx) => ({
       id: `audio-${idx}`,
       type: 'audio_comprehension',
-      badgeLabel: 'Blind Audio Decoding',
-      promptEnglish: 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
+      badgeLabel: isPtBr ? 'Compreensão pelo Ouvido' : 'Blind Audio Decoding',
+      promptEnglish: isPtBr
+        ? 'Ouça a frase falada em inglês (sem ler primeiro!) e escolha o significado exato em português:'
+        : 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
       audioSentence: q.audioSentence,
       correctAnswer: q.correctAnswer,
       options: deterministicShuffle(q.options, seedBase + idx * 17 + 3),
@@ -6458,7 +6461,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const grammarList = drills.grammar_contrast.map((q, idx) => ({
       id: `grammar-${idx}`,
       type: 'grammar_contrast',
-      badgeLabel: 'Form-Focused Pattern Check',
+      badgeLabel: isPtBr ? 'Checagem de Estrutura' : 'Form-Focused Pattern Check',
       promptEnglish: q.promptEnglish,
       correctAnswer: q.correctAnswer,
       options: deterministicShuffle(q.options, seedBase + idx * 19 + 4),
@@ -6474,7 +6477,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
       return {
         id: `order-${idx}`,
         type: 'sentence_order',
-        badgeLabel: 'Interactive Sentence Assembly',
+        badgeLabel: isPtBr ? 'Montar a Frase em Inglês' : 'Interactive Sentence Assembly',
         promptEnglish: q.promptEnglish,
         correctChunks: q.chunks,
         shuffledChunks: shuffled,
@@ -6495,10 +6498,11 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     return interleaved;
   }
 
-  return buildDynamicFallbackExercises(chapter, seedBase);
+  return buildDynamicFallbackExercises(chapter, seedBase, languageCode);
 }
 
-function buildDynamicRecapMetadata(chapter) {
+function buildDynamicRecapMetadata(chapter, languageCode) {
+  const isPtBr = languageCode === 'en';
   if (chapter?.recapModule?.vocabReuses?.length && chapter?.recapModule?.construction) {
     return chapter.recapModule;
   }
@@ -6551,21 +6555,32 @@ function buildDynamicRecapMetadata(chapter) {
   return {
     subtitle:
       chapter?.recycledWordsUsed?.length > 0
-        ? `Contextual Transfer & Active Recall: ${chapter.recycledWordsUsed.join(', ')}`
+        ? isPtBr
+          ? `Prática em Novos Contextos: ${chapter.recycledWordsUsed.join(', ')}`
+          : `Contextual Transfer & Active Recall: ${chapter.recycledWordsUsed.join(', ')}`
+        : isPtBr
+        ? 'Vocabulário em Novos Contextos, Estrutura de Frases e Prática Interativa'
         : 'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall',
     vocabReuses,
     construction: {
-      patternName: `Chapter ${chapter?.chapterNumber || ''} Core Sentence Pattern`,
+      patternName: isPtBr
+        ? `Estrutura Principal do Capítulo ${chapter?.chapterNumber || ''}`
+        : `Chapter ${chapter?.chapterNumber || ''} Core Sentence Pattern`,
       explanation:
         firstWithGrammar.grammarNote ||
-        'Notice how these building blocks combine to express actions, dialogue, and context naturally.',
-      formula: ['Context / Subject', 'Core Verb Phrase', 'Complement / Detail'],
+        (isPtBr
+          ? 'Observe como estes blocos de palavras se combinam para formar frases naturais em inglês.'
+          : 'Notice how these building blocks combine to express actions, dialogue, and context naturally.'),
+      formula: isPtBr
+        ? ['Sujeito / Quem', 'Verbo Principal', 'Complemento']
+        : ['Context / Subject', 'Core Verb Phrase', 'Complement / Detail'],
       examples,
     },
   };
 }
 
-function buildDynamicFallbackExercises(chapter, seedBase) {
+function buildDynamicFallbackExercises(chapter, seedBase, languageCode) {
+  const isPtBr = languageCode === 'en';
   const sentences = chapter?.sentences || [];
   if (sentences.length === 0) return [];
 
@@ -6626,13 +6641,15 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
       clozeList.push({
         id: `dyn-cloze-${i}`,
         type: 'cloze',
-        badgeLabel: 'Context Transfer (Cloze)',
+        badgeLabel: isPtBr ? 'Completar a Frase' : 'Context Transfer (Cloze)',
         promptEnglish: s.cleanEn,
         sentenceParts: [before, after],
         correctAnswer: answer,
         options: deterministicShuffle([answer, ...pickedDistractors], seedBase + i * 11 + 1),
         fullSentence: s.cleanTarget,
-        explanation: `« ${answer} » (${targetTok.baseForm || answer}) means "${targetTok.contextualMeaning || ''}" in this context.`,
+        explanation: isPtBr
+          ? `« ${answer} » (${targetTok.baseForm || answer}) significa "${targetTok.contextualMeaning || ''}" neste contexto.`
+          : `« ${answer} » (${targetTok.baseForm || answer}) means "${targetTok.contextualMeaning || ''}" in this context.`,
       });
     }
 
@@ -6644,17 +6661,23 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     dialogueList.push({
       id: `dyn-dialogue-${i}`,
       type: 'dialogue',
-      badgeLabel: 'Pragmatic Mini-Dialogue',
+      badgeLabel: isPtBr ? 'Mini-Diálogo Prático' : 'Pragmatic Mini-Dialogue',
       speakerA: s.cleanTarget,
       speakerAEnglish: s.cleanEn,
-      promptEnglish: `Continue the scene by expressing: "${nextS.cleanEn}"`,
+      promptEnglish: isPtBr
+        ? `Continue a conversa dizendo em inglês: "${nextS.cleanEn}"`
+        : `Continue the scene by expressing: "${nextS.cleanEn}"`,
       correctAnswer: nextS.cleanTarget,
       options: deterministicShuffle(
         [nextS.cleanTarget, ...otherAnswers.slice(0, 3)],
         seedBase + i * 13 + 2
       ),
       fullSentence: nextS.cleanTarget,
-      explanation: nextS.grammarNote || `Matches the meaning: "${nextS.cleanEn}".`,
+      explanation:
+        nextS.grammarNote ||
+        (isPtBr
+          ? `Corresponde ao significado: "${nextS.cleanEn}".`
+          : `Matches the meaning: "${nextS.cleanEn}".`),
     });
 
     // 3. Blind Audio Decoding
@@ -6666,8 +6689,10 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     audioList.push({
       id: `dyn-audio-${i}`,
       type: 'audio_comprehension',
-      badgeLabel: 'Blind Audio Decoding',
-      promptEnglish: 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
+      badgeLabel: isPtBr ? 'Compreensão pelo Ouvido' : 'Blind Audio Decoding',
+      promptEnglish: isPtBr
+        ? 'Ouça a frase falada em inglês (sem ler primeiro!) e escolha o significado exato em português:'
+        : 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
       audioSentence: audioS.cleanTarget,
       correctAnswer: audioS.cleanEn,
       options: deterministicShuffle(
@@ -6675,7 +6700,9 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
         seedBase + i * 17 + 3
       ),
       fullSentence: audioS.cleanTarget,
-      explanation: `« ${audioS.cleanTarget} » means "${audioS.cleanEn}".`,
+      explanation: isPtBr
+        ? `« ${audioS.cleanTarget} » significa "${audioS.cleanEn}".`
+        : `« ${audioS.cleanTarget} » means "${audioS.cleanEn}".`,
     });
 
     // 4. Form-Focused Pattern Check
@@ -6687,15 +6714,21 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     grammarList.push({
       id: `dyn-grammar-${i}`,
       type: 'grammar_contrast',
-      badgeLabel: 'Form-Focused Pattern Check',
-      promptEnglish: `Which sentence accurately expresses: "${gramS.cleanEn}"?`,
+      badgeLabel: isPtBr ? 'Checagem de Estrutura' : 'Form-Focused Pattern Check',
+      promptEnglish: isPtBr
+        ? `Qual frase em inglês expressa corretamente: "${gramS.cleanEn}"?`
+        : `Which sentence accurately expresses: "${gramS.cleanEn}"?`,
       correctAnswer: gramS.cleanTarget,
       options: deterministicShuffle(
         [gramS.cleanTarget, ...gramDistractors.slice(0, 3)],
         seedBase + i * 19 + 4
       ),
       fullSentence: gramS.cleanTarget,
-      explanation: gramS.grammarNote || `Correct structure for "${gramS.cleanEn}".`,
+      explanation:
+        gramS.grammarNote ||
+        (isPtBr
+          ? `Estrutura correta para "${gramS.cleanEn}".`
+          : `Correct structure for "${gramS.cleanEn}".`),
     });
 
     // 5. Interactive Sentence Assembly
@@ -6722,13 +6755,17 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
       orderList.push({
         id: `dyn-order-${i}`,
         type: 'sentence_order',
-        badgeLabel: 'Interactive Sentence Assembly',
+        badgeLabel: isPtBr ? 'Montar a Frase em Inglês' : 'Interactive Sentence Assembly',
         promptEnglish: ordS.cleanEn,
         correctChunks: chunks,
         shuffledChunks: shuffled,
         correctAnswer: chunks.join(' '),
         fullSentence: ordS.cleanTarget,
-        explanation: ordS.grammarNote || `Full sentence: « ${ordS.cleanTarget} »`,
+        explanation:
+          ordS.grammarNote ||
+          (isPtBr
+            ? `Frase completa: « ${ordS.cleanTarget} »`
+            : `Full sentence: « ${ordS.cleanTarget} »`),
       });
     }
   }
@@ -6759,12 +6796,13 @@ export default function ChapterRecapSection({
   onGenerateChapter: propGenerateChapter
 }) {
   const languageCode = propLangCode || profile?.id || 'fr';
+  const isPtBr = languageCode === 'en';
   const bcp47 = profile?.bcp47 || 'fr-FR';
   const chapterNum = chapter?.chapterNumber || chapter?.number || (chapterIndex ?? 0) + 1;
   const langBank = COURSE_RECAP_BANK[languageCode] || {};
   const curatedData = useMemo(
-    () => langBank[chapterNum] || buildDynamicRecapMetadata(chapter),
-    [langBank, chapterNum, chapter]
+    () => langBank[chapterNum] || buildDynamicRecapMetadata(chapter, languageCode),
+    [langBank, chapterNum, chapter, languageCode]
   );
 
   const hasNextChapter =
@@ -6927,7 +6965,9 @@ export default function ChapterRecapSection({
   const construction = curatedData?.construction || null;
   const subtitle =
     curatedData?.subtitle ||
-    'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall';
+    (isPtBr
+      ? 'Vocabulário em Novos Contextos, Estrutura de Frases e Prática Interativa'
+      : 'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall');
 
   const exercisesToRender =
     viewMode === 'focused'
@@ -6945,13 +6985,21 @@ export default function ChapterRecapSection({
           <div className="space-y-1.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-orange-800 text-[11px] font-bold tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5 text-orange-600 shrink-0" />
-              <span>Chapter {chapterNum} Consolidation &amp; Transfer Lab</span>
+              <span>
+                {isPtBr
+                  ? `Laboratório de Fixação e Prática — Capítulo ${chapterNum}`
+                  : `Chapter ${chapterNum} Consolidation & Transfer Lab`}
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#181D1B] tracking-tight">
-              Beyond the Story: Recombine &amp; Master
+              {isPtBr
+                ? 'Além da História: Pratique e Domine o Inglês'
+                : 'Beyond the Story: Recombine & Master'}
             </h2>
             <p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed">
-              <span className="font-semibold text-[#181D1B]">Grammar &amp; Lexical Focus:</span>{' '}
+              <span className="font-semibold text-[#181D1B]">
+                {isPtBr ? 'Foco de Gramática e Vocabulário:' : 'Grammar & Lexical Focus:'}
+              </span>{' '}
               {subtitle}
             </p>
           </div>
@@ -6963,13 +7011,19 @@ export default function ChapterRecapSection({
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                Recall Progress
+                {isPtBr ? 'Seu Progresso' : 'Recall Progress'}
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#181D1B]">
                 {allCompleted
                   ? correctCount === totalQuestions
-                    ? 'Perfect Mastery!'
+                    ? isPtBr
+                      ? 'Domínio Perfeito!'
+                      : 'Perfect Mastery!'
+                    : isPtBr
+                    ? 'Prática Concluída!'
                     : 'Checkpoint Complete!'
+                  : isPtBr
+                  ? `${answeredCount} de ${totalQuestions} concluídos`
                   : `${answeredCount} of ${totalQuestions} completed`}
               </div>
             </div>
@@ -6986,7 +7040,9 @@ export default function ChapterRecapSection({
             <span className="inline-flex items-center gap-2">
               <GraduationCap className="w-4 h-4 text-orange-600 shrink-0" />
               <span>
-                Adult SLA Methodology: Why these exercises use fresh contexts &amp; blind audio
+                {isPtBr
+                  ? 'Como funciona este método: Por que praticamos com situações novas e áudio?'
+                  : 'Adult SLA Methodology: Why these exercises use fresh contexts & blind audio'}
               </span>
             </span>
             {showMethodologyInfo ? (
@@ -7000,34 +7056,50 @@ export default function ChapterRecapSection({
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-600 bg-white rounded-xl p-4 border border-[#E8D7C3]">
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  1. Chunk Recombination (Conti’s EPI)
+                  {isPtBr
+                    ? '1. Palavras em Situações do Dia a Dia'
+                    : '1. Chunk Recombination (Conti’s EPI)'}
                 </div>
                 <p className="leading-relaxed">
-                  Instead of repeating the same story lines, all 30 drills transplant the chapter’s vocabulary into fresh everyday scenarios so you build flexible mental schemas.
+                  {isPtBr
+                    ? 'Em vez de apenas repetir as frases da história, os exercícios usam as mesmas palavras em situações novas do cotidiano para você aprender a falar de verdade.'
+                    : 'Instead of repeating the same story lines, all 30 drills transplant the chapter’s vocabulary into fresh everyday scenarios so you build flexible mental schemas.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  2. Anti-Shortcut Design (VanPatten’s IP)
+                  {isPtBr
+                    ? '2. Aprendizado Real (Sem Adivinhação)'
+                    : '2. Anti-Shortcut Design (VanPatten’s IP)'}
                 </div>
                 <p className="leading-relaxed">
-                  Character names are stripped from all exercises and options share the same grammatical subject so you can never guess by matching names.
+                  {isPtBr
+                    ? 'Os nomes dos personagens são retirados dos exercícios para que você preste atenção no significado real das palavras em inglês.'
+                    : 'Character names are stripped from all exercises and options share the same grammatical subject so you can never guess by matching names.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  3. Blind Audio Decoding First
+                  {isPtBr
+                    ? '3. Treino de Ouvido Primeiro'
+                    : '3. Blind Audio Decoding First'}
                 </div>
                 <p className="leading-relaxed">
-                  In Listening exercises, the written transcript stays hidden until you answer—training your ear to decode spoken streams at 1.0x or 0.8x speed.
+                  {isPtBr
+                    ? 'Nos exercícios de áudio, a frase escrita fica oculta até você responder — treinando seu ouvido a entender o inglês falado na velocidade normal, lenta ou muito lenta.'
+                    : 'In Listening exercises, the written transcript stays hidden until you answer—training your ear to decode spoken streams at 1.0x or 0.8x speed.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  4. Multi-Modal Retrieval (Nation &amp; Bjork)
+                  {isPtBr
+                    ? '4. Cinco Formas de Praticar'
+                    : '4. Multi-Modal Retrieval (Nation & Bjork)'}
                 </div>
                 <p className="leading-relaxed">
-                  Cycles through Context Cloze, Pragmatic Mini-Dialogues, Blind Audio, Pattern Checks, and Interactive Sentence Assembly.
+                  {isPtBr
+                    ? 'Combina Completar Frases, Mini-Diálogos, Compreensão pelo Ouvido, Checagem de Estrutura e Montagem de Frases.'
+                    : 'Cycles through Context Cloze, Pragmatic Mini-Dialogues, Blind Audio, Pattern Checks, and Interactive Sentence Assembly.'}
                 </p>
               </div>
             </div>
@@ -7046,10 +7118,14 @@ export default function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Vocabulary in Fresh Contexts
+                {isPtBr
+                  ? 'Vocabulário em Novos Contextos'
+                  : 'Vocabulary in Fresh Contexts'}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                See how key expressions from the story transfer into everyday life
+                {isPtBr
+                  ? 'Veja como usar as principais expressões da história em outras situações do dia a dia'
+                  : 'See how key expressions from the story transfer into everyday life'}
               </p>
             </div>
           </div>
@@ -7070,10 +7146,14 @@ export default function ChapterRecapSection({
                       type="button"
                       onClick={() => onPlaySentenceAudio(item.newPhrase, 1.0)}
                       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F1F6FA] hover:bg-[#E3EEF5] border border-[#C9DCE8] text-[#1E3F54] text-xs font-semibold transition-colors cursor-pointer"
-                      title="Listen to the new everyday sentence"
+                      title={
+                        isPtBr
+                          ? 'Ouvir esta nova frase em inglês'
+                          : 'Listen to the new everyday sentence'
+                      }
                     >
                       <Volume2 className="w-3.5 h-3.5 text-[#234E68]" />
-                      <span>Listen</span>
+                      <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
                     </button>
                   )}
                 </div>
@@ -7082,7 +7162,7 @@ export default function ChapterRecapSection({
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
                   <div className="sm:col-span-5 rounded-lg bg-[#F8FAF9] border border-[#E6ECE9] p-3 flex flex-col justify-center">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#737F79] mb-1">
-                      In the Story
+                      {isPtBr ? 'Na História' : 'In the Story'}
                     </span>
                     <p className="text-xs sm:text-sm text-[#4A5550] italic font-serif leading-relaxed">
                       {item.storyContext}
@@ -7091,7 +7171,7 @@ export default function ChapterRecapSection({
 
                   <div className="sm:col-span-7 rounded-lg bg-[#FFFDF9] border border-[#F2E3C9] p-3 flex flex-col justify-center">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-orange-700 mb-1">
-                      New Everyday Context
+                      {isPtBr ? 'Novo Contexto do Dia a Dia' : 'New Everyday Context'}
                     </span>
                     <p className="text-sm sm:text-base font-serif font-semibold text-[#181D1B] leading-snug">
                       {item.newPhrase}
@@ -7118,10 +7198,14 @@ export default function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Sentence Blueprint &amp; Pattern Noticing
+                {isPtBr
+                  ? 'Estrutura da Frase e Padrão do Inglês'
+                  : 'Sentence Blueprint & Pattern Noticing'}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                Master one reusable grammatical building block from this chapter
+                {isPtBr
+                  ? 'Domine um bloco de construção importante deste capítulo para montar suas próprias frases'
+                  : 'Master one reusable grammatical building block from this chapter'}
               </p>
             </div>
           </div>
@@ -7142,7 +7226,7 @@ export default function ChapterRecapSection({
               <div className="pt-1">
                 <div className="inline-flex flex-wrap items-center gap-2 bg-[#F8FAF9] px-3.5 py-2.5 rounded-xl border border-[#DCE2DF]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6661] mr-1">
-                    Formula:
+                    {isPtBr ? 'Fórmula:' : 'Formula:'}
                   </span>
                   {construction.formula.map((part, idx) => (
                     <React.Fragment key={idx}>
@@ -7170,7 +7254,7 @@ export default function ChapterRecapSection({
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F2F4F3] text-[#5C6661]">
-                          Example {idx + 1}
+                          {isPtBr ? `Exemplo ${idx + 1}` : `Example ${idx + 1}`}
                         </span>
                       </div>
                       <p className="text-base sm:text-lg font-serif font-medium text-[#181D1B] leading-snug pt-0.5">
@@ -7196,10 +7280,10 @@ export default function ChapterRecapSection({
                         type="button"
                         onClick={() => onPlaySentenceAudio(ex.target, 1.0)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAF9] hover:bg-[#E5EFF6] border border-[#DCE2DF] text-xs font-semibold text-[#234E68] transition-colors shrink-0 cursor-pointer mt-1"
-                        title="Listen to example"
+                        title={isPtBr ? 'Ouvir exemplo' : 'Listen to example'}
                       >
                         <Volume2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Listen</span>
+                        <span className="hidden sm:inline">{isPtBr ? 'Ouvir' : 'Listen'}</span>
                       </button>
                     )}
                   </div>
@@ -7221,10 +7305,14 @@ export default function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Active-Recall Transfer Checkpoint ({totalQuestions} Exercises)
+                {isPtBr
+                  ? `Exercícios Práticos de Fixação (${totalQuestions} Exercícios)`
+                  : `Active-Recall Transfer Checkpoint (${totalQuestions} Exercises)`}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                5 cognitive modalities • Zero repeated story lines • Zero character-name shortcuts
+                {isPtBr
+                  ? '5 tipos de exercícios interativos • Frases do dia a dia com áudio e explicação'
+                  : '5 cognitive modalities • Zero repeated story lines • Zero character-name shortcuts'}
               </p>
             </div>
           </div>
@@ -7242,7 +7330,7 @@ export default function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                15 Standard
+                {isPtBr ? '15 Padrão' : '15 Standard'}
               </button>
               <button
                 type="button"
@@ -7254,7 +7342,7 @@ export default function ChapterRecapSection({
                 }`}
               >
                 <Shuffle className="w-3 h-3" />
-                <span>30 Deep</span>
+                <span>{isPtBr ? '30 Completo' : '30 Deep'}</span>
               </button>
             </div>
 
@@ -7269,7 +7357,7 @@ export default function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                One-by-One
+                {isPtBr ? 'Um por Um' : 'One-by-One'}
               </button>
               <button
                 type="button"
@@ -7280,7 +7368,7 @@ export default function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                All ({ activeExercises.length })
+                {isPtBr ? `Todos (${activeExercises.length})` : `All (${activeExercises.length})`}
               </button>
             </div>
 
@@ -7289,10 +7377,10 @@ export default function ChapterRecapSection({
                 type="button"
                 onClick={handleResetQuiz}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white border border-[#DCE2DF] text-xs font-semibold text-[#5C6661] hover:text-[#181D1B] transition-colors cursor-pointer"
-                title="Reset all answers"
+                title={isPtBr ? 'Reiniciar todos os exercícios' : 'Reset all answers'}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset</span>
+                <span>{isPtBr ? 'Reiniciar' : 'Reset'}</span>
               </button>
             )}
           </div>
@@ -7301,12 +7389,26 @@ export default function ChapterRecapSection({
         {/* Modality Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5 mb-4">
           {[
-            { id: 'all', label: `All Modalities (${totalQuestions})` },
-            { id: 'cloze', label: 'Context Cloze' },
-            { id: 'dialogue', label: 'Mini-Dialogue' },
-            { id: 'audio_comprehension', label: 'Blind Audio' },
-            { id: 'grammar_contrast', label: 'Pattern Check' },
-            { id: 'sentence_order', label: 'Sentence Assembly' }
+            {
+              id: 'all',
+              label: isPtBr
+                ? `Todos os Tipos (${totalQuestions})`
+                : `All Modalities (${totalQuestions})`,
+            },
+            { id: 'cloze', label: isPtBr ? 'Completar Frase' : 'Context Cloze' },
+            { id: 'dialogue', label: isPtBr ? 'Mini-Diálogo' : 'Mini-Dialogue' },
+            {
+              id: 'audio_comprehension',
+              label: isPtBr ? 'Compreensão de Áudio' : 'Blind Audio',
+            },
+            {
+              id: 'grammar_contrast',
+              label: isPtBr ? 'Checagem de Estrutura' : 'Pattern Check',
+            },
+            {
+              id: 'sentence_order',
+              label: isPtBr ? 'Montar a Frase' : 'Sentence Assembly',
+            },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -7331,10 +7433,14 @@ export default function ChapterRecapSection({
           <div className="mb-4 bg-white rounded-xl border border-[#DCE2DF] p-3 shadow-sm">
             <div className="flex items-center justify-between text-xs text-[#5C6661] mb-2">
               <span className="font-semibold text-[#181D1B]">
-                Exercise {currentStepIdx + 1} of {activeExercises.length}
+                {isPtBr
+                  ? `Exercício ${currentStepIdx + 1} de ${activeExercises.length}`
+                  : `Exercise ${currentStepIdx + 1} of ${activeExercises.length}`}
               </span>
               <span>
-                Click any number to jump • Green = Correct, Red = Needs retry
+                {isPtBr
+                  ? 'Clique em qualquer número para ir direto • Verde = Acertou, Vermelho = Tentar novamente'
+                  : 'Click any number to jump • Green = Correct, Red = Needs retry'}
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -7399,7 +7505,9 @@ export default function ChapterRecapSection({
                     <div className="space-y-2 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-bold uppercase tracking-wider text-[#5C6661]">
-                          Exercise {globalIdx + 1} of {activeExercises.length}
+                          {isPtBr
+                            ? `Exercício ${globalIdx + 1} de ${activeExercises.length}`
+                            : `Exercise ${globalIdx + 1} of ${activeExercises.length}`}
                         </span>
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${styleInfo.bg}`}
@@ -7438,7 +7546,7 @@ export default function ChapterRecapSection({
                         <div className="mt-2 rounded-xl bg-[#F8FAF9] border border-[#DCE2DF] p-4 space-y-1.5">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[11px] font-bold uppercase tracking-wider text-[#234E68]">
-                              Conversational Partner
+                              {isPtBr ? 'Pessoa Falando com Você' : 'Conversational Partner'}
                             </span>
                             {onPlaySentenceAudio && (
                               <button
@@ -7447,7 +7555,7 @@ export default function ChapterRecapSection({
                                 className="inline-flex items-center gap-1 text-xs font-semibold text-[#234E68] hover:text-orange-600 cursor-pointer"
                               >
                                 <Volume2 className="w-3.5 h-3.5" />
-                                <span>Listen</span>
+                                <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
                               </button>
                             )}
                           </div>
@@ -7472,7 +7580,11 @@ export default function ChapterRecapSection({
                                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-colors cursor-pointer"
                                 >
                                   <Volume2 className="w-4 h-4 shrink-0" />
-                                  <span>Play Spoken Sentence (1.0x)</span>
+                                  <span>
+                                    {isPtBr
+                                      ? 'Ouvir Frase Falada (1.0x)'
+                                      : 'Play Spoken Sentence (1.0x)'}
+                                  </span>
                                 </button>
                                 <button
                                   type="button"
@@ -7480,7 +7592,7 @@ export default function ChapterRecapSection({
                                   className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-semibold transition-colors cursor-pointer"
                                 >
                                   <Headphones className="w-3.5 h-3.5 shrink-0" />
-                                  <span>Slow (0.75x)</span>
+                                  <span>{isPtBr ? 'Lento (0.75x)' : 'Slow (0.75x)'}</span>
                                 </button>
                                 <button
                                   type="button"
@@ -7488,7 +7600,9 @@ export default function ChapterRecapSection({
                                   className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold transition-colors cursor-pointer"
                                 >
                                   <Headphones className="w-3.5 h-3.5 shrink-0" />
-                                  <span>Very Slow (0.55x)</span>
+                                  <span>
+                                    {isPtBr ? 'Muito Lento (0.55x)' : 'Very Slow (0.55x)'}
+                                  </span>
                                 </button>
                               </>
                             )}
@@ -7502,12 +7616,16 @@ export default function ChapterRecapSection({
                                 {isTranscriptShown ? (
                                   <>
                                     <EyeOff className="w-3.5 h-3.5 shrink-0" />
-                                    <span>Hide Written Hint</span>
+                                    <span>
+                                      {isPtBr ? 'Ocultar Dica Escrita' : 'Hide Written Hint'}
+                                    </span>
                                   </>
                                 ) : (
                                   <>
                                     <Eye className="w-3.5 h-3.5 shrink-0" />
-                                    <span>Show Transcript Hint</span>
+                                    <span>
+                                      {isPtBr ? 'Mostrar Dica Escrita' : 'Show Transcript Hint'}
+                                    </span>
                                   </>
                                 )}
                               </button>
@@ -7517,7 +7635,13 @@ export default function ChapterRecapSection({
                           {isTranscriptShown ? (
                             <div className="rounded-xl bg-purple-50/70 border border-purple-200 px-4 py-3">
                               <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 block mb-0.5">
-                                {isAnswered ? 'Spoken Target Sentence' : 'Transcript Hint'}
+                                {isAnswered
+                                  ? isPtBr
+                                    ? 'Frase Falada em Inglês'
+                                    : 'Spoken Target Sentence'
+                                  : isPtBr
+                                  ? 'Dica Escrita'
+                                  : 'Transcript Hint'}
                               </span>
                               <p className="text-base sm:text-lg font-serif font-semibold text-[#181D1B]">
                                 « {q.audioSentence} »
@@ -7527,7 +7651,9 @@ export default function ChapterRecapSection({
                             <div className="rounded-xl bg-[#F8FAF9] border border-dashed border-[#C5D1CB] px-4 py-2.5 text-xs text-[#5C6661] flex items-center gap-2">
                               <Headphones className="w-4 h-4 text-purple-600 shrink-0" />
                               <span>
-                                Written sentence hidden so your ear decodes the spoken stream first.
+                                {isPtBr
+                                  ? 'A frase escrita está oculta para você treinar o ouvido primeiro.'
+                                  : 'Written sentence hidden so your ear decodes the spoken stream first.'}
                               </span>
                             </div>
                           )}
@@ -7540,7 +7666,9 @@ export default function ChapterRecapSection({
                           <div className="min-h-[56px] rounded-xl bg-[#F8FAF9] border-2 border-dashed border-[#C5D1CB] p-3 flex flex-wrap items-center gap-2">
                             {placedList.length === 0 && !isAnswered ? (
                               <span className="text-xs text-[#737F79] select-none">
-                                Click the phrase tiles below in order to assemble the sentence...
+                                {isPtBr
+                                  ? 'Clique nos blocos de palavras abaixo na ordem certa para montar a frase em inglês...'
+                                  : 'Click the phrase tiles below in order to assemble the sentence...'}
                               </span>
                             ) : (
                               placedList.map((item, pIdx) => (
@@ -7556,7 +7684,13 @@ export default function ChapterRecapSection({
                                       ? 'bg-emerald-100 border-emerald-500 text-emerald-950'
                                       : 'bg-rose-100 border-rose-500 text-rose-950'
                                   }`}
-                                  title={!isAnswered ? 'Click to remove tile' : ''}
+                                  title={
+                                    !isAnswered
+                                      ? isPtBr
+                                        ? 'Clique para remover este bloco'
+                                        : 'Click to remove tile'
+                                      : ''
+                                  }
                                 >
                                   {item.text}
                                 </button>
@@ -7591,7 +7725,7 @@ export default function ChapterRecapSection({
                                 className="ml-auto inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#5C6661] hover:text-[#181D1B] cursor-pointer"
                               >
                                 <RotateCcw className="w-3 h-3" />
-                                <span>Clear Tray</span>
+                                <span>{isPtBr ? 'Limpar Blocos' : 'Clear Tray'}</span>
                               </button>
                             )}
                           </div>
@@ -7605,10 +7739,14 @@ export default function ChapterRecapSection({
                         type="button"
                         onClick={() => onPlaySentenceAudio(q.fullSentence, 1.0)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#DCE2DF] text-xs font-semibold text-[#234E68] hover:border-orange-300 hover:text-orange-600 transition-colors shrink-0 cursor-pointer shadow-sm"
-                        title="Listen to the complete sentence"
+                        title={
+                          isPtBr
+                            ? 'Ouvir a frase completa em inglês'
+                            : 'Listen to the complete sentence'
+                        }
                       >
                         <Volume2 className="w-3.5 h-3.5 text-orange-600" />
-                        <span>Play Audio</span>
+                        <span>{isPtBr ? 'Ouvir Áudio' : 'Play Audio'}</span>
                       </button>
                     )}
                   </div>
@@ -7668,7 +7806,13 @@ export default function ChapterRecapSection({
                     >
                       <div className="leading-relaxed">
                         <span className="font-bold mr-1.5">
-                          {isCorrect ? 'Spot on!' : `Correct answer: « ${q.correctAnswer} » —`}
+                          {isCorrect
+                            ? isPtBr
+                              ? 'Muito bem! Correto!'
+                              : 'Spot on!'
+                            : isPtBr
+                            ? `Resposta correta: « ${q.correctAnswer} » —`
+                            : `Correct answer: « ${q.correctAnswer} » —`}
                         </span>
                         <span>{q.explanation}</span>
                       </div>
@@ -7681,7 +7825,7 @@ export default function ChapterRecapSection({
                             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-300 text-rose-800 font-semibold text-xs cursor-pointer"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Try Again</span>
+                            <span>{isPtBr ? 'Tentar Novamente' : 'Try Again'}</span>
                           </button>
                         )}
                       </div>
@@ -7698,11 +7842,13 @@ export default function ChapterRecapSection({
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCE2DF] bg-[#F8FAF9] text-xs font-semibold text-[#4A5550] hover:text-[#181D1B] disabled:opacity-40 cursor-pointer"
                       >
                         <ChevronLeft className="w-4 h-4" />
-                        <span>Previous</span>
+                        <span>{isPtBr ? 'Anterior' : 'Previous'}</span>
                       </button>
 
                       <span className="text-xs font-medium text-[#737F79]">
-                        {answeredCount} of {totalQuestions} answered
+                        {isPtBr
+                          ? `${answeredCount} de ${totalQuestions} respondidos`
+                          : `${answeredCount} of ${totalQuestions} answered`}
                       </span>
 
                       <button
@@ -7717,7 +7863,7 @@ export default function ChapterRecapSection({
                             : 'border border-[#DCE2DF] bg-[#F8FAF9] text-[#181D1B] hover:bg-[#EEF2F0]'
                         }`}
                       >
-                        <span>Next Exercise</span>
+                        <span>{isPtBr ? 'Próximo Exercício' : 'Next Exercise'}</span>
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -7740,14 +7886,24 @@ export default function ChapterRecapSection({
           <div>
             <h4 className="text-base font-serif font-bold text-white">
               {allCompleted
-                ? `Great job completing Chapter ${chapterNum}'s Transfer Lab!`
+                ? isPtBr
+                  ? `Parabéns por concluir o Laboratório de Prática do Capítulo ${chapterNum}!`
+                  : `Great job completing Chapter ${chapterNum}'s Transfer Lab!`
+                : isPtBr
+                ? 'Pronta para a próxima parte da história?'
                 : `Ready for the next part of the story?`}
             </h4>
             <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
               {allCompleted
-                ? `You scored ${correctCount} out of ${totalQuestions} across all 5 active-recall modalities.`
+                ? isPtBr
+                  ? `Você acertou ${correctCount} de ${totalQuestions} exercícios práticos de fixação.`
+                  : `You scored ${correctCount} out of ${totalQuestions} across all 5 active-recall modalities.`
                 : exerciseCountMode === 15
-                ? `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
+                ? isPtBr
+                  ? 'Pratique com os 15 exercícios acima ou clique em "30 Completo" para mais 15 exercícios.'
+                  : `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
+                : isPtBr
+                ? 'Conclua os 30 exercícios acima para fixar bem o vocabulário deste capítulo.'
                 : `Complete all 30 multi-style transfer exercises above to lock in this chapter's patterns.`}
             </p>
           </div>
@@ -7760,7 +7916,11 @@ export default function ChapterRecapSection({
               onClick={onNextChapter}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
             >
-              <span>Continue to Chapter {chapterNum + 1}</span>
+              <span>
+                {isPtBr
+                  ? `Continuar para o Capítulo ${chapterNum + 1}`
+                  : `Continue to Chapter ${chapterNum + 1}`}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
@@ -7771,7 +7931,11 @@ export default function ChapterRecapSection({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Generate Chapter {chapterNum + 1} with AI</span>
+                <span>
+                  {isPtBr
+                    ? `Gerar Capítulo ${chapterNum + 1}`
+                    : `Generate Chapter ${chapterNum + 1} with AI`}
+                </span>
               </button>
             )
           )}

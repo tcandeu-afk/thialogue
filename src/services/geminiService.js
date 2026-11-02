@@ -424,7 +424,7 @@ const BONUS_SCENE_BANK = {
   en: [
     {
       title: 'Afternoon Tea with Mrs. Miller (Chá da Tarde com a Sra. Miller)',
-      summary: 'Mrs. Miller invites Helena and her daughter Julia into the warm garden behind the flower shop for traditional English tea and homemade apple cake.',
+      summary: 'A Sra. Miller convida Helena e sua filha Julia para o jardim atrás da floricultura para tomar um tradicional chá inglês com bolo de maçã caseiro.',
       recycled: ['morning', 'notebook', 'would', 'looking'],
       sentences: [
         {
@@ -617,8 +617,14 @@ export function generateOfflineBonusChapter(
       id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
       preRenderedAudioId: `${profile.id}-bonus-${unusedBonusIdx}`,
       chapterNumber: chapterNum,
-      difficultyLabel: `${profile.cefrLevel} • Fresh Story & Vocabulary`,
-      chapterTitle: `Chapter ${chapterNum} : ${pickedScene.title}`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Nova História e Vocabulário'
+          : `${profile.cefrLevel} • Fresh Story & Vocabulary`,
+      chapterTitle:
+        profile.id === 'en'
+          ? `Capítulo ${chapterNum}: ${pickedScene.title}`
+          : `Chapter ${chapterNum} : ${pickedScene.title}`,
       updatedArcSummary: pickedScene.summary,
       recycledWordsUsed: pickedScene.recycled,
       sentences: structuredClone(combinedSentences),
@@ -660,9 +666,18 @@ export function generateOfflineBonusChapter(
   return {
     id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
     chapterNumber: chapterNum,
-    difficultyLabel: `${profile.cefrLevel} • Episode ${chapterNum}`,
-    chapterTitle: `Chapter ${chapterNum} : ${episodeTitles[profile.id] || `Episode ${chapterNum}`}`,
-    updatedArcSummary: `${profile.storyArcSummary} In Chapter ${chapterNum}, new clues and conversations deepen the investigation.`,
+    difficultyLabel:
+      profile.id === 'en'
+        ? `A1 Iniciante • Episódio ${chapterNum}`
+        : `${profile.cefrLevel} • Episode ${chapterNum}`,
+    chapterTitle:
+      profile.id === 'en'
+        ? `Capítulo ${chapterNum}: ${episodeTitles[profile.id]}`
+        : `Chapter ${chapterNum} : ${episodeTitles[profile.id] || `Episode ${chapterNum}`}`,
+    updatedArcSummary:
+      profile.id === 'en'
+        ? `${profile.storyArcSummary} No Capítulo ${chapterNum}, novas conversas em inglês continuam a história.`
+        : `${profile.storyArcSummary} In Chapter ${chapterNum}, new clues and conversations deepen the investigation.`,
     recycledWordsUsed: (profile.vocabBank || []).slice(0, 4).map((w) => w.baseForm),
     sentences: pickedSentences,
   };
@@ -1086,7 +1101,10 @@ export function createOfflineDifficultyVariant(baseChapter, level, profile) {
       ...cleanBase,
       id: `${baseId}__maintain`,
       activeDifficulty: 'maintain',
-      difficultyLabel: `${profile.cefrLevel} • Just Right (Standard)`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Ideal (Padrão)'
+          : `${profile.cefrLevel} • Just Right (Standard)`,
     };
   }
 
@@ -1101,7 +1119,10 @@ export function createOfflineDifficultyVariant(baseChapter, level, profile) {
       ...cleanBase,
       id: `${baseId}__simplify`,
       activeDifficulty: 'simplify',
-      difficultyLabel: `${profile.cefrLevel} • Simplified (Shorter & Easier)`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Mais Simples (Mais Curto e Fácil)'
+          : `${profile.cefrLevel} • Simplified (Shorter & Easier)`,
       sentences: coreSentences,
     };
   }
@@ -1112,7 +1133,10 @@ export function createOfflineDifficultyVariant(baseChapter, level, profile) {
     ...cleanBase,
     id: `${baseId}__challenge`,
     activeDifficulty: 'challenge',
-    difficultyLabel: `${profile.cefrLevel} • More Complex (Longer & Richer)`,
+    difficultyLabel:
+      profile.id === 'en'
+        ? 'A1 Iniciante • Mais Complexo (Mais Longo e Completo)'
+        : `${profile.cefrLevel} • More Complex (Longer & Richer)`,
     sentences: [...cleanBase.sentences, ...structuredClone(extras)],
   };
 }

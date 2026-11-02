@@ -10488,8 +10488,8 @@ export const INITIAL_PROFILES = {
     "hasFurigana": false,
     "noWordSpaces": false,
     "storyTitle": "The Sunny Café in London (A Cafeteria Ensolarada em Londres)",
-    "storyArcSummary": "Helena, a Brazilian mother visiting her daughter Julia in London, walks into the cozy Sunny Café on a rainy morning. With the help of the friendly waiter Oliver, she finds a lost blue notebook with a family recipe card and a Concert Ticket inside, leading them to Portobello Market to return it to its grateful owner, Mrs. Miller.",
-    "difficultyModifier": "Baseline A1 Beginner",
+    "storyArcSummary": "Helena, uma mãe brasileira visitando sua filha Julia em Londres, entra na aconchegante cafeteria Sunny Café em uma manhã fria. Com a ajuda do simpático garçom Oliver, ela encontra um caderno azul perdido com uma receita de família e um ingresso, levando-as até o Mercado Portobello para devolvê-lo à sua dona agradecida, a Sra. Miller.",
+    "difficultyModifier": "A1 Iniciante",
     "activeChapterIndex": 0,
     "vocabBank": [
       {
@@ -10533,9 +10533,9 @@ export const INITIAL_PROFILES = {
       {
         "id": "en-ch-1",
         "chapterNumber": 1,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 1: A Warm Cup of Coffee (Uma Xícara de Café Quente)",
-        "updatedArcSummary": "On a cold morning in London, Helena enters the Sunny Café, orders hot coffee and warm bread in English from the waiter Oliver, and discovers a small blue notebook on the chair next to her table.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 1: A Warm Cup of Coffee (Uma Xícara de Café Quente)",
+        "updatedArcSummary": "Em uma manhã fria em Londres, Helena entra na cafeteria Sunny Café, pede um café quente e pão quentinho em inglês ao garçom Oliver, e encontra um pequeno caderno azul esquecido na cadeira ao lado de sua mesa.",
         "recycledWordsUsed": [
           "morning",
           "would",
@@ -11423,9 +11423,9 @@ export const INITIAL_PROFILES = {
       {
         "id": "en-ch-2",
         "chapterNumber": 2,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 2: Walking to Portobello Market (Caminhando até o Mercado Portobello)",
-        "updatedArcSummary": "Helena finishes her coffee and asks Oliver for directions to Mrs. Miller's flower shop at Portobello Market. Along the way, she meets her daughter Julia and they walk together down the colorful street.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 2: Walking to Portobello Market (Caminhando até o Mercado Portobello)",
+        "updatedArcSummary": "Helena termina seu café e pede direções a Oliver para chegar à floricultura da Sra. Miller no Mercado Portobello. Na saída, ela encontra sua filha Julia e elas caminham juntas pela rua colorida.",
         "recycledWordsUsed": [
           "morning",
           "looking",
@@ -12203,9 +12203,9 @@ export const INITIAL_PROFILES = {
       {
         "id": "en-ch-3",
         "chapterNumber": 3,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 3: A New Friend at the Flower Shop (Uma Nova Amiga na Floricultura)",
-        "updatedArcSummary": "At Portobello Market, Helena and Julia find the flower shop with yellow roses. Mrs. Miller is overjoyed to get her grandmother's recipe notebook back and gifts Helena a bouquet of yellow roses and homemade tea.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 3: A New Friend at the Flower Shop (Uma Nova Amiga na Floricultura)",
+        "updatedArcSummary": "No Mercado Portobello, Helena e Julia encontram a floricultura cheia de rosas amarelas. A Sra. Miller fica muito feliz ao recuperar o caderno de receitas de sua avó e presenteia Helena com rosas amarelas e um convite especial.",
         "recycledWordsUsed": [
           "morning",
           "looking",

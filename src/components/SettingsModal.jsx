@@ -27,8 +27,10 @@ export default function SettingsModal({
   onSaveSettings,
   onResetActiveProfile,
   activeProfileName,
+  langId,
   onClose,
 }) {
+  const isPtBr = langId === 'en';
   const [geminiApiKey, setGeminiApiKey] = useState(settings?.geminiApiKey || '');
   const [elevenLabsApiKey, setElevenLabsApiKey] = useState(
     settings?.elevenLabsApiKey || ''
@@ -93,10 +95,14 @@ export default function SettingsModal({
             </div>
             <div>
               <h2 className="font-serif text-lg font-bold text-[#181D1B]">
-                API Keys &amp; Audio Configuration
+                {isPtBr
+                  ? 'Configurações de Áudio e Chaves API'
+                  : 'API Keys & Audio Configuration'}
               </h2>
               <p className="text-xs text-[#5C6661]">
-                Saved locally in browser localStorage • Zero external database
+                {isPtBr
+                  ? 'Salvo no seu navegador • Seus dados ficam apenas no seu aparelho'
+                  : 'Saved locally in browser localStorage • Zero external database'}
               </p>
             </div>
           </div>
@@ -252,7 +258,9 @@ export default function SettingsModal({
               onClick={() => {
                 if (
                   window.confirm(
-                    `Reset ${activeProfileName} profile back to starter Chapter 1 and default vocabulary?`
+                    isPtBr
+                      ? 'Deseja reiniciar seu progresso neste curso de Inglês de volta para o Capítulo 1?'
+                      : `Reset ${activeProfileName} profile back to starter Chapter 1 and default vocabulary?`
                   )
                 ) {
                   onResetActiveProfile();
@@ -262,7 +270,11 @@ export default function SettingsModal({
               className="inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-red-50/80 px-3 py-1.5 text-xs font-medium text-red-900 hover:bg-red-100"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              <span>Reset {activeProfileName} Profile</span>
+              <span>
+                {isPtBr
+                  ? 'Reiniciar Curso de Inglês'
+                  : `Reset ${activeProfileName} Profile`}
+              </span>
             </button>
 
             <div className="flex items-center gap-2">
@@ -271,14 +283,14 @@ export default function SettingsModal({
                 onClick={onClose}
                 className="rounded-xl border border-[#D5DDD9] bg-[#F7F9F8] px-4 py-2 text-xs font-semibold text-[#5C6661] hover:bg-[#EEF2F0]"
               >
-                Cancel
+                {isPtBr ? 'Cancelar' : 'Cancel'}
               </button>
               <button
                 type="submit"
                 className="inline-flex items-center gap-1.5 rounded-xl bg-stone-900 px-4 py-2 text-xs font-semibold text-stone-100 shadow-xs hover:bg-stone-700"
               >
                 <Save className="h-3.5 w-3.5" />
-                <span>Save Settings</span>
+                <span>{isPtBr ? 'Salvar Configurações' : 'Save Settings'}</span>
               </button>
             </div>
           </div>

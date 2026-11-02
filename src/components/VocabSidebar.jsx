@@ -126,6 +126,8 @@ export default function VocabSidebar({
   };
 
   const helperLangLabel = profile?.id === 'en' ? 'Português (BR)' : 'English';
+  const isPtBr = profile?.id === 'en';
+  const targetLangShort = isPtBr ? 'Inglês' : profile.name.split(' ')[0];
 
   return (
     <aside className="space-y-4">
@@ -134,7 +136,11 @@ export default function VocabSidebar({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
             <BookOpen className="h-4 w-4" />
-            <span>Dictionary &amp; Phrase Lookup</span>
+            <span>
+              {isPtBr
+                ? 'Dicionário e Busca de Frases'
+                : 'Dictionary & Phrase Lookup'}
+            </span>
           </div>
 
           <button
@@ -144,19 +150,23 @@ export default function VocabSidebar({
               setDictResult(null);
             }}
             className="inline-flex items-center gap-1 rounded-lg border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54] hover:bg-[#E4EFF6]"
-            title="Switch lookup direction"
+            title={
+              isPtBr ? 'Inverter direção da tradução' : 'Switch lookup direction'
+            }
           >
             <span>
               {dictDirection === 'to_en'
-                ? `${profile.name.split(' ')[0]} → ${helperLangLabel}`
-                : `${helperLangLabel} → ${profile.name.split(' ')[0]}`}
+                ? `${targetLangShort} → ${helperLangLabel}`
+                : `${helperLangLabel} → ${targetLangShort}`}
             </span>
             <ArrowLeftRight className="h-3 w-3 text-[#234E68]" />
           </button>
         </div>
 
         <p className="mt-1 text-[11px] text-[#5C6661]">
-          Consult any word or sentence (even outside the story) and save it to your Vocab Bank.
+          {isPtBr
+            ? 'Consulte qualquer palavra ou frase (mesmo fora da história) e salve no seu Banco de Vocabulário.'
+            : 'Consult any word or sentence (even outside the story) and save it to your Vocab Bank.'}
         </p>
 
         <form onSubmit={handleDictionaryLookup} className="mt-2.5 flex gap-1.5">
@@ -165,7 +175,11 @@ export default function VocabSidebar({
             value={dictQuery}
             onChange={(e) => setDictQuery(e.target.value)}
             placeholder={
-              dictDirection === 'to_en'
+              isPtBr
+                ? dictDirection === 'to_en'
+                  ? 'Digite uma palavra ou frase em Inglês...'
+                  : 'Digite uma palavra ou frase em Português...'
+                : dictDirection === 'to_en'
                 ? `Type any ${profile.name} word or sentence...`
                 : `Type an English word or phrase...`
             }
@@ -181,7 +195,7 @@ export default function VocabSidebar({
             ) : (
               <Search className="h-3.5 w-3.5" />
             )}
-            <span>Consult</span>
+            <span>{isPtBr ? 'Consultar' : 'Consult'}</span>
           </button>
         </form>
 
@@ -204,7 +218,7 @@ export default function VocabSidebar({
                   )}
                 </div>
                 <p className="text-[11px] text-[#5C6661]">
-                  Query: &ldquo;{dictResult.query}&rdquo;
+                  {isPtBr ? 'Busca:' : 'Query:'} &ldquo;{dictResult.query}&rdquo;
                 </p>
               </div>
 
@@ -219,7 +233,11 @@ export default function VocabSidebar({
                     speakSingleWord(textToSpeak, profile.bcp47);
                   }}
                   className="rounded-lg border border-[#C9DCE8] bg-[#FFFFFF] p-1.5 text-[#234E68] hover:bg-[#E4EFF6]"
-                  title={`Pronounce in ${profile.name} (${profile.bcp47})`}
+                  title={
+                    isPtBr
+                      ? 'Ouvir pronúncia em Inglês'
+                      : `Pronounce in ${profile.name} (${profile.bcp47})`
+                  }
                 >
                   <Volume2 className="h-3.5 w-3.5" />
                 </button>
@@ -233,17 +251,21 @@ export default function VocabSidebar({
                       ? 'bg-[#2D5A46] text-white'
                       : 'bg-[#234E68] text-white hover:bg-[#1B3E54]'
                   }`}
-                  title="Add this word to your Vocab Bank for story recycling"
+                  title={
+                    isPtBr
+                      ? 'Salvar esta palavra no seu Banco de Vocabulário'
+                      : 'Add this word to your Vocab Bank for story recycling'
+                  }
                 >
                   {justAddedToBank ? (
                     <>
                       <CheckCircle2 className="h-3 w-3" />
-                      <span>Saved</span>
+                      <span>{isPtBr ? 'Salva' : 'Saved'}</span>
                     </>
                   ) : (
                     <>
                       <Plus className="h-3 w-3" />
-                      <span>Save</span>
+                      <span>{isPtBr ? 'Salvar' : 'Save'}</span>
                     </>
                   )}
                 </button>
@@ -274,10 +296,14 @@ export default function VocabSidebar({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#785420]">
             <BookMarked className="h-4 w-4 text-[#B88328]" />
-            <span>{profile.name} Vocab Bank</span>
+            <span>
+              {isPtBr
+                ? 'Banco de Vocabulário (Inglês)'
+                : `${profile.name} Vocab Bank`}
+            </span>
           </div>
           <span className="rounded-full border border-[#E8D7B4] bg-[#FDF8EE] px-2 py-0.5 text-[11px] font-semibold text-[#785420]">
-            {vocabBank.length} Total
+            {isPtBr ? `${vocabBank.length} no Total` : `${vocabBank.length} Total`}
           </span>
         </div>
 
@@ -286,7 +312,11 @@ export default function VocabSidebar({
           <div className="mt-3 rounded-xl border border-[#E6D6B8] bg-[#FBF7F0] p-2.5">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#785420]">
               <Sparkles className="h-3.5 w-3.5 text-[#B88328]" />
-              <span>Queued for Next Chapter (Top {priorityNextFive.length}):</span>
+              <span>
+                {isPtBr
+                  ? `Praticar no Próximo Capítulo (${priorityNextFive.length}):`
+                  : `Queued for Next Chapter (Top ${priorityNextFive.length}):`}
+              </span>
             </div>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {priorityNextFive.map((item, idx) => (
@@ -302,7 +332,11 @@ export default function VocabSidebar({
                     type="button"
                     onClick={() => onRemoveWord(item.baseForm)}
                     className="ml-0.5 rounded p-0.5 text-[#87928D] transition hover:bg-red-100 hover:text-red-800"
-                    title={`Remove "${item.baseForm}" from queue and Vocab Bank`}
+                    title={
+                      isPtBr
+                        ? `Remover "${item.baseForm}" do Banco de Vocabulário`
+                        : `Remove "${item.baseForm}" from queue and Vocab Bank`
+                    }
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -323,7 +357,9 @@ export default function VocabSidebar({
                 : 'text-[#5C6661] hover:text-[#181D1B]'
             }`}
           >
-            Learning ({learningWords.length})
+            {isPtBr
+              ? `Aprendendo (${learningWords.length})`
+              : `Learning (${learningWords.length})`}
           </button>
           <button
             type="button"
@@ -334,7 +370,9 @@ export default function VocabSidebar({
                 : 'text-[#5C6661] hover:text-[#181D1B]'
             }`}
           >
-            Acquired ({acquiredWords.length})
+            {isPtBr
+              ? `Aprendidas (${acquiredWords.length})`
+              : `Acquired (${acquiredWords.length})`}
           </button>
         </div>
 
@@ -343,7 +381,11 @@ export default function VocabSidebar({
           {displayedWords.length === 0 ? (
             <div className="rounded-xl border border-dashed border-[#D5DDD9] p-5 text-center text-xs text-[#737F79]">
               {activeTab === 'learning'
-                ? 'Click any word in the story or use the Dictionary box above to save words to your Learning bank.'
+                ? isPtBr
+                  ? 'Clique em qualquer palavra na história ou use o Dicionário acima para salvar palavras que você está aprendendo.'
+                  : 'Click any word in the story or use the Dictionary box above to save words to your Learning bank.'
+                : isPtBr
+                ? 'As palavras passam automaticamente para "Aprendidas" depois que você as encontra 5 vezes nos capítulos.'
                 : 'Words automatically graduate to Acquired once they reach 5 contextual exposures across chapters.'}
             </div>
           ) : (
@@ -387,7 +429,7 @@ export default function VocabSidebar({
                         type="button"
                         onClick={() => speakSingleWord(entry.word, profile.bcp47)}
                         className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E4EFF6] hover:text-[#234E68]"
-                        title={`Pronounce (${profile.bcp47})`}
+                        title={isPtBr ? 'Ouvir pronúncia' : `Pronounce (${profile.bcp47})`}
                       >
                         <Volume2 className="h-3.5 w-3.5" />
                       </button>
@@ -397,7 +439,11 @@ export default function VocabSidebar({
                         className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E5F0EA] hover:text-[#2D5A46]"
                         title={
                           entry.status === 'learning'
-                            ? 'Mark as Acquired now'
+                            ? isPtBr
+                              ? 'Marcar como Aprendida agora'
+                              : 'Mark as Acquired now'
+                            : isPtBr
+                            ? 'Voltar para Aprendendo'
                             : 'Move back to Learning'
                         }
                       >
@@ -411,7 +457,9 @@ export default function VocabSidebar({
                         type="button"
                         onClick={() => onRemoveWord(entry.baseForm)}
                         className="rounded-md p-1.5 text-[#87928D] hover:bg-red-100 hover:text-red-800"
-                        title="Remove from Vocab Bank"
+                        title={
+                          isPtBr ? 'Remover do Banco de Vocabulário' : 'Remove from Vocab Bank'
+                        }
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -422,17 +470,18 @@ export default function VocabSidebar({
                   <div className="mt-2">
                     <div className="flex items-center justify-between text-[10px] font-medium text-[#5C6661]">
                       <span>
-                        Exposures: <strong>{entry.exposures}</strong> /{' '}
+                        {isPtBr ? 'Vezes vista:' : 'Exposures:'}{' '}
+                        <strong>{entry.exposures}</strong> /{' '}
                         {ACQUISITION_EXPOSURE_THRESHOLD}
                       </span>
                       {isQueued && (
                         <span className="rounded border border-[#E6D6B8] bg-[#FDF8EE] px-1.5 py-0.2 font-semibold text-[#785420]">
-                          Next Chapter Target
+                          {isPtBr ? 'Meta do Próx. Capítulo' : 'Next Chapter Target'}
                         </span>
                       )}
                       {entry.status === 'acquired' && (
                         <span className="rounded border border-[#C2DFD0] bg-[#EFF6F2] px-1.5 py-0.2 font-semibold text-[#285943]">
-                          Acquired
+                          {isPtBr ? 'Aprendida' : 'Acquired'}
                         </span>
                       )}
                     </div>
@@ -457,10 +506,16 @@ export default function VocabSidebar({
         <div className="flex items-center justify-between border-b border-[#E8ECEA] pb-2.5">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
             <BookOpen className="h-4 w-4 text-[#234E68]" />
-            <span>Chapter {chapter?.chapterNumber || 1} Word Vocab Table</span>
+            <span>
+              {isPtBr
+                ? `Palavras do Capítulo ${chapter?.chapterNumber || 1}`
+                : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table`}
+            </span>
           </div>
           <span className="rounded-full border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54]">
-            {uniqueChapterWords.length} Words
+            {isPtBr
+              ? `${uniqueChapterWords.length} Palavras`
+              : `${uniqueChapterWords.length} Words`}
           </span>
         </div>
 
@@ -468,9 +523,15 @@ export default function VocabSidebar({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#E6ECE9] text-[10px] font-semibold uppercase tracking-wider text-[#5C6661]">
-                <th className="py-1.5 pr-2">Word / Base</th>
-                <th className="py-1.5 px-2">Meaning in Chapter</th>
-                <th className="py-1.5 pl-1 text-right">Audio</th>
+                <th className="py-1.5 pr-2">
+                  {isPtBr ? 'Palavra em Inglês' : 'Word / Base'}
+                </th>
+                <th className="py-1.5 px-2">
+                  {isPtBr ? 'Significado no Capítulo' : 'Meaning in Chapter'}
+                </th>
+                <th className="py-1.5 pl-1 text-right">
+                  {isPtBr ? 'Ouvir' : 'Audio'}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EEF2F0] text-xs">
@@ -487,7 +548,11 @@ export default function VocabSidebar({
                         onAddCustomVocabWord?.(item);
                       }}
                       className="text-left font-serif text-sm font-bold text-[#181D1B] hover:text-[#234E68]"
-                      title="Click to pronounce and save to Vocab Bank"
+                      title={
+                        isPtBr
+                          ? 'Clique para ouvir a pronúncia e salvar no Banco de Vocabulário'
+                          : 'Click to pronounce and save to Vocab Bank'
+                      }
                     >
                       {item.surface}
                     </button>
@@ -511,7 +576,11 @@ export default function VocabSidebar({
                       type="button"
                       onClick={() => speakSingleWord(item.surface, profile.bcp47)}
                       className="inline-flex items-center justify-center rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6]"
-                      title={`Pronounce "${item.surface}"`}
+                      title={
+                        isPtBr
+                          ? `Ouvir "${item.surface}"`
+                          : `Pronounce "${item.surface}"`
+                      }
                     >
                       <Volume2 className="h-3.5 w-3.5" />
                     </button>
@@ -527,15 +596,25 @@ export default function VocabSidebar({
       <div className="rounded-2xl border border-[#E2E7E4] bg-[#FFFFFF] p-4 shadow-2xs">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#464E70]">
           <ScrollText className="h-4 w-4" />
-          <span>Running Story Arc Summary</span>
+          <span>
+            {isPtBr
+              ? 'Resumo da História até Agora'
+              : 'Running Story Arc Summary'}
+          </span>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-[#2C3531]">
           {profile.storyArcSummary}
         </p>
         <div className="mt-2.5 flex items-center justify-between border-t border-[#E8ECEA] pt-2 text-[11px] text-[#737F79]">
-          <span>Fed into Gemini 2.5 Flash on next chapter</span>
+          <span>
+            {isPtBr
+              ? 'Usado pela IA para criar o próximo capítulo'
+              : 'Fed into Gemini 2.5 Flash on next chapter'}
+          </span>
           <span className="font-semibold text-[#464E70]">
-            {profile.chapters?.length || 1} Chapters
+            {isPtBr
+              ? `${profile.chapters?.length || 1} Capítulos`
+              : `${profile.chapters?.length || 1} Chapters`}
           </span>
         </div>
       </div>

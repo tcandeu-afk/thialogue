@@ -10819,8 +10819,8 @@ const INITIAL_PROFILES = {
     "hasFurigana": false,
     "noWordSpaces": false,
     "storyTitle": "The Sunny Café in London (A Cafeteria Ensolarada em Londres)",
-    "storyArcSummary": "Helena, a Brazilian mother visiting her daughter Julia in London, walks into the cozy Sunny Café on a rainy morning. With the help of the friendly waiter Oliver, she finds a lost blue notebook with a family recipe card and a Concert Ticket inside, leading them to Portobello Market to return it to its grateful owner, Mrs. Miller.",
-    "difficultyModifier": "Baseline A1 Beginner",
+    "storyArcSummary": "Helena, uma mãe brasileira visitando sua filha Julia em Londres, entra na aconchegante cafeteria Sunny Café em uma manhã fria. Com a ajuda do simpático garçom Oliver, ela encontra um caderno azul perdido com uma receita de família e um ingresso, levando-as até o Mercado Portobello para devolvê-lo à sua dona agradecida, a Sra. Miller.",
+    "difficultyModifier": "A1 Iniciante",
     "activeChapterIndex": 0,
     "vocabBank": [
       {
@@ -10864,9 +10864,9 @@ const INITIAL_PROFILES = {
       {
         "id": "en-ch-1",
         "chapterNumber": 1,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 1: A Warm Cup of Coffee (Uma Xícara de Café Quente)",
-        "updatedArcSummary": "On a cold morning in London, Helena enters the Sunny Café, orders hot coffee and warm bread in English from the waiter Oliver, and discovers a small blue notebook on the chair next to her table.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 1: A Warm Cup of Coffee (Uma Xícara de Café Quente)",
+        "updatedArcSummary": "Em uma manhã fria em Londres, Helena entra na cafeteria Sunny Café, pede um café quente e pão quentinho em inglês ao garçom Oliver, e encontra um pequeno caderno azul esquecido na cadeira ao lado de sua mesa.",
         "recycledWordsUsed": [
           "morning",
           "would",
@@ -11754,9 +11754,9 @@ const INITIAL_PROFILES = {
       {
         "id": "en-ch-2",
         "chapterNumber": 2,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 2: Walking to Portobello Market (Caminhando até o Mercado Portobello)",
-        "updatedArcSummary": "Helena finishes her coffee and asks Oliver for directions to Mrs. Miller's flower shop at Portobello Market. Along the way, she meets her daughter Julia and they walk together down the colorful street.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 2: Walking to Portobello Market (Caminhando até o Mercado Portobello)",
+        "updatedArcSummary": "Helena termina seu café e pede direções a Oliver para chegar à floricultura da Sra. Miller no Mercado Portobello. Na saída, ela encontra sua filha Julia e elas caminham juntas pela rua colorida.",
         "recycledWordsUsed": [
           "morning",
           "looking",
@@ -12534,9 +12534,9 @@ const INITIAL_PROFILES = {
       {
         "id": "en-ch-3",
         "chapterNumber": 3,
-        "difficultyLabel": "A1 Beginner",
-        "chapterTitle": "Chapter 3: A New Friend at the Flower Shop (Uma Nova Amiga na Floricultura)",
-        "updatedArcSummary": "At Portobello Market, Helena and Julia find the flower shop with yellow roses. Mrs. Miller is overjoyed to get her grandmother's recipe notebook back and gifts Helena a bouquet of yellow roses and homemade tea.",
+        "difficultyLabel": "A1 Iniciante",
+        "chapterTitle": "Capítulo 3: A New Friend at the Flower Shop (Uma Nova Amiga na Floricultura)",
+        "updatedArcSummary": "No Mercado Portobello, Helena e Julia encontram a floricultura cheia de rosas amarelas. A Sra. Miller fica muito feliz ao recuperar o caderno de receitas de sua avó e presenteia Helena com rosas amarelas e um convite especial.",
         "recycledWordsUsed": [
           "morning",
           "looking",
@@ -13394,16 +13394,28 @@ function loadProfiles() {
 
       const combinedChapters =
         isCurrentVersion && savedChapters.length > 0
-          ? savedChapters.map((ch, idx) => ({
-              ...ch,
-              chapterNumber: idx + 1,
-            }))
+          ? savedChapters.map((ch, idx) => {
+              const starterCh = starterChapters[idx];
+              return {
+                ...ch,
+                chapterNumber: idx + 1,
+                ...(starterCh
+                  ? {
+                      chapterTitle: starterCh.chapterTitle,
+                      difficultyLabel: starterCh.difficultyLabel,
+                      updatedArcSummary: starterCh.updatedArcSummary,
+                    }
+                  : {}),
+              };
+            })
           : starterChapters;
 
       merged[langId] = {
         ...merged[langId],
         ...(isCurrentVersion ? savedProf : {}),
         storyTitle: merged[langId].storyTitle,
+        storyArcSummary: merged[langId].storyArcSummary,
+        difficultyModifier: merged[langId].difficultyModifier,
         vocabBank: combinedVocab,
         chapters: combinedChapters,
         activeChapterIndex: isCurrentVersion
@@ -15101,7 +15113,7 @@ const BONUS_SCENE_BANK = {
   en: [
     {
       title: 'Afternoon Tea with Mrs. Miller (Chá da Tarde com a Sra. Miller)',
-      summary: 'Mrs. Miller invites Helena and her daughter Julia into the warm garden behind the flower shop for traditional English tea and homemade apple cake.',
+      summary: 'A Sra. Miller convida Helena e sua filha Julia para o jardim atrás da floricultura para tomar um tradicional chá inglês com bolo de maçã caseiro.',
       recycled: ['morning', 'notebook', 'would', 'looking'],
       sentences: [
         {
@@ -15294,8 +15306,14 @@ function generateOfflineBonusChapter(
       id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
       preRenderedAudioId: `${profile.id}-bonus-${unusedBonusIdx}`,
       chapterNumber: chapterNum,
-      difficultyLabel: `${profile.cefrLevel} • Fresh Story & Vocabulary`,
-      chapterTitle: `Chapter ${chapterNum} : ${pickedScene.title}`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Nova História e Vocabulário'
+          : `${profile.cefrLevel} • Fresh Story & Vocabulary`,
+      chapterTitle:
+        profile.id === 'en'
+          ? `Capítulo ${chapterNum}: ${pickedScene.title}`
+          : `Chapter ${chapterNum} : ${pickedScene.title}`,
       updatedArcSummary: pickedScene.summary,
       recycledWordsUsed: pickedScene.recycled,
       sentences: structuredClone(combinedSentences),
@@ -15337,9 +15355,18 @@ function generateOfflineBonusChapter(
   return {
     id: `${profile.id}-ch-${chapterNum}-${Date.now()}`,
     chapterNumber: chapterNum,
-    difficultyLabel: `${profile.cefrLevel} • Episode ${chapterNum}`,
-    chapterTitle: `Chapter ${chapterNum} : ${episodeTitles[profile.id] || `Episode ${chapterNum}`}`,
-    updatedArcSummary: `${profile.storyArcSummary} In Chapter ${chapterNum}, new clues and conversations deepen the investigation.`,
+    difficultyLabel:
+      profile.id === 'en'
+        ? `A1 Iniciante • Episódio ${chapterNum}`
+        : `${profile.cefrLevel} • Episode ${chapterNum}`,
+    chapterTitle:
+      profile.id === 'en'
+        ? `Capítulo ${chapterNum}: ${episodeTitles[profile.id]}`
+        : `Chapter ${chapterNum} : ${episodeTitles[profile.id] || `Episode ${chapterNum}`}`,
+    updatedArcSummary:
+      profile.id === 'en'
+        ? `${profile.storyArcSummary} No Capítulo ${chapterNum}, novas conversas em inglês continuam a história.`
+        : `${profile.storyArcSummary} In Chapter ${chapterNum}, new clues and conversations deepen the investigation.`,
     recycledWordsUsed: (profile.vocabBank || []).slice(0, 4).map((w) => w.baseForm),
     sentences: pickedSentences,
   };
@@ -15763,7 +15790,10 @@ function createOfflineDifficultyVariant(baseChapter, level, profile) {
       ...cleanBase,
       id: `${baseId}__maintain`,
       activeDifficulty: 'maintain',
-      difficultyLabel: `${profile.cefrLevel} • Just Right (Standard)`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Ideal (Padrão)'
+          : `${profile.cefrLevel} • Just Right (Standard)`,
     };
   }
 
@@ -15778,7 +15808,10 @@ function createOfflineDifficultyVariant(baseChapter, level, profile) {
       ...cleanBase,
       id: `${baseId}__simplify`,
       activeDifficulty: 'simplify',
-      difficultyLabel: `${profile.cefrLevel} • Simplified (Shorter & Easier)`,
+      difficultyLabel:
+        profile.id === 'en'
+          ? 'A1 Iniciante • Mais Simples (Mais Curto e Fácil)'
+          : `${profile.cefrLevel} • Simplified (Shorter & Easier)`,
       sentences: coreSentences,
     };
   }
@@ -15789,7 +15822,10 @@ function createOfflineDifficultyVariant(baseChapter, level, profile) {
     ...cleanBase,
     id: `${baseId}__challenge`,
     activeDifficulty: 'challenge',
-    difficultyLabel: `${profile.cefrLevel} • More Complex (Longer & Richer)`,
+    difficultyLabel:
+      profile.id === 'en'
+        ? 'A1 Iniciante • Mais Complexo (Mais Longo e Completo)'
+        : `${profile.cefrLevel} • More Complex (Longer & Richer)`,
     sentences: [...cleanBase.sentences, ...structuredClone(extras)],
   };
 }
@@ -15972,6 +16008,7 @@ function TopReaderBar({
   )}`;
 
   const isCJK = activeProfile?.id === 'ja';
+  const isPtBr = activeProfile?.id === 'en';
 
   const learningCount = (activeProfile?.vocabBank || []).filter(
     (w) => w.status === 'learning'
@@ -16029,7 +16066,7 @@ function TopReaderBar({
           <div className="relative flex shrink-0 items-center gap-1.5 sm:gap-2" ref={menuRef}>
             {strictMode && (
               <span className="hidden rounded-md bg-[#8C4A3E] px-2 py-0.5 text-[11px] font-semibold text-white lg:inline-block">
-                Strict ON
+                {isPtBr ? 'Modo Estrito' : 'Strict ON'}
               </span>
             )}
 
@@ -16040,9 +16077,15 @@ function TopReaderBar({
               disabled={strictMode}
               title={
                 strictMode
-                  ? 'Disable Strict Mode in Menu to show sentence translations'
+                  ? isPtBr
+                    ? 'Desative o Modo Estrito no Menu para mostrar a tradução das frases'
+                    : 'Disable Strict Mode in Menu to show sentence translations'
                   : showEnglishTranslation
-                  ? `Hide ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
+                  ? isPtBr
+                    ? 'Ocultar a tradução em Português (BR) abaixo de cada frase'
+                    : `Hide ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
+                  : isPtBr
+                  ? 'Mostrar a tradução em Português (BR) abaixo de cada frase'
                   : `Show ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
               }
               aria-label="Toggle Sentence Translation"
@@ -16056,8 +16099,13 @@ function TopReaderBar({
             >
               <Subtitles className="h-3.5 w-3.5" />
               <span>
-                {activeProfile?.id === 'en' ? 'PT' : 'EN'}{' '}
-                {showEnglishTranslation && !strictMode ? 'ON' : 'OFF'}
+                {isPtBr
+                  ? showEnglishTranslation && !strictMode
+                    ? 'Tradução PT: SIM'
+                    : 'Tradução PT: NÃO'
+                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'} ${
+                      showEnglishTranslation && !strictMode ? 'ON' : 'OFF'
+                    }`}
               </span>
             </button>
 
@@ -16067,7 +16115,11 @@ function TopReaderBar({
               onClick={onToggleReaderOnlyMode}
               title={
                 readerOnlyMode
-                  ? 'Exit Reader View (Show all tools & sidebars)'
+                  ? isPtBr
+                    ? 'Sair do Modo Leitura (Mostrar dicionário e exercícios)'
+                    : 'Exit Reader View (Show all tools & sidebars)'
+                  : isPtBr
+                  ? 'Modo Leitura: Mostrar apenas o texto e o áudio'
                   : 'Reader View: Simplified Text & Sound Only (Safari Reader style)'
               }
               aria-label="Toggle Simplified Text and Sound Only Reader View"
@@ -16081,7 +16133,13 @@ function TopReaderBar({
                 AA
               </span>
               <span className="hidden xs:inline sm:inline">
-                {readerOnlyMode ? 'Reader ON' : 'Reader'}
+                {readerOnlyMode
+                  ? isPtBr
+                    ? 'Leitura ATIVA'
+                    : 'Reader ON'
+                  : isPtBr
+                  ? 'Modo Leitura'
+                  : 'Reader'}
               </span>
             </button>
 
@@ -16097,7 +16155,7 @@ function TopReaderBar({
               }`}
             >
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              <span>Menu</span>
+              <span>{isPtBr ? 'Opções' : 'Menu'}</span>
               <span
                 className={`h-2 w-2 rounded-full ${
                   hasGeminiKey ? 'bg-[#3B7A57]' : 'bg-[#C88A32]'
@@ -16109,7 +16167,7 @@ function TopReaderBar({
             {menuOpen && (
               <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-[#DCE2DF] bg-[#FFFFFF] p-2.5 shadow-xl z-50 space-y-1.5">
                 <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#737F79]">
-                  Reading Modes &amp; Aids
+                  {isPtBr ? 'Modos de Leitura e Ajuda' : 'Reading Modes & Aids'}
                 </div>
 
                 {/* 0. Safari-Inspired Reader View (Text & Sound Only) Toggle */}
@@ -16129,10 +16187,20 @@ function TopReaderBar({
                     <span className="inline-flex h-4 w-5 items-center justify-center rounded bg-black/10 font-serif text-[11px] font-bold">
                       AA
                     </span>
-                    <span>Text &amp; Sound Only (Reader)</span>
+                    <span>
+                      {isPtBr
+                        ? 'Apenas Texto e Áudio (Leitura)'
+                        : 'Text & Sound Only (Reader)'}
+                    </span>
                   </span>
                   <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-black/10">
-                    {readerOnlyMode ? 'ON' : 'OFF'}
+                    {readerOnlyMode
+                      ? isPtBr
+                        ? 'SIM'
+                        : 'ON'
+                      : isPtBr
+                      ? 'NÃO'
+                      : 'OFF'}
                   </span>
                 </button>
 
@@ -16148,10 +16216,10 @@ function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <ShieldAlert className="h-4 w-4" />
-                    <span>Strict Mode</span>
+                    <span>{isPtBr ? 'Modo Sem Dicas (Estrito)' : 'Strict Mode'}</span>
                   </span>
                   <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-black/10">
-                    {strictMode ? 'ON' : 'OFF'}
+                    {strictMode ? (isPtBr ? 'SIM' : 'ON') : isPtBr ? 'NÃO' : 'OFF'}
                   </span>
                 </button>
 
@@ -16180,7 +16248,7 @@ function TopReaderBar({
                 )}
 
                 <div className="my-1 border-t border-[#E8ECEA] pt-1.5 px-2.5 text-[10px] font-bold uppercase tracking-wider text-[#737F79]">
-                  Tools &amp; Configuration
+                  {isPtBr ? 'Ferramentas e Ajustes' : 'Tools & Configuration'}
                 </div>
 
                 {/* 4. Built-in Translator Panel */}
@@ -16198,10 +16266,18 @@ function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    <span>Google Translator Panel</span>
+                    <span>
+                      {isPtBr ? 'Tradutor Google na Página' : 'Google Translator Panel'}
+                    </span>
                   </span>
                   <span className="text-[10px] font-semibold">
-                    {showTranslator ? 'Shown' : 'Open'}
+                    {showTranslator
+                      ? isPtBr
+                        ? 'Aberto'
+                        : 'Shown'
+                      : isPtBr
+                      ? 'Abrir'
+                      : 'Open'}
                   </span>
                 </button>
 
@@ -16220,10 +16296,14 @@ function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <BookmarkCheck className="h-4 w-4 text-[#D9A756]" />
-                    <span>Dictionary &amp; Vocab Sidebar</span>
+                    <span>
+                      {isPtBr
+                        ? 'Dicionário e Banco de Palavras'
+                        : 'Dictionary & Vocab Sidebar'}
+                    </span>
                   </span>
                   <span className="rounded-full bg-[#F6EBD8] px-2 py-0.5 text-[10px] font-bold text-[#6E4E19]">
-                    {learningCount}L/{acquiredCount}A
+                    {learningCount}/{acquiredCount}
                   </span>
                 </button>
 
@@ -16238,7 +16318,11 @@ function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <Settings className="h-4 w-4 text-[#5C6661]" />
-                    <span>API Keys &amp; Audio Settings</span>
+                    <span>
+                      {isPtBr
+                        ? 'Configurações de Áudio e IA'
+                        : 'API Keys & Audio Settings'}
+                    </span>
                   </span>
                   <span
                     className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold ${
@@ -16252,7 +16336,13 @@ function TopReaderBar({
                         hasGeminiKey ? 'bg-[#3B7A57]' : 'bg-[#C88A32]'
                       }`}
                     />
-                    {hasGeminiKey ? 'Ready' : 'Setup'}
+                    {hasGeminiKey
+                      ? isPtBr
+                        ? 'Pronto'
+                        : 'Ready'
+                      : isPtBr
+                      ? 'Ajustar'
+                      : 'Setup'}
                   </span>
                 </button>
 
@@ -16263,16 +16353,28 @@ function TopReaderBar({
                     onClick={() => setShowQrCode((prev) => !prev)}
                     className="flex w-full items-center justify-between rounded-xl border border-[#C9DCE8] bg-[#F1F6FA] px-3 py-2 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E4EFF6]"
                   >
-                    <span>📱 Open on Your Phone (QR Code)</span>
+                    <span>
+                      {isPtBr
+                        ? '📱 Abrir no Celular (Código QR)'
+                        : '📱 Open on Your Phone (QR Code)'}
+                    </span>
                     <span className="text-[10px] font-bold text-[#234E68]">
-                      {showQrCode ? 'Hide' : 'Scan'}
+                      {showQrCode
+                        ? isPtBr
+                          ? 'Ocultar'
+                          : 'Hide'
+                        : isPtBr
+                        ? 'Ver QR'
+                        : 'Scan'}
                     </span>
                   </button>
 
                   {showQrCode && (
                     <div className="mt-2 rounded-xl border border-[#D5E1E8] bg-[#FFFFFF] p-3 text-center">
                       <p className="text-[11px] font-medium text-[#2A332F]">
-                        Scan with your phone camera (on the same Wi-Fi):
+                        {isPtBr
+                          ? 'Aponte a câmera do seu celular para o código abaixo:'
+                          : 'Scan with your phone camera (on the same Wi-Fi):'}
                       </p>
                       <div className="my-2 flex justify-center">
                         <img
@@ -16282,10 +16384,12 @@ function TopReaderBar({
                         />
                       </div>
                       <p className="font-mono text-[11px] font-semibold text-[#234E68] select-all">
-                        http://192.168.1.62:8080
+                        https://tcandeu-afk.github.io/thialogue/
                       </p>
                       <p className="mt-1 text-[10px] text-[#6E7A74]">
-                        Your saved ElevenLabs &amp; Gemini keys will sync automatically!
+                        {isPtBr
+                          ? 'Você pode estudar pelo celular ou computador a qualquer momento!'
+                          : 'Your saved ElevenLabs & Gemini keys will sync automatically!'}
                       </p>
                     </div>
                   )}
@@ -16363,6 +16467,7 @@ function getSentenceIndexAtTime(sentences = [], currentTime = 0, duration = 0) {
 function AudioPlayerBar({
   chapter,
   bcp47,
+  langId,
   settings,
   audioBlobUrls,
   onCacheChapterBlobUrl,
@@ -16371,6 +16476,7 @@ function AudioPlayerBar({
   activeSpokenTokenIdx,
   setActiveSpokenTokenIdx,
 }) {
+  const isPtBr = langId === 'en';
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -16510,7 +16616,9 @@ function AudioPlayerBar({
 
     if (!hasElevenLabsKey && !preRenderedAudioUrl) {
       setAudioError(
-        'Please add your ElevenLabs API Key in Menu → API Keys & Audio Settings to play neural narration.'
+        isPtBr
+          ? 'Por favor, adicione sua chave API da ElevenLabs em Menu → Configurações para ouvir a narração neural.'
+          : 'Please add your ElevenLabs API Key in Menu → API Keys & Audio Settings to play neural narration.'
       );
       return;
     }
@@ -16726,18 +16834,24 @@ function AudioPlayerBar({
             {isGeneratingAudio ? (
               <>
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                <span>Loading Audio...</span>
+                <span>{isPtBr ? 'Carregando Áudio...' : 'Loading Audio...'}</span>
               </>
             ) : isPlaying ? (
               <>
                 <Pause className="h-3.5 w-3.5" />
-                <span>Pause Narration</span>
+                <span>{isPtBr ? 'Pausar Narração' : 'Pause Narration'}</span>
               </>
             ) : (
               <>
                 <Play className="h-3.5 w-3.5 fill-current" />
                 <span>
-                  {currentTime > 0.1 ? 'Resume Narration' : 'Play Full Chapter'}
+                  {currentTime > 0.1
+                    ? isPtBr
+                      ? 'Continuar Narração'
+                      : 'Resume Narration'
+                    : isPtBr
+                    ? 'Ouvir Capítulo Inteiro'
+                    : 'Play Full Chapter'}
                 </span>
               </>
             )}
@@ -16751,10 +16865,10 @@ function AudioPlayerBar({
                 onClick={() => handleJumpToSentence(Math.max(0, currentSentenceIdx - 1))}
                 disabled={isGeneratingAudio || currentSentenceIdx <= 0}
                 className="flex items-center gap-0.5 rounded-md px-2 py-1 text-[11px] font-medium text-[#355263] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Previous sentence"
+                title={isPtBr ? 'Frase anterior' : 'Previous sentence'}
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Prev</span>
+                <span className="hidden sm:inline">{isPtBr ? 'Ant.' : 'Prev'}</span>
               </button>
 
               <button
@@ -16762,10 +16876,18 @@ function AudioPlayerBar({
                 onClick={() => handleJumpToSentence(currentSentenceIdx)}
                 disabled={isGeneratingAudio}
                 className="flex items-center gap-1 border-x border-[#E6ECEA] px-2.5 py-1 text-[11px] font-semibold text-[#234E68] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Restart current sentence from the beginning"
+                title={
+                  isPtBr
+                    ? 'Repetir a frase atual desde o início'
+                    : 'Restart current sentence from the beginning'
+                }
               >
                 <RotateCcw className="h-3 w-3" />
-                <span>Replay S{currentSentenceIdx + 1}</span>
+                <span>
+                  {isPtBr
+                    ? `Repetir F${currentSentenceIdx + 1}`
+                    : `Replay S${currentSentenceIdx + 1}`}
+                </span>
               </button>
 
               <button
@@ -16779,9 +16901,9 @@ function AudioPlayerBar({
                   isGeneratingAudio || currentSentenceIdx >= sentenceSegments.length - 1
                 }
                 className="flex items-center gap-0.5 rounded-md px-2 py-1 text-[11px] font-medium text-[#355263] transition hover:bg-[#EDF4F8] disabled:opacity-40"
-                title="Next sentence"
+                title={isPtBr ? 'Próxima frase' : 'Next sentence'}
               >
-                <span className="hidden sm:inline">Next</span>
+                <span className="hidden sm:inline">{isPtBr ? 'Próx.' : 'Next'}</span>
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -16792,10 +16914,10 @@ function AudioPlayerBar({
               type="button"
               onClick={() => stopAllPlayback(true)}
               className="flex items-center gap-1 rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-medium text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-              title="Stop and reset to 00:00"
+              title={isPtBr ? 'Parar e voltar ao início (00:00)' : 'Stop and reset to 00:00'}
             >
               <Square className="h-3 w-3 fill-current" />
-              <span>Stop</span>
+              <span>{isPtBr ? 'Parar' : 'Stop'}</span>
             </button>
           )}
         </div>
@@ -16803,28 +16925,33 @@ function AudioPlayerBar({
         {/* Speed Selector */}
         <div className="flex flex-wrap items-center gap-1.5">
           <Volume2 className="h-4 w-4 text-[#87928D]" />
-          <span className="text-[11px] font-medium text-[#5C6661]">Speed:</span>
+          <span className="text-[11px] font-medium text-[#5C6661]">
+            {isPtBr ? 'Velocidade:' : 'Speed:'}
+          </span>
           <div className="flex flex-wrap rounded-lg border border-[#D5E1E8] bg-[#F4F8FA] p-0.5">
             {[
-              { rate: 0.5, label: '0.5x (Very Slow)' },
-              { rate: 0.65, label: '0.65x (Slow)' },
+              { rate: 0.5, label: isPtBr ? '0.5x (Muito Lento)' : '0.5x (Very Slow)' },
+              { rate: 0.65, label: isPtBr ? '0.65x (Lento)' : '0.65x (Slow)' },
               { rate: 0.75, label: '0.75x' },
               { rate: 0.85, label: '0.85x' },
-              { rate: 1.0, label: '1.0x' },
-              { rate: 1.15, label: '1.15x' },
+              { rate: 1.0, label: isPtBr ? '1.0x (Normal)' : '1.0x' },
             ].map(({ rate, label }) => (
               <button
                 key={rate}
                 type="button"
                 onClick={() => handleSpeedChange(rate)}
-                title={`Set narration speed to ${label}`}
+                title={
+                  isPtBr
+                    ? `Mudar velocidade da voz para ${label}`
+                    : `Set narration speed to ${label}`
+                }
                 className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition cursor-pointer ${
                   playbackRate === rate
                     ? 'bg-[#234E68] text-white shadow-2xs'
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                {rate === 0.5 ? '0.5x' : rate === 0.65 ? '0.65x' : `${rate}x`}
+                {`${rate}x`}
               </button>
             ))}
           </div>
@@ -16871,7 +16998,11 @@ function AudioPlayerBar({
                     type="button"
                     onClick={() => handleJumpToSentence(seg.index)}
                     style={{ flexGrow: Math.max(1, Math.round(seg.weightRatio * 100)) }}
-                    title={`Sentence ${seg.index + 1}: "${seg.text}"`}
+                    title={
+                      isPtBr
+                        ? `Frase ${seg.index + 1}: "${seg.text}"`
+                        : `Sentence ${seg.index + 1}: "${seg.text}"`
+                    }
                     className={`group relative h-1.5 hover:h-2.5 transition-all rounded-[2px] bg-[#D5E1E8] overflow-visible focus:outline-none ${
                       isCurrentSentence ? 'h-2 bg-[#C8D8E2]' : ''
                     }`}
@@ -16906,11 +17037,15 @@ function AudioPlayerBar({
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#EA580C] animate-ping" />
                 <span className="truncate">
-                  Sentence {activeSpokenSentenceIdx + 1} of {sentenceSegments.length}
+                  {isPtBr
+                    ? `Frase ${activeSpokenSentenceIdx + 1} de ${sentenceSegments.length}`
+                    : `Sentence ${activeSpokenSentenceIdx + 1} of ${sentenceSegments.length}`}
                 </span>
               </div>
               <span className="text-[10px] text-[#6C7A74] shrink-0">
-                Click any marked segment on the line to restart that sentence
+                {isPtBr
+                  ? 'Clique em qualquer pedacinho na linha acima para repetir aquela frase'
+                  : 'Click any marked segment on the line to restart that sentence'}
               </span>
             </div>
           )}
@@ -16921,9 +17056,16 @@ function AudioPlayerBar({
         <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-[#C6D8E4] bg-[#F1F6FA] px-3 py-1.5 text-xs text-[#1E3F54]">
           <div className="flex items-center gap-2">
             <span className="inline-block h-2 w-2 rounded-full bg-[#234E68]" />
-            <span>
-              <strong>Pre-recorded audio ready</strong> — click <em>Play Full Chapter</em> to listen. (To use live AI voices, add your ElevenLabs API Key in <em>Menu → Settings</em>).
-            </span>
+            {isPtBr ? (
+              <span>
+                <strong>Áudio gravado pronto</strong> — clique em{' '}
+                <em>Ouvir Capítulo Inteiro</em> para escutar a história em inglês.
+              </span>
+            ) : (
+              <span>
+                <strong>Pre-recorded audio ready</strong> — click <em>Play Full Chapter</em> to listen. (To use live AI voices, add your ElevenLabs API Key in <em>Menu → Settings</em>).
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -23332,13 +23474,14 @@ function anonymizeCharacterNames(text, mode = 'en') {
  */
 function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapterNum) {
   const seedBase = (chapterNum || 1) * 37 + (languageCode?.charCodeAt(0) || 100);
+  const isPtBr = languageCode === 'en';
   const drills = curatedData?.drills;
 
   if (drills && drills.cloze && drills.dialogue && drills.audio_comprehension && drills.grammar_contrast && drills.sentence_order) {
     const clozeList = drills.cloze.map((q, idx) => ({
       id: `cloze-${idx}`,
       type: 'cloze',
-      badgeLabel: 'Context Transfer (Cloze)',
+      badgeLabel: isPtBr ? 'Completar a Frase' : 'Context Transfer (Cloze)',
       promptEnglish: q.promptEnglish,
       sentenceParts: q.sentenceParts,
       correctAnswer: q.correctAnswer,
@@ -23350,7 +23493,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const dialogueList = drills.dialogue.map((q, idx) => ({
       id: `dialogue-${idx}`,
       type: 'dialogue',
-      badgeLabel: 'Pragmatic Mini-Dialogue',
+      badgeLabel: isPtBr ? 'Mini-Diálogo Prático' : 'Pragmatic Mini-Dialogue',
       speakerA: q.speakerA,
       speakerAEnglish: q.speakerAEnglish,
       promptEnglish: q.promptEnglish,
@@ -23363,8 +23506,10 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const audioList = drills.audio_comprehension.map((q, idx) => ({
       id: `audio-${idx}`,
       type: 'audio_comprehension',
-      badgeLabel: 'Blind Audio Decoding',
-      promptEnglish: 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
+      badgeLabel: isPtBr ? 'Compreensão pelo Ouvido' : 'Blind Audio Decoding',
+      promptEnglish: isPtBr
+        ? 'Ouça a frase falada em inglês (sem ler primeiro!) e escolha o significado exato em português:'
+        : 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
       audioSentence: q.audioSentence,
       correctAnswer: q.correctAnswer,
       options: deterministicShuffle(q.options, seedBase + idx * 17 + 3),
@@ -23375,7 +23520,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     const grammarList = drills.grammar_contrast.map((q, idx) => ({
       id: `grammar-${idx}`,
       type: 'grammar_contrast',
-      badgeLabel: 'Form-Focused Pattern Check',
+      badgeLabel: isPtBr ? 'Checagem de Estrutura' : 'Form-Focused Pattern Check',
       promptEnglish: q.promptEnglish,
       correctAnswer: q.correctAnswer,
       options: deterministicShuffle(q.options, seedBase + idx * 19 + 4),
@@ -23391,7 +23536,7 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
       return {
         id: `order-${idx}`,
         type: 'sentence_order',
-        badgeLabel: 'Interactive Sentence Assembly',
+        badgeLabel: isPtBr ? 'Montar a Frase em Inglês' : 'Interactive Sentence Assembly',
         promptEnglish: q.promptEnglish,
         correctChunks: q.chunks,
         shuffledChunks: shuffled,
@@ -23412,10 +23557,11 @@ function buildInterleavedExerciseSet(curatedData, chapter, languageCode, chapter
     return interleaved;
   }
 
-  return buildDynamicFallbackExercises(chapter, seedBase);
+  return buildDynamicFallbackExercises(chapter, seedBase, languageCode);
 }
 
-function buildDynamicRecapMetadata(chapter) {
+function buildDynamicRecapMetadata(chapter, languageCode) {
+  const isPtBr = languageCode === 'en';
   if (chapter?.recapModule?.vocabReuses?.length && chapter?.recapModule?.construction) {
     return chapter.recapModule;
   }
@@ -23468,21 +23614,32 @@ function buildDynamicRecapMetadata(chapter) {
   return {
     subtitle:
       chapter?.recycledWordsUsed?.length > 0
-        ? `Contextual Transfer & Active Recall: ${chapter.recycledWordsUsed.join(', ')}`
+        ? isPtBr
+          ? `Prática em Novos Contextos: ${chapter.recycledWordsUsed.join(', ')}`
+          : `Contextual Transfer & Active Recall: ${chapter.recycledWordsUsed.join(', ')}`
+        : isPtBr
+        ? 'Vocabulário em Novos Contextos, Estrutura de Frases e Prática Interativa'
         : 'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall',
     vocabReuses,
     construction: {
-      patternName: `Chapter ${chapter?.chapterNumber || ''} Core Sentence Pattern`,
+      patternName: isPtBr
+        ? `Estrutura Principal do Capítulo ${chapter?.chapterNumber || ''}`
+        : `Chapter ${chapter?.chapterNumber || ''} Core Sentence Pattern`,
       explanation:
         firstWithGrammar.grammarNote ||
-        'Notice how these building blocks combine to express actions, dialogue, and context naturally.',
-      formula: ['Context / Subject', 'Core Verb Phrase', 'Complement / Detail'],
+        (isPtBr
+          ? 'Observe como estes blocos de palavras se combinam para formar frases naturais em inglês.'
+          : 'Notice how these building blocks combine to express actions, dialogue, and context naturally.'),
+      formula: isPtBr
+        ? ['Sujeito / Quem', 'Verbo Principal', 'Complemento']
+        : ['Context / Subject', 'Core Verb Phrase', 'Complement / Detail'],
       examples,
     },
   };
 }
 
-function buildDynamicFallbackExercises(chapter, seedBase) {
+function buildDynamicFallbackExercises(chapter, seedBase, languageCode) {
+  const isPtBr = languageCode === 'en';
   const sentences = chapter?.sentences || [];
   if (sentences.length === 0) return [];
 
@@ -23543,13 +23700,15 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
       clozeList.push({
         id: `dyn-cloze-${i}`,
         type: 'cloze',
-        badgeLabel: 'Context Transfer (Cloze)',
+        badgeLabel: isPtBr ? 'Completar a Frase' : 'Context Transfer (Cloze)',
         promptEnglish: s.cleanEn,
         sentenceParts: [before, after],
         correctAnswer: answer,
         options: deterministicShuffle([answer, ...pickedDistractors], seedBase + i * 11 + 1),
         fullSentence: s.cleanTarget,
-        explanation: `« ${answer} » (${targetTok.baseForm || answer}) means "${targetTok.contextualMeaning || ''}" in this context.`,
+        explanation: isPtBr
+          ? `« ${answer} » (${targetTok.baseForm || answer}) significa "${targetTok.contextualMeaning || ''}" neste contexto.`
+          : `« ${answer} » (${targetTok.baseForm || answer}) means "${targetTok.contextualMeaning || ''}" in this context.`,
       });
     }
 
@@ -23561,17 +23720,23 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     dialogueList.push({
       id: `dyn-dialogue-${i}`,
       type: 'dialogue',
-      badgeLabel: 'Pragmatic Mini-Dialogue',
+      badgeLabel: isPtBr ? 'Mini-Diálogo Prático' : 'Pragmatic Mini-Dialogue',
       speakerA: s.cleanTarget,
       speakerAEnglish: s.cleanEn,
-      promptEnglish: `Continue the scene by expressing: "${nextS.cleanEn}"`,
+      promptEnglish: isPtBr
+        ? `Continue a conversa dizendo em inglês: "${nextS.cleanEn}"`
+        : `Continue the scene by expressing: "${nextS.cleanEn}"`,
       correctAnswer: nextS.cleanTarget,
       options: deterministicShuffle(
         [nextS.cleanTarget, ...otherAnswers.slice(0, 3)],
         seedBase + i * 13 + 2
       ),
       fullSentence: nextS.cleanTarget,
-      explanation: nextS.grammarNote || `Matches the meaning: "${nextS.cleanEn}".`,
+      explanation:
+        nextS.grammarNote ||
+        (isPtBr
+          ? `Corresponde ao significado: "${nextS.cleanEn}".`
+          : `Matches the meaning: "${nextS.cleanEn}".`),
     });
 
     // 3. Blind Audio Decoding
@@ -23583,8 +23748,10 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     audioList.push({
       id: `dyn-audio-${i}`,
       type: 'audio_comprehension',
-      badgeLabel: 'Blind Audio Decoding',
-      promptEnglish: 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
+      badgeLabel: isPtBr ? 'Compreensão pelo Ouvido' : 'Blind Audio Decoding',
+      promptEnglish: isPtBr
+        ? 'Ouça a frase falada em inglês (sem ler primeiro!) e escolha o significado exato em português:'
+        : 'Listen to the spoken sentence (without reading!) and choose the exact meaning:',
       audioSentence: audioS.cleanTarget,
       correctAnswer: audioS.cleanEn,
       options: deterministicShuffle(
@@ -23592,7 +23759,9 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
         seedBase + i * 17 + 3
       ),
       fullSentence: audioS.cleanTarget,
-      explanation: `« ${audioS.cleanTarget} » means "${audioS.cleanEn}".`,
+      explanation: isPtBr
+        ? `« ${audioS.cleanTarget} » significa "${audioS.cleanEn}".`
+        : `« ${audioS.cleanTarget} » means "${audioS.cleanEn}".`,
     });
 
     // 4. Form-Focused Pattern Check
@@ -23604,15 +23773,21 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
     grammarList.push({
       id: `dyn-grammar-${i}`,
       type: 'grammar_contrast',
-      badgeLabel: 'Form-Focused Pattern Check',
-      promptEnglish: `Which sentence accurately expresses: "${gramS.cleanEn}"?`,
+      badgeLabel: isPtBr ? 'Checagem de Estrutura' : 'Form-Focused Pattern Check',
+      promptEnglish: isPtBr
+        ? `Qual frase em inglês expressa corretamente: "${gramS.cleanEn}"?`
+        : `Which sentence accurately expresses: "${gramS.cleanEn}"?`,
       correctAnswer: gramS.cleanTarget,
       options: deterministicShuffle(
         [gramS.cleanTarget, ...gramDistractors.slice(0, 3)],
         seedBase + i * 19 + 4
       ),
       fullSentence: gramS.cleanTarget,
-      explanation: gramS.grammarNote || `Correct structure for "${gramS.cleanEn}".`,
+      explanation:
+        gramS.grammarNote ||
+        (isPtBr
+          ? `Estrutura correta para "${gramS.cleanEn}".`
+          : `Correct structure for "${gramS.cleanEn}".`),
     });
 
     // 5. Interactive Sentence Assembly
@@ -23639,13 +23814,17 @@ function buildDynamicFallbackExercises(chapter, seedBase) {
       orderList.push({
         id: `dyn-order-${i}`,
         type: 'sentence_order',
-        badgeLabel: 'Interactive Sentence Assembly',
+        badgeLabel: isPtBr ? 'Montar a Frase em Inglês' : 'Interactive Sentence Assembly',
         promptEnglish: ordS.cleanEn,
         correctChunks: chunks,
         shuffledChunks: shuffled,
         correctAnswer: chunks.join(' '),
         fullSentence: ordS.cleanTarget,
-        explanation: ordS.grammarNote || `Full sentence: « ${ordS.cleanTarget} »`,
+        explanation:
+          ordS.grammarNote ||
+          (isPtBr
+            ? `Frase completa: « ${ordS.cleanTarget} »`
+            : `Full sentence: « ${ordS.cleanTarget} »`),
       });
     }
   }
@@ -23676,12 +23855,13 @@ function ChapterRecapSection({
   onGenerateChapter: propGenerateChapter
 }) {
   const languageCode = propLangCode || profile?.id || 'fr';
+  const isPtBr = languageCode === 'en';
   const bcp47 = profile?.bcp47 || 'fr-FR';
   const chapterNum = chapter?.chapterNumber || chapter?.number || (chapterIndex ?? 0) + 1;
   const langBank = COURSE_RECAP_BANK[languageCode] || {};
   const curatedData = useMemo(
-    () => langBank[chapterNum] || buildDynamicRecapMetadata(chapter),
-    [langBank, chapterNum, chapter]
+    () => langBank[chapterNum] || buildDynamicRecapMetadata(chapter, languageCode),
+    [langBank, chapterNum, chapter, languageCode]
   );
 
   const hasNextChapter =
@@ -23844,7 +24024,9 @@ function ChapterRecapSection({
   const construction = curatedData?.construction || null;
   const subtitle =
     curatedData?.subtitle ||
-    'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall';
+    (isPtBr
+      ? 'Vocabulário em Novos Contextos, Estrutura de Frases e Prática Interativa'
+      : 'Contextual Recombination, Sentence Patterns & Multi-Modal Active Recall');
 
   const exercisesToRender =
     viewMode === 'focused'
@@ -23862,13 +24044,21 @@ function ChapterRecapSection({
           <div className="space-y-1.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-orange-800 text-[11px] font-bold tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5 text-orange-600 shrink-0" />
-              <span>Chapter {chapterNum} Consolidation &amp; Transfer Lab</span>
+              <span>
+                {isPtBr
+                  ? `Laboratório de Fixação e Prática — Capítulo ${chapterNum}`
+                  : `Chapter ${chapterNum} Consolidation & Transfer Lab`}
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#181D1B] tracking-tight">
-              Beyond the Story: Recombine &amp; Master
+              {isPtBr
+                ? 'Além da História: Pratique e Domine o Inglês'
+                : 'Beyond the Story: Recombine & Master'}
             </h2>
             <p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed">
-              <span className="font-semibold text-[#181D1B]">Grammar &amp; Lexical Focus:</span>{' '}
+              <span className="font-semibold text-[#181D1B]">
+                {isPtBr ? 'Foco de Gramática e Vocabulário:' : 'Grammar & Lexical Focus:'}
+              </span>{' '}
               {subtitle}
             </p>
           </div>
@@ -23880,13 +24070,19 @@ function ChapterRecapSection({
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                Recall Progress
+                {isPtBr ? 'Seu Progresso' : 'Recall Progress'}
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#181D1B]">
                 {allCompleted
                   ? correctCount === totalQuestions
-                    ? 'Perfect Mastery!'
+                    ? isPtBr
+                      ? 'Domínio Perfeito!'
+                      : 'Perfect Mastery!'
+                    : isPtBr
+                    ? 'Prática Concluída!'
                     : 'Checkpoint Complete!'
+                  : isPtBr
+                  ? `${answeredCount} de ${totalQuestions} concluídos`
                   : `${answeredCount} of ${totalQuestions} completed`}
               </div>
             </div>
@@ -23903,7 +24099,9 @@ function ChapterRecapSection({
             <span className="inline-flex items-center gap-2">
               <GraduationCap className="w-4 h-4 text-orange-600 shrink-0" />
               <span>
-                Adult SLA Methodology: Why these exercises use fresh contexts &amp; blind audio
+                {isPtBr
+                  ? 'Como funciona este método: Por que praticamos com situações novas e áudio?'
+                  : 'Adult SLA Methodology: Why these exercises use fresh contexts & blind audio'}
               </span>
             </span>
             {showMethodologyInfo ? (
@@ -23917,34 +24115,50 @@ function ChapterRecapSection({
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-600 bg-white rounded-xl p-4 border border-[#E8D7C3]">
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  1. Chunk Recombination (Conti’s EPI)
+                  {isPtBr
+                    ? '1. Palavras em Situações do Dia a Dia'
+                    : '1. Chunk Recombination (Conti’s EPI)'}
                 </div>
                 <p className="leading-relaxed">
-                  Instead of repeating the same story lines, all 30 drills transplant the chapter’s vocabulary into fresh everyday scenarios so you build flexible mental schemas.
+                  {isPtBr
+                    ? 'Em vez de apenas repetir as frases da história, os exercícios usam as mesmas palavras em situações novas do cotidiano para você aprender a falar de verdade.'
+                    : 'Instead of repeating the same story lines, all 30 drills transplant the chapter’s vocabulary into fresh everyday scenarios so you build flexible mental schemas.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  2. Anti-Shortcut Design (VanPatten’s IP)
+                  {isPtBr
+                    ? '2. Aprendizado Real (Sem Adivinhação)'
+                    : '2. Anti-Shortcut Design (VanPatten’s IP)'}
                 </div>
                 <p className="leading-relaxed">
-                  Character names are stripped from all exercises and options share the same grammatical subject so you can never guess by matching names.
+                  {isPtBr
+                    ? 'Os nomes dos personagens são retirados dos exercícios para que você preste atenção no significado real das palavras em inglês.'
+                    : 'Character names are stripped from all exercises and options share the same grammatical subject so you can never guess by matching names.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  3. Blind Audio Decoding First
+                  {isPtBr
+                    ? '3. Treino de Ouvido Primeiro'
+                    : '3. Blind Audio Decoding First'}
                 </div>
                 <p className="leading-relaxed">
-                  In Listening exercises, the written transcript stays hidden until you answer—training your ear to decode spoken streams at 1.0x or 0.8x speed.
+                  {isPtBr
+                    ? 'Nos exercícios de áudio, a frase escrita fica oculta até você responder — treinando seu ouvido a entender o inglês falado na velocidade normal, lenta ou muito lenta.'
+                    : 'In Listening exercises, the written transcript stays hidden until you answer—training your ear to decode spoken streams at 1.0x or 0.8x speed.'}
                 </p>
               </div>
               <div className="space-y-1">
                 <div className="font-bold text-stone-800">
-                  4. Multi-Modal Retrieval (Nation &amp; Bjork)
+                  {isPtBr
+                    ? '4. Cinco Formas de Praticar'
+                    : '4. Multi-Modal Retrieval (Nation & Bjork)'}
                 </div>
                 <p className="leading-relaxed">
-                  Cycles through Context Cloze, Pragmatic Mini-Dialogues, Blind Audio, Pattern Checks, and Interactive Sentence Assembly.
+                  {isPtBr
+                    ? 'Combina Completar Frases, Mini-Diálogos, Compreensão pelo Ouvido, Checagem de Estrutura e Montagem de Frases.'
+                    : 'Cycles through Context Cloze, Pragmatic Mini-Dialogues, Blind Audio, Pattern Checks, and Interactive Sentence Assembly.'}
                 </p>
               </div>
             </div>
@@ -23963,10 +24177,14 @@ function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Vocabulary in Fresh Contexts
+                {isPtBr
+                  ? 'Vocabulário em Novos Contextos'
+                  : 'Vocabulary in Fresh Contexts'}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                See how key expressions from the story transfer into everyday life
+                {isPtBr
+                  ? 'Veja como usar as principais expressões da história em outras situações do dia a dia'
+                  : 'See how key expressions from the story transfer into everyday life'}
               </p>
             </div>
           </div>
@@ -23987,10 +24205,14 @@ function ChapterRecapSection({
                       type="button"
                       onClick={() => onPlaySentenceAudio(item.newPhrase, 1.0)}
                       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F1F6FA] hover:bg-[#E3EEF5] border border-[#C9DCE8] text-[#1E3F54] text-xs font-semibold transition-colors cursor-pointer"
-                      title="Listen to the new everyday sentence"
+                      title={
+                        isPtBr
+                          ? 'Ouvir esta nova frase em inglês'
+                          : 'Listen to the new everyday sentence'
+                      }
                     >
                       <Volume2 className="w-3.5 h-3.5 text-[#234E68]" />
-                      <span>Listen</span>
+                      <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
                     </button>
                   )}
                 </div>
@@ -23999,7 +24221,7 @@ function ChapterRecapSection({
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
                   <div className="sm:col-span-5 rounded-lg bg-[#F8FAF9] border border-[#E6ECE9] p-3 flex flex-col justify-center">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#737F79] mb-1">
-                      In the Story
+                      {isPtBr ? 'Na História' : 'In the Story'}
                     </span>
                     <p className="text-xs sm:text-sm text-[#4A5550] italic font-serif leading-relaxed">
                       {item.storyContext}
@@ -24008,7 +24230,7 @@ function ChapterRecapSection({
 
                   <div className="sm:col-span-7 rounded-lg bg-[#FFFDF9] border border-[#F2E3C9] p-3 flex flex-col justify-center">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-orange-700 mb-1">
-                      New Everyday Context
+                      {isPtBr ? 'Novo Contexto do Dia a Dia' : 'New Everyday Context'}
                     </span>
                     <p className="text-sm sm:text-base font-serif font-semibold text-[#181D1B] leading-snug">
                       {item.newPhrase}
@@ -24035,10 +24257,14 @@ function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Sentence Blueprint &amp; Pattern Noticing
+                {isPtBr
+                  ? 'Estrutura da Frase e Padrão do Inglês'
+                  : 'Sentence Blueprint & Pattern Noticing'}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                Master one reusable grammatical building block from this chapter
+                {isPtBr
+                  ? 'Domine um bloco de construção importante deste capítulo para montar suas próprias frases'
+                  : 'Master one reusable grammatical building block from this chapter'}
               </p>
             </div>
           </div>
@@ -24059,7 +24285,7 @@ function ChapterRecapSection({
               <div className="pt-1">
                 <div className="inline-flex flex-wrap items-center gap-2 bg-[#F8FAF9] px-3.5 py-2.5 rounded-xl border border-[#DCE2DF]">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6661] mr-1">
-                    Formula:
+                    {isPtBr ? 'Fórmula:' : 'Formula:'}
                   </span>
                   {construction.formula.map((part, idx) => (
                     <React.Fragment key={idx}>
@@ -24087,7 +24313,7 @@ function ChapterRecapSection({
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F2F4F3] text-[#5C6661]">
-                          Example {idx + 1}
+                          {isPtBr ? `Exemplo ${idx + 1}` : `Example ${idx + 1}`}
                         </span>
                       </div>
                       <p className="text-base sm:text-lg font-serif font-medium text-[#181D1B] leading-snug pt-0.5">
@@ -24113,10 +24339,10 @@ function ChapterRecapSection({
                         type="button"
                         onClick={() => onPlaySentenceAudio(ex.target, 1.0)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAF9] hover:bg-[#E5EFF6] border border-[#DCE2DF] text-xs font-semibold text-[#234E68] transition-colors shrink-0 cursor-pointer mt-1"
-                        title="Listen to example"
+                        title={isPtBr ? 'Ouvir exemplo' : 'Listen to example'}
                       >
                         <Volume2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Listen</span>
+                        <span className="hidden sm:inline">{isPtBr ? 'Ouvir' : 'Listen'}</span>
                       </button>
                     )}
                   </div>
@@ -24138,10 +24364,14 @@ function ChapterRecapSection({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                Active-Recall Transfer Checkpoint ({totalQuestions} Exercises)
+                {isPtBr
+                  ? `Exercícios Práticos de Fixação (${totalQuestions} Exercícios)`
+                  : `Active-Recall Transfer Checkpoint (${totalQuestions} Exercises)`}
               </h3>
               <p className="text-xs text-[#5C6661]">
-                5 cognitive modalities • Zero repeated story lines • Zero character-name shortcuts
+                {isPtBr
+                  ? '5 tipos de exercícios interativos • Frases do dia a dia com áudio e explicação'
+                  : '5 cognitive modalities • Zero repeated story lines • Zero character-name shortcuts'}
               </p>
             </div>
           </div>
@@ -24159,7 +24389,7 @@ function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                15 Standard
+                {isPtBr ? '15 Padrão' : '15 Standard'}
               </button>
               <button
                 type="button"
@@ -24171,7 +24401,7 @@ function ChapterRecapSection({
                 }`}
               >
                 <Shuffle className="w-3 h-3" />
-                <span>30 Deep</span>
+                <span>{isPtBr ? '30 Completo' : '30 Deep'}</span>
               </button>
             </div>
 
@@ -24186,7 +24416,7 @@ function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                One-by-One
+                {isPtBr ? 'Um por Um' : 'One-by-One'}
               </button>
               <button
                 type="button"
@@ -24197,7 +24427,7 @@ function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                All ({ activeExercises.length })
+                {isPtBr ? `Todos (${activeExercises.length})` : `All (${activeExercises.length})`}
               </button>
             </div>
 
@@ -24206,10 +24436,10 @@ function ChapterRecapSection({
                 type="button"
                 onClick={handleResetQuiz}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white border border-[#DCE2DF] text-xs font-semibold text-[#5C6661] hover:text-[#181D1B] transition-colors cursor-pointer"
-                title="Reset all answers"
+                title={isPtBr ? 'Reiniciar todos os exercícios' : 'Reset all answers'}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset</span>
+                <span>{isPtBr ? 'Reiniciar' : 'Reset'}</span>
               </button>
             )}
           </div>
@@ -24218,12 +24448,26 @@ function ChapterRecapSection({
         {/* Modality Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5 mb-4">
           {[
-            { id: 'all', label: `All Modalities (${totalQuestions})` },
-            { id: 'cloze', label: 'Context Cloze' },
-            { id: 'dialogue', label: 'Mini-Dialogue' },
-            { id: 'audio_comprehension', label: 'Blind Audio' },
-            { id: 'grammar_contrast', label: 'Pattern Check' },
-            { id: 'sentence_order', label: 'Sentence Assembly' }
+            {
+              id: 'all',
+              label: isPtBr
+                ? `Todos os Tipos (${totalQuestions})`
+                : `All Modalities (${totalQuestions})`,
+            },
+            { id: 'cloze', label: isPtBr ? 'Completar Frase' : 'Context Cloze' },
+            { id: 'dialogue', label: isPtBr ? 'Mini-Diálogo' : 'Mini-Dialogue' },
+            {
+              id: 'audio_comprehension',
+              label: isPtBr ? 'Compreensão de Áudio' : 'Blind Audio',
+            },
+            {
+              id: 'grammar_contrast',
+              label: isPtBr ? 'Checagem de Estrutura' : 'Pattern Check',
+            },
+            {
+              id: 'sentence_order',
+              label: isPtBr ? 'Montar a Frase' : 'Sentence Assembly',
+            },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -24248,10 +24492,14 @@ function ChapterRecapSection({
           <div className="mb-4 bg-white rounded-xl border border-[#DCE2DF] p-3 shadow-sm">
             <div className="flex items-center justify-between text-xs text-[#5C6661] mb-2">
               <span className="font-semibold text-[#181D1B]">
-                Exercise {currentStepIdx + 1} of {activeExercises.length}
+                {isPtBr
+                  ? `Exercício ${currentStepIdx + 1} de ${activeExercises.length}`
+                  : `Exercise ${currentStepIdx + 1} of ${activeExercises.length}`}
               </span>
               <span>
-                Click any number to jump • Green = Correct, Red = Needs retry
+                {isPtBr
+                  ? 'Clique em qualquer número para ir direto • Verde = Acertou, Vermelho = Tentar novamente'
+                  : 'Click any number to jump • Green = Correct, Red = Needs retry'}
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -24316,7 +24564,9 @@ function ChapterRecapSection({
                     <div className="space-y-2 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-bold uppercase tracking-wider text-[#5C6661]">
-                          Exercise {globalIdx + 1} of {activeExercises.length}
+                          {isPtBr
+                            ? `Exercício ${globalIdx + 1} de ${activeExercises.length}`
+                            : `Exercise ${globalIdx + 1} of ${activeExercises.length}`}
                         </span>
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${styleInfo.bg}`}
@@ -24355,7 +24605,7 @@ function ChapterRecapSection({
                         <div className="mt-2 rounded-xl bg-[#F8FAF9] border border-[#DCE2DF] p-4 space-y-1.5">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[11px] font-bold uppercase tracking-wider text-[#234E68]">
-                              Conversational Partner
+                              {isPtBr ? 'Pessoa Falando com Você' : 'Conversational Partner'}
                             </span>
                             {onPlaySentenceAudio && (
                               <button
@@ -24364,7 +24614,7 @@ function ChapterRecapSection({
                                 className="inline-flex items-center gap-1 text-xs font-semibold text-[#234E68] hover:text-orange-600 cursor-pointer"
                               >
                                 <Volume2 className="w-3.5 h-3.5" />
-                                <span>Listen</span>
+                                <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
                               </button>
                             )}
                           </div>
@@ -24389,7 +24639,11 @@ function ChapterRecapSection({
                                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-colors cursor-pointer"
                                 >
                                   <Volume2 className="w-4 h-4 shrink-0" />
-                                  <span>Play Spoken Sentence (1.0x)</span>
+                                  <span>
+                                    {isPtBr
+                                      ? 'Ouvir Frase Falada (1.0x)'
+                                      : 'Play Spoken Sentence (1.0x)'}
+                                  </span>
                                 </button>
                                 <button
                                   type="button"
@@ -24397,7 +24651,7 @@ function ChapterRecapSection({
                                   className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-semibold transition-colors cursor-pointer"
                                 >
                                   <Headphones className="w-3.5 h-3.5 shrink-0" />
-                                  <span>Slow (0.75x)</span>
+                                  <span>{isPtBr ? 'Lento (0.75x)' : 'Slow (0.75x)'}</span>
                                 </button>
                                 <button
                                   type="button"
@@ -24405,7 +24659,9 @@ function ChapterRecapSection({
                                   className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold transition-colors cursor-pointer"
                                 >
                                   <Headphones className="w-3.5 h-3.5 shrink-0" />
-                                  <span>Very Slow (0.55x)</span>
+                                  <span>
+                                    {isPtBr ? 'Muito Lento (0.55x)' : 'Very Slow (0.55x)'}
+                                  </span>
                                 </button>
                               </>
                             )}
@@ -24419,12 +24675,16 @@ function ChapterRecapSection({
                                 {isTranscriptShown ? (
                                   <>
                                     <EyeOff className="w-3.5 h-3.5 shrink-0" />
-                                    <span>Hide Written Hint</span>
+                                    <span>
+                                      {isPtBr ? 'Ocultar Dica Escrita' : 'Hide Written Hint'}
+                                    </span>
                                   </>
                                 ) : (
                                   <>
                                     <Eye className="w-3.5 h-3.5 shrink-0" />
-                                    <span>Show Transcript Hint</span>
+                                    <span>
+                                      {isPtBr ? 'Mostrar Dica Escrita' : 'Show Transcript Hint'}
+                                    </span>
                                   </>
                                 )}
                               </button>
@@ -24434,7 +24694,13 @@ function ChapterRecapSection({
                           {isTranscriptShown ? (
                             <div className="rounded-xl bg-purple-50/70 border border-purple-200 px-4 py-3">
                               <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 block mb-0.5">
-                                {isAnswered ? 'Spoken Target Sentence' : 'Transcript Hint'}
+                                {isAnswered
+                                  ? isPtBr
+                                    ? 'Frase Falada em Inglês'
+                                    : 'Spoken Target Sentence'
+                                  : isPtBr
+                                  ? 'Dica Escrita'
+                                  : 'Transcript Hint'}
                               </span>
                               <p className="text-base sm:text-lg font-serif font-semibold text-[#181D1B]">
                                 « {q.audioSentence} »
@@ -24444,7 +24710,9 @@ function ChapterRecapSection({
                             <div className="rounded-xl bg-[#F8FAF9] border border-dashed border-[#C5D1CB] px-4 py-2.5 text-xs text-[#5C6661] flex items-center gap-2">
                               <Headphones className="w-4 h-4 text-purple-600 shrink-0" />
                               <span>
-                                Written sentence hidden so your ear decodes the spoken stream first.
+                                {isPtBr
+                                  ? 'A frase escrita está oculta para você treinar o ouvido primeiro.'
+                                  : 'Written sentence hidden so your ear decodes the spoken stream first.'}
                               </span>
                             </div>
                           )}
@@ -24457,7 +24725,9 @@ function ChapterRecapSection({
                           <div className="min-h-[56px] rounded-xl bg-[#F8FAF9] border-2 border-dashed border-[#C5D1CB] p-3 flex flex-wrap items-center gap-2">
                             {placedList.length === 0 && !isAnswered ? (
                               <span className="text-xs text-[#737F79] select-none">
-                                Click the phrase tiles below in order to assemble the sentence...
+                                {isPtBr
+                                  ? 'Clique nos blocos de palavras abaixo na ordem certa para montar a frase em inglês...'
+                                  : 'Click the phrase tiles below in order to assemble the sentence...'}
                               </span>
                             ) : (
                               placedList.map((item, pIdx) => (
@@ -24473,7 +24743,13 @@ function ChapterRecapSection({
                                       ? 'bg-emerald-100 border-emerald-500 text-emerald-950'
                                       : 'bg-rose-100 border-rose-500 text-rose-950'
                                   }`}
-                                  title={!isAnswered ? 'Click to remove tile' : ''}
+                                  title={
+                                    !isAnswered
+                                      ? isPtBr
+                                        ? 'Clique para remover este bloco'
+                                        : 'Click to remove tile'
+                                      : ''
+                                  }
                                 >
                                   {item.text}
                                 </button>
@@ -24508,7 +24784,7 @@ function ChapterRecapSection({
                                 className="ml-auto inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#5C6661] hover:text-[#181D1B] cursor-pointer"
                               >
                                 <RotateCcw className="w-3 h-3" />
-                                <span>Clear Tray</span>
+                                <span>{isPtBr ? 'Limpar Blocos' : 'Clear Tray'}</span>
                               </button>
                             )}
                           </div>
@@ -24522,10 +24798,14 @@ function ChapterRecapSection({
                         type="button"
                         onClick={() => onPlaySentenceAudio(q.fullSentence, 1.0)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#DCE2DF] text-xs font-semibold text-[#234E68] hover:border-orange-300 hover:text-orange-600 transition-colors shrink-0 cursor-pointer shadow-sm"
-                        title="Listen to the complete sentence"
+                        title={
+                          isPtBr
+                            ? 'Ouvir a frase completa em inglês'
+                            : 'Listen to the complete sentence'
+                        }
                       >
                         <Volume2 className="w-3.5 h-3.5 text-orange-600" />
-                        <span>Play Audio</span>
+                        <span>{isPtBr ? 'Ouvir Áudio' : 'Play Audio'}</span>
                       </button>
                     )}
                   </div>
@@ -24585,7 +24865,13 @@ function ChapterRecapSection({
                     >
                       <div className="leading-relaxed">
                         <span className="font-bold mr-1.5">
-                          {isCorrect ? 'Spot on!' : `Correct answer: « ${q.correctAnswer} » —`}
+                          {isCorrect
+                            ? isPtBr
+                              ? 'Muito bem! Correto!'
+                              : 'Spot on!'
+                            : isPtBr
+                            ? `Resposta correta: « ${q.correctAnswer} » —`
+                            : `Correct answer: « ${q.correctAnswer} » —`}
                         </span>
                         <span>{q.explanation}</span>
                       </div>
@@ -24598,7 +24884,7 @@ function ChapterRecapSection({
                             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-300 text-rose-800 font-semibold text-xs cursor-pointer"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Try Again</span>
+                            <span>{isPtBr ? 'Tentar Novamente' : 'Try Again'}</span>
                           </button>
                         )}
                       </div>
@@ -24615,11 +24901,13 @@ function ChapterRecapSection({
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCE2DF] bg-[#F8FAF9] text-xs font-semibold text-[#4A5550] hover:text-[#181D1B] disabled:opacity-40 cursor-pointer"
                       >
                         <ChevronLeft className="w-4 h-4" />
-                        <span>Previous</span>
+                        <span>{isPtBr ? 'Anterior' : 'Previous'}</span>
                       </button>
 
                       <span className="text-xs font-medium text-[#737F79]">
-                        {answeredCount} of {totalQuestions} answered
+                        {isPtBr
+                          ? `${answeredCount} de ${totalQuestions} respondidos`
+                          : `${answeredCount} of ${totalQuestions} answered`}
                       </span>
 
                       <button
@@ -24634,7 +24922,7 @@ function ChapterRecapSection({
                             : 'border border-[#DCE2DF] bg-[#F8FAF9] text-[#181D1B] hover:bg-[#EEF2F0]'
                         }`}
                       >
-                        <span>Next Exercise</span>
+                        <span>{isPtBr ? 'Próximo Exercício' : 'Next Exercise'}</span>
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -24657,14 +24945,24 @@ function ChapterRecapSection({
           <div>
             <h4 className="text-base font-serif font-bold text-white">
               {allCompleted
-                ? `Great job completing Chapter ${chapterNum}'s Transfer Lab!`
+                ? isPtBr
+                  ? `Parabéns por concluir o Laboratório de Prática do Capítulo ${chapterNum}!`
+                  : `Great job completing Chapter ${chapterNum}'s Transfer Lab!`
+                : isPtBr
+                ? 'Pronta para a próxima parte da história?'
                 : `Ready for the next part of the story?`}
             </h4>
             <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
               {allCompleted
-                ? `You scored ${correctCount} out of ${totalQuestions} across all 5 active-recall modalities.`
+                ? isPtBr
+                  ? `Você acertou ${correctCount} de ${totalQuestions} exercícios práticos de fixação.`
+                  : `You scored ${correctCount} out of ${totalQuestions} across all 5 active-recall modalities.`
                 : exerciseCountMode === 15
-                ? `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
+                ? isPtBr
+                  ? 'Pratique com os 15 exercícios acima ou clique em "30 Completo" para mais 15 exercícios.'
+                  : `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
+                : isPtBr
+                ? 'Conclua os 30 exercícios acima para fixar bem o vocabulário deste capítulo.'
                 : `Complete all 30 multi-style transfer exercises above to lock in this chapter's patterns.`}
             </p>
           </div>
@@ -24677,7 +24975,11 @@ function ChapterRecapSection({
               onClick={onNextChapter}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
             >
-              <span>Continue to Chapter {chapterNum + 1}</span>
+              <span>
+                {isPtBr
+                  ? `Continuar para o Capítulo ${chapterNum + 1}`
+                  : `Continue to Chapter ${chapterNum + 1}`}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
@@ -24688,7 +24990,11 @@ function ChapterRecapSection({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Generate Chapter {chapterNum + 1} with AI</span>
+                <span>
+                  {isPtBr
+                    ? `Gerar Capítulo ${chapterNum + 1}`
+                    : `Generate Chapter ${chapterNum + 1} with AI`}
+                </span>
               </button>
             )
           )}
@@ -24861,6 +25167,7 @@ function InteractiveReader({
   const activeDifficulty = chapter.activeDifficulty || 'maintain';
   const isCJK = profile.id === 'ja';
   const isJapanese = profile.id === 'ja';
+  const isPtBr = profile.id === 'en';
   const showPhonetics = isCJK && phoneticAid && !strictMode;
   const showEnglishUnderSentence = showEnglishTranslation && !strictMode;
 
@@ -24907,23 +25214,29 @@ function InteractiveReader({
   const difficultyOptions = [
     {
       id: 'simplify',
-      shortLabel: 'Too Hard (Simpler)',
-      title: 'Too Hard — Make Simpler',
-      desc: 'Shorter, easier version of this chapter with simpler sentences',
+      shortLabel: isPtBr ? 'Muito Difícil (Mais Simples)' : 'Too Hard (Simpler)',
+      title: isPtBr ? 'Muito Difícil — Deixar Mais Simples' : 'Too Hard — Make Simpler',
+      desc: isPtBr
+        ? 'Versão mais curta e fácil deste capítulo com frases mais simples'
+        : 'Shorter, easier version of this chapter with simpler sentences',
       icon: SlidersHorizontal,
     },
     {
       id: 'maintain',
-      shortLabel: 'Just Right (Standard)',
-      title: 'Just Right — Standard',
-      desc: 'Original baseline version of this chapter',
+      shortLabel: isPtBr ? 'Ideal (Padrão)' : 'Just Right (Standard)',
+      title: isPtBr ? 'Ideal — Padrão' : 'Just Right — Standard',
+      desc: isPtBr
+        ? 'Versão original padrão deste capítulo'
+        : 'Original baseline version of this chapter',
       icon: CheckCircle2,
     },
     {
       id: 'challenge',
-      shortLabel: 'Too Easy (More Complex)',
-      title: 'Too Easy — Challenge Me',
-      desc: 'Longer, richer version of this chapter with deeper grammar',
+      shortLabel: isPtBr ? 'Muito Fácil (Mais Complexo)' : 'Too Easy (More Complex)',
+      title: isPtBr ? 'Muito Fácil — Mais Complexo' : 'Too Easy — Challenge Me',
+      desc: isPtBr
+        ? 'Versão mais longa e rica deste capítulo'
+        : 'Longer, richer version of this chapter with deeper grammar',
       icon: Flame,
     },
   ];
@@ -24946,7 +25259,7 @@ function InteractiveReader({
               </span>
               {readerOnlyMode && (
                 <span className="rounded-md border border-[#CDE0D6] bg-[#EFF6F2] px-2 py-0.5 text-[#285943]">
-                  Reader View
+                  {isPtBr ? 'Modo Leitura' : 'Reader View'}
                 </span>
               )}
             </div>
@@ -24973,7 +25286,7 @@ function InteractiveReader({
                     onClick={() => onSelectChapterIndex(idx)}
                     className="px-3 py-1.5 cursor-pointer focus:outline-none"
                   >
-                    Ch. {idx + 1}
+                    {isPtBr ? `Cap. ${idx + 1}` : `Ch. ${idx + 1}`}
                   </button>
                   {!readerOnlyMode && totalChapters > 1 && onDeleteChapter && idx >= 3 && (
                     <button
@@ -24982,8 +25295,16 @@ function InteractiveReader({
                         e.stopPropagation();
                         onDeleteChapter(idx);
                       }}
-                      title={`Delete Chapter ${idx + 1}`}
-                      aria-label={`Delete Chapter ${idx + 1}`}
+                      title={
+                        isPtBr
+                          ? `Excluir Capítulo ${idx + 1}`
+                          : `Delete Chapter ${idx + 1}`
+                      }
+                      aria-label={
+                        isPtBr
+                          ? `Excluir Capítulo ${idx + 1}`
+                          : `Delete Chapter ${idx + 1}`
+                      }
                       className={`mr-1 flex h-4 w-4 items-center justify-center rounded-full transition ${
                         isActive
                           ? 'text-[#C6D8E4] hover:bg-white/20 hover:text-white'
@@ -25003,17 +25324,23 @@ function InteractiveReader({
                 disabled={isGeneratingChapter}
                 onClick={() => onGenerateNextChapter('maintain')}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-70 cursor-pointer"
-                title="Generate next chapter"
+                title={isPtBr ? 'Gerar próximo capítulo' : 'Generate next chapter'}
               >
                 {isGeneratingChapter ? (
                   <>
                     <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
-                    <span className="text-[#EA580C]">Generating Ch. {totalChapters + 1}...</span>
+                    <span className="text-[#EA580C]">
+                      {isPtBr
+                        ? `Gerando Cap. ${totalChapters + 1}...`
+                        : `Generating Ch. ${totalChapters + 1}...`}
+                    </span>
                   </>
                 ) : (
                   <>
                     <Plus className="h-3.5 w-3.5" />
-                    <span>Ch. {totalChapters + 1}</span>
+                    <span>
+                      {isPtBr ? `Cap. ${totalChapters + 1}` : `Ch. ${totalChapters + 1}`}
+                    </span>
                   </>
                 )}
               </button>
@@ -25024,9 +25351,9 @@ function InteractiveReader({
                 type="button"
                 onClick={onToggleReaderOnlyMode}
                 className="inline-flex items-center gap-1 rounded-xl border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#4A5550] transition hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-                title="Exit Reader View"
+                title={isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader View'}
               >
-                <span>Exit Reader</span>
+                <span>{isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader'}</span>
               </button>
             )}
           </div>
@@ -25037,7 +25364,7 @@ function InteractiveReader({
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
-                Level:
+                {isPtBr ? 'Nível:' : 'Level:'}
               </span>
               {difficultyOptions.map((opt) => {
                 const isSelected = activeDifficulty === opt.id;
@@ -25056,9 +25383,15 @@ function InteractiveReader({
                     {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
                     <span>
                       {opt.id === 'simplify'
-                        ? 'Simpler'
+                        ? isPtBr
+                          ? 'Mais Simples'
+                          : 'Simpler'
                         : opt.id === 'maintain'
-                        ? 'Standard'
+                        ? isPtBr
+                          ? 'Padrão'
+                          : 'Standard'
+                        : isPtBr
+                        ? 'Mais Complexo'
                         : 'More Complex'}
                     </span>
                   </button>
@@ -25069,19 +25402,27 @@ function InteractiveReader({
             {strictMode ? (
               <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#7A3E33]">
                 <EyeOff className="h-3.5 w-3.5 shrink-0 text-[#8C4A3E]" />
-                <span>Strict Mode ON (Uninterrupted reading)</span>
+                <span>
+                  {isPtBr
+                    ? 'Modo Sem Dicas ATIVO (Leitura direta)'
+                    : 'Strict Mode ON (Uninterrupted reading)'}
+                </span>
               </div>
             ) : (
               <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#5C6661]">
-                <span>Tap any word for instant meaning &amp; audio</span>
+                <span>
+                  {isPtBr
+                    ? 'Toque em qualquer palavra para ver a tradução e ouvir a pronúncia'
+                    : 'Tap any word for instant meaning & audio'}
+                </span>
                 <span className="hidden sm:inline text-[#C5CECA]">•</span>
                 <span className="inline-flex items-center gap-1 font-medium text-[#7C581E]">
                   <span className="inline-block h-2 w-2 rounded-full bg-[#C9963E]" />
-                  Learning
+                  {isPtBr ? 'Aprendendo' : 'Learning'}
                 </span>
                 <span className="inline-flex items-center gap-1 font-medium text-[#285943]">
                   <span className="inline-block h-2 w-2 rounded-full bg-[#3B7A57]" />
-                  Acquired
+                  {isPtBr ? 'Aprendida' : 'Acquired'}
                 </span>
               </div>
             )}
@@ -25103,7 +25444,7 @@ function InteractiveReader({
             className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#181D1B] shadow-2xs transition hover:bg-[#E4EFF6] active:scale-95"
           >
             <X className="h-3.5 w-3.5" />
-            <span>Close</span>
+            <span>{isPtBr ? 'Fechar' : 'Close'}</span>
           </button>
 
           <div className="pr-20 space-y-1.5">
@@ -25117,7 +25458,7 @@ function InteractiveReader({
                 </span>
               )}
               <span className="text-xs text-[#5C6661]">
-                Base:{' '}
+                {isPtBr ? 'Forma base:' : 'Base:'}{' '}
                 <strong className="font-semibold text-[#181D1B]">
                   {selectedTokenInfo.token.baseForm}
                 </strong>
@@ -25135,10 +25476,10 @@ function InteractiveReader({
                   speakSingleWord(selectedTokenInfo.token.surface, profile.bcp47)
                 }
                 className="inline-flex items-center gap-1.5 rounded-lg border border-[#234E68] bg-[#234E68] px-3 py-1 text-xs font-semibold text-white shadow-2xs transition hover:bg-[#1B3E54] active:scale-95"
-                title="Pronounce word again"
+                title={isPtBr ? 'Ouvir a pronúncia novamente' : 'Pronounce word again'}
               >
                 <Volume2 className="h-3.5 w-3.5" />
-                <span>Listen ({profile.bcp47})</span>
+                <span>{isPtBr ? 'Ouvir Pronúncia' : `Listen (${profile.bcp47})`}</span>
               </button>
 
               {selectedVocabEntry && (
@@ -25152,14 +25493,19 @@ function InteractiveReader({
                   {selectedVocabEntry.status === 'acquired' ? (
                     <>
                       <CheckCircle2 className="h-3.5 w-3.5 text-[#3B7A57]" />
-                      <span>Acquired ({selectedVocabEntry.exposures}/5)</span>
+                      <span>
+                        {isPtBr
+                          ? `Aprendida (${selectedVocabEntry.exposures}/5)`
+                          : `Acquired (${selectedVocabEntry.exposures}/5)`}
+                      </span>
                     </>
                   ) : (
                     <>
                       <BookMarked className="h-3.5 w-3.5 text-[#B88328]" />
                       <span>
-                        Saved ({selectedVocabEntry.exposures}/
-                        {ACQUISITION_EXPOSURE_THRESHOLD})
+                        {isPtBr
+                          ? `Salva no Banco (${selectedVocabEntry.exposures}/${ACQUISITION_EXPOSURE_THRESHOLD})`
+                          : `Saved (${selectedVocabEntry.exposures}/${ACQUISITION_EXPOSURE_THRESHOLD})`}
                       </span>
                     </>
                   )}
@@ -25220,9 +25566,15 @@ function InteractiveReader({
                   }
                   title={
                     isThisSentencePlaying
-                      ? `Pause sentence ${sIdx + 1} (ElevenLabs)`
+                      ? isPtBr
+                        ? `Pausar frase ${sIdx + 1}`
+                        : `Pause sentence ${sIdx + 1} (ElevenLabs)`
                       : isThisSentencePaused
-                      ? `Resume sentence ${sIdx + 1} (ElevenLabs)`
+                      ? isPtBr
+                        ? `Continuar frase ${sIdx + 1}`
+                        : `Resume sentence ${sIdx + 1} (ElevenLabs)`
+                      : isPtBr
+                      ? `Ouvir frase ${sIdx + 1}`
                       : `Play sentence ${sIdx + 1} (ElevenLabs)`
                   }
                   aria-label={
@@ -25259,7 +25611,11 @@ function InteractiveReader({
                       onStateChange: setSentenceAudioState,
                     })
                   }
-                  title={`Restart sentence ${sIdx + 1} from beginning (ElevenLabs)`}
+                  title={
+                    isPtBr
+                      ? `Repetir frase ${sIdx + 1} desde o início`
+                      : `Restart sentence ${sIdx + 1} from beginning (ElevenLabs)`
+                  }
                   aria-label={`Restart sentence ${sIdx + 1}`}
                   className="inline-flex h-6 w-6 items-center justify-center rounded-md text-[#5C6661] transition hover:bg-[#E4EFF6] hover:text-[#181D1B] cursor-pointer"
                 >
@@ -25341,7 +25697,11 @@ function InteractiveReader({
                     <button
                       type="button"
                       onClick={() => toggleGrammarNote(sIdx)}
-                      title="Pattern Recognition Note: Click for a plain-English explanation of this sentence's grammar pattern"
+                      title={
+                        isPtBr
+                          ? 'Explicação da Frase: Clique para ver uma explicação simples de como esta frase funciona'
+                          : "Pattern Recognition Note: Click for a plain-English explanation of this sentence's grammar pattern"
+                      }
                       className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition ${
                         isGrammarOpen
                           ? 'border-[#464E70] bg-[#464E70] text-white'
@@ -25349,17 +25709,25 @@ function InteractiveReader({
                       }`}
                     >
                       <Sparkles className="h-3 w-3" />
-                      <span className="hidden sm:inline">Pattern</span>
+                      <span className="hidden sm:inline">
+                        {isPtBr ? 'Explicação' : 'Pattern'}
+                      </span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => onTranslateSentence(sentence.fullSentence)}
-                      title="Open this sentence in the top Translator panel"
+                      title={
+                        isPtBr
+                          ? 'Abrir esta frase no painel do Tradutor no topo da página'
+                          : 'Open this sentence in the top Translator panel'
+                      }
                       className="inline-flex items-center gap-1 rounded-full border border-[#C9DCE8] bg-[#F2F7FA] px-2 py-0.5 text-[11px] font-medium text-[#234E68] opacity-80 transition hover:bg-[#E4EFF6] group-hover:opacity-100"
                     >
                       <Globe className="h-3 w-3" />
-                      <span className="hidden md:inline">Translate</span>
+                      <span className="hidden md:inline">
+                        {isPtBr ? 'Traduzir' : 'Translate'}
+                      </span>
                     </button>
                   </span>
                 )}
@@ -25375,7 +25743,10 @@ function InteractiveReader({
               {/* Optional English Translation Line (Quiet Nordic Sage-Mist) */}
               {showEnglishUnderSentence && (
                 <p className="mt-1.5 rounded-lg border-l-2 border-[#4C7C64] bg-[#F2F7F4] px-3 py-1 font-sans text-sm font-medium text-[#244233]">
-                  {englishLine || 'Translating sentence to English...'}
+                  {englishLine ||
+                    (isPtBr
+                      ? 'Traduzindo frase para o Português...'
+                      : 'Translating sentence to English...')}
                 </p>
               )}
 
@@ -25384,7 +25755,9 @@ function InteractiveReader({
                 <div className="mt-2.5 flex items-start gap-2 rounded-lg border border-[#D6D9E8] bg-[#F5F6FA] px-3.5 py-2 font-sans text-xs leading-relaxed text-[#333954]">
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#464E70]" />
                   <div>
-                    <span className="font-semibold">Sentence Pattern: </span>
+                    <span className="font-semibold">
+                      {isPtBr ? 'Explicação da Frase: ' : 'Sentence Pattern: '}
+                    </span>
                     <span>{sentence.grammarNote}</span>
                   </div>
                 </div>
@@ -25401,7 +25774,9 @@ function InteractiveReader({
           <div className="mt-8 border-t border-[#E8ECEA] pt-4">
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#5C6661]">
               <span className="font-semibold text-[#181D1B]">
-                Target Words Woven Into This Chapter:
+                {isPtBr
+                  ? 'Palavras-Alvo Praticadas Neste Capítulo:'
+                  : 'Target Words Woven Into This Chapter:'}
               </span>
               {chapter.recycledWordsUsed.map((word, idx) => (
                 <span
@@ -25420,7 +25795,7 @@ function InteractiveReader({
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E2E7E4] bg-[#F8FAF9] px-4 py-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-[#4A5550]">
-              Story Level:
+              {isPtBr ? 'Nível da História:' : 'Story Level:'}
             </span>
             {difficultyOptions.map((opt) => {
               const isSelected = activeDifficulty === opt.id;
@@ -25448,14 +25823,18 @@ function InteractiveReader({
             disabled={isGeneratingChapter}
             onClick={onRegenerateCurrentChapter}
             className="inline-flex items-center gap-1.5 rounded-lg border border-[#94B8CE] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E3EEF5] cursor-pointer disabled:opacity-50"
-            title="Generate a fresh story with new vocabulary for this chapter"
+            title={
+              isPtBr
+                ? 'Gerar uma nova variação desta história para praticar mais'
+                : 'Generate a fresh story with new vocabulary for this chapter'
+            }
           >
             {isGeneratingChapter ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-[#234E68]" />
             ) : (
               <RefreshCw className="h-3.5 w-3.5 text-[#234E68]" />
             )}
-            <span>New Story Variant</span>
+            <span>{isPtBr ? 'Nova Variação da História' : 'New Story Variant'}</span>
           </button>
 
           {generationError && (
@@ -25594,6 +25973,8 @@ function VocabSidebar({
   };
 
   const helperLangLabel = profile?.id === 'en' ? 'Português (BR)' : 'English';
+  const isPtBr = profile?.id === 'en';
+  const targetLangShort = isPtBr ? 'Inglês' : profile.name.split(' ')[0];
 
   return (
     <aside className="space-y-4">
@@ -25602,7 +25983,11 @@ function VocabSidebar({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
             <BookOpen className="h-4 w-4" />
-            <span>Dictionary &amp; Phrase Lookup</span>
+            <span>
+              {isPtBr
+                ? 'Dicionário e Busca de Frases'
+                : 'Dictionary & Phrase Lookup'}
+            </span>
           </div>
 
           <button
@@ -25612,19 +25997,23 @@ function VocabSidebar({
               setDictResult(null);
             }}
             className="inline-flex items-center gap-1 rounded-lg border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54] hover:bg-[#E4EFF6]"
-            title="Switch lookup direction"
+            title={
+              isPtBr ? 'Inverter direção da tradução' : 'Switch lookup direction'
+            }
           >
             <span>
               {dictDirection === 'to_en'
-                ? `${profile.name.split(' ')[0]} → ${helperLangLabel}`
-                : `${helperLangLabel} → ${profile.name.split(' ')[0]}`}
+                ? `${targetLangShort} → ${helperLangLabel}`
+                : `${helperLangLabel} → ${targetLangShort}`}
             </span>
             <ArrowLeftRight className="h-3 w-3 text-[#234E68]" />
           </button>
         </div>
 
         <p className="mt-1 text-[11px] text-[#5C6661]">
-          Consult any word or sentence (even outside the story) and save it to your Vocab Bank.
+          {isPtBr
+            ? 'Consulte qualquer palavra ou frase (mesmo fora da história) e salve no seu Banco de Vocabulário.'
+            : 'Consult any word or sentence (even outside the story) and save it to your Vocab Bank.'}
         </p>
 
         <form onSubmit={handleDictionaryLookup} className="mt-2.5 flex gap-1.5">
@@ -25633,7 +26022,11 @@ function VocabSidebar({
             value={dictQuery}
             onChange={(e) => setDictQuery(e.target.value)}
             placeholder={
-              dictDirection === 'to_en'
+              isPtBr
+                ? dictDirection === 'to_en'
+                  ? 'Digite uma palavra ou frase em Inglês...'
+                  : 'Digite uma palavra ou frase em Português...'
+                : dictDirection === 'to_en'
                 ? `Type any ${profile.name} word or sentence...`
                 : `Type an English word or phrase...`
             }
@@ -25649,7 +26042,7 @@ function VocabSidebar({
             ) : (
               <Search className="h-3.5 w-3.5" />
             )}
-            <span>Consult</span>
+            <span>{isPtBr ? 'Consultar' : 'Consult'}</span>
           </button>
         </form>
 
@@ -25672,7 +26065,7 @@ function VocabSidebar({
                   )}
                 </div>
                 <p className="text-[11px] text-[#5C6661]">
-                  Query: &ldquo;{dictResult.query}&rdquo;
+                  {isPtBr ? 'Busca:' : 'Query:'} &ldquo;{dictResult.query}&rdquo;
                 </p>
               </div>
 
@@ -25687,7 +26080,11 @@ function VocabSidebar({
                     speakSingleWord(textToSpeak, profile.bcp47);
                   }}
                   className="rounded-lg border border-[#C9DCE8] bg-[#FFFFFF] p-1.5 text-[#234E68] hover:bg-[#E4EFF6]"
-                  title={`Pronounce in ${profile.name} (${profile.bcp47})`}
+                  title={
+                    isPtBr
+                      ? 'Ouvir pronúncia em Inglês'
+                      : `Pronounce in ${profile.name} (${profile.bcp47})`
+                  }
                 >
                   <Volume2 className="h-3.5 w-3.5" />
                 </button>
@@ -25701,17 +26098,21 @@ function VocabSidebar({
                       ? 'bg-[#2D5A46] text-white'
                       : 'bg-[#234E68] text-white hover:bg-[#1B3E54]'
                   }`}
-                  title="Add this word to your Vocab Bank for story recycling"
+                  title={
+                    isPtBr
+                      ? 'Salvar esta palavra no seu Banco de Vocabulário'
+                      : 'Add this word to your Vocab Bank for story recycling'
+                  }
                 >
                   {justAddedToBank ? (
                     <>
                       <CheckCircle2 className="h-3 w-3" />
-                      <span>Saved</span>
+                      <span>{isPtBr ? 'Salva' : 'Saved'}</span>
                     </>
                   ) : (
                     <>
                       <Plus className="h-3 w-3" />
-                      <span>Save</span>
+                      <span>{isPtBr ? 'Salvar' : 'Save'}</span>
                     </>
                   )}
                 </button>
@@ -25742,10 +26143,14 @@ function VocabSidebar({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#785420]">
             <BookMarked className="h-4 w-4 text-[#B88328]" />
-            <span>{profile.name} Vocab Bank</span>
+            <span>
+              {isPtBr
+                ? 'Banco de Vocabulário (Inglês)'
+                : `${profile.name} Vocab Bank`}
+            </span>
           </div>
           <span className="rounded-full border border-[#E8D7B4] bg-[#FDF8EE] px-2 py-0.5 text-[11px] font-semibold text-[#785420]">
-            {vocabBank.length} Total
+            {isPtBr ? `${vocabBank.length} no Total` : `${vocabBank.length} Total`}
           </span>
         </div>
 
@@ -25754,7 +26159,11 @@ function VocabSidebar({
           <div className="mt-3 rounded-xl border border-[#E6D6B8] bg-[#FBF7F0] p-2.5">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#785420]">
               <Sparkles className="h-3.5 w-3.5 text-[#B88328]" />
-              <span>Queued for Next Chapter (Top {priorityNextFive.length}):</span>
+              <span>
+                {isPtBr
+                  ? `Praticar no Próximo Capítulo (${priorityNextFive.length}):`
+                  : `Queued for Next Chapter (Top ${priorityNextFive.length}):`}
+              </span>
             </div>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {priorityNextFive.map((item, idx) => (
@@ -25770,7 +26179,11 @@ function VocabSidebar({
                     type="button"
                     onClick={() => onRemoveWord(item.baseForm)}
                     className="ml-0.5 rounded p-0.5 text-[#87928D] transition hover:bg-red-100 hover:text-red-800"
-                    title={`Remove "${item.baseForm}" from queue and Vocab Bank`}
+                    title={
+                      isPtBr
+                        ? `Remover "${item.baseForm}" do Banco de Vocabulário`
+                        : `Remove "${item.baseForm}" from queue and Vocab Bank`
+                    }
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -25791,7 +26204,9 @@ function VocabSidebar({
                 : 'text-[#5C6661] hover:text-[#181D1B]'
             }`}
           >
-            Learning ({learningWords.length})
+            {isPtBr
+              ? `Aprendendo (${learningWords.length})`
+              : `Learning (${learningWords.length})`}
           </button>
           <button
             type="button"
@@ -25802,7 +26217,9 @@ function VocabSidebar({
                 : 'text-[#5C6661] hover:text-[#181D1B]'
             }`}
           >
-            Acquired ({acquiredWords.length})
+            {isPtBr
+              ? `Aprendidas (${acquiredWords.length})`
+              : `Acquired (${acquiredWords.length})`}
           </button>
         </div>
 
@@ -25811,7 +26228,11 @@ function VocabSidebar({
           {displayedWords.length === 0 ? (
             <div className="rounded-xl border border-dashed border-[#D5DDD9] p-5 text-center text-xs text-[#737F79]">
               {activeTab === 'learning'
-                ? 'Click any word in the story or use the Dictionary box above to save words to your Learning bank.'
+                ? isPtBr
+                  ? 'Clique em qualquer palavra na história ou use o Dicionário acima para salvar palavras que você está aprendendo.'
+                  : 'Click any word in the story or use the Dictionary box above to save words to your Learning bank.'
+                : isPtBr
+                ? 'As palavras passam automaticamente para "Aprendidas" depois que você as encontra 5 vezes nos capítulos.'
                 : 'Words automatically graduate to Acquired once they reach 5 contextual exposures across chapters.'}
             </div>
           ) : (
@@ -25855,7 +26276,7 @@ function VocabSidebar({
                         type="button"
                         onClick={() => speakSingleWord(entry.word, profile.bcp47)}
                         className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E4EFF6] hover:text-[#234E68]"
-                        title={`Pronounce (${profile.bcp47})`}
+                        title={isPtBr ? 'Ouvir pronúncia' : `Pronounce (${profile.bcp47})`}
                       >
                         <Volume2 className="h-3.5 w-3.5" />
                       </button>
@@ -25865,7 +26286,11 @@ function VocabSidebar({
                         className="rounded-md p-1.5 text-[#5C6661] hover:bg-[#E5F0EA] hover:text-[#2D5A46]"
                         title={
                           entry.status === 'learning'
-                            ? 'Mark as Acquired now'
+                            ? isPtBr
+                              ? 'Marcar como Aprendida agora'
+                              : 'Mark as Acquired now'
+                            : isPtBr
+                            ? 'Voltar para Aprendendo'
                             : 'Move back to Learning'
                         }
                       >
@@ -25879,7 +26304,9 @@ function VocabSidebar({
                         type="button"
                         onClick={() => onRemoveWord(entry.baseForm)}
                         className="rounded-md p-1.5 text-[#87928D] hover:bg-red-100 hover:text-red-800"
-                        title="Remove from Vocab Bank"
+                        title={
+                          isPtBr ? 'Remover do Banco de Vocabulário' : 'Remove from Vocab Bank'
+                        }
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -25890,17 +26317,18 @@ function VocabSidebar({
                   <div className="mt-2">
                     <div className="flex items-center justify-between text-[10px] font-medium text-[#5C6661]">
                       <span>
-                        Exposures: <strong>{entry.exposures}</strong> /{' '}
+                        {isPtBr ? 'Vezes vista:' : 'Exposures:'}{' '}
+                        <strong>{entry.exposures}</strong> /{' '}
                         {ACQUISITION_EXPOSURE_THRESHOLD}
                       </span>
                       {isQueued && (
                         <span className="rounded border border-[#E6D6B8] bg-[#FDF8EE] px-1.5 py-0.2 font-semibold text-[#785420]">
-                          Next Chapter Target
+                          {isPtBr ? 'Meta do Próx. Capítulo' : 'Next Chapter Target'}
                         </span>
                       )}
                       {entry.status === 'acquired' && (
                         <span className="rounded border border-[#C2DFD0] bg-[#EFF6F2] px-1.5 py-0.2 font-semibold text-[#285943]">
-                          Acquired
+                          {isPtBr ? 'Aprendida' : 'Acquired'}
                         </span>
                       )}
                     </div>
@@ -25925,10 +26353,16 @@ function VocabSidebar({
         <div className="flex items-center justify-between border-b border-[#E8ECEA] pb-2.5">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
             <BookOpen className="h-4 w-4 text-[#234E68]" />
-            <span>Chapter {chapter?.chapterNumber || 1} Word Vocab Table</span>
+            <span>
+              {isPtBr
+                ? `Palavras do Capítulo ${chapter?.chapterNumber || 1}`
+                : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table`}
+            </span>
           </div>
           <span className="rounded-full border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54]">
-            {uniqueChapterWords.length} Words
+            {isPtBr
+              ? `${uniqueChapterWords.length} Palavras`
+              : `${uniqueChapterWords.length} Words`}
           </span>
         </div>
 
@@ -25936,9 +26370,15 @@ function VocabSidebar({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#E6ECE9] text-[10px] font-semibold uppercase tracking-wider text-[#5C6661]">
-                <th className="py-1.5 pr-2">Word / Base</th>
-                <th className="py-1.5 px-2">Meaning in Chapter</th>
-                <th className="py-1.5 pl-1 text-right">Audio</th>
+                <th className="py-1.5 pr-2">
+                  {isPtBr ? 'Palavra em Inglês' : 'Word / Base'}
+                </th>
+                <th className="py-1.5 px-2">
+                  {isPtBr ? 'Significado no Capítulo' : 'Meaning in Chapter'}
+                </th>
+                <th className="py-1.5 pl-1 text-right">
+                  {isPtBr ? 'Ouvir' : 'Audio'}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EEF2F0] text-xs">
@@ -25955,7 +26395,11 @@ function VocabSidebar({
                         onAddCustomVocabWord?.(item);
                       }}
                       className="text-left font-serif text-sm font-bold text-[#181D1B] hover:text-[#234E68]"
-                      title="Click to pronounce and save to Vocab Bank"
+                      title={
+                        isPtBr
+                          ? 'Clique para ouvir a pronúncia e salvar no Banco de Vocabulário'
+                          : 'Click to pronounce and save to Vocab Bank'
+                      }
                     >
                       {item.surface}
                     </button>
@@ -25979,7 +26423,11 @@ function VocabSidebar({
                       type="button"
                       onClick={() => speakSingleWord(item.surface, profile.bcp47)}
                       className="inline-flex items-center justify-center rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6]"
-                      title={`Pronounce "${item.surface}"`}
+                      title={
+                        isPtBr
+                          ? `Ouvir "${item.surface}"`
+                          : `Pronounce "${item.surface}"`
+                      }
                     >
                       <Volume2 className="h-3.5 w-3.5" />
                     </button>
@@ -25995,15 +26443,25 @@ function VocabSidebar({
       <div className="rounded-2xl border border-[#E2E7E4] bg-[#FFFFFF] p-4 shadow-2xs">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#464E70]">
           <ScrollText className="h-4 w-4" />
-          <span>Running Story Arc Summary</span>
+          <span>
+            {isPtBr
+              ? 'Resumo da História até Agora'
+              : 'Running Story Arc Summary'}
+          </span>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-[#2C3531]">
           {profile.storyArcSummary}
         </p>
         <div className="mt-2.5 flex items-center justify-between border-t border-[#E8ECEA] pt-2 text-[11px] text-[#737F79]">
-          <span>Fed into Gemini 2.5 Flash on next chapter</span>
+          <span>
+            {isPtBr
+              ? 'Usado pela IA para criar o próximo capítulo'
+              : 'Fed into Gemini 2.5 Flash on next chapter'}
+          </span>
           <span className="font-semibold text-[#464E70]">
-            {profile.chapters?.length || 1} Chapters
+            {isPtBr
+              ? `${profile.chapters?.length || 1} Capítulos`
+              : `${profile.chapters?.length || 1} Chapters`}
           </span>
         </div>
       </div>
@@ -26078,6 +26536,7 @@ function TranslatorPanel({
 
   const currentLangMeta =
     LANGUAGE_METADATA.find((l) => l.translateCode === sourceLang) || activeProfile;
+  const isPtBr = activeProfile?.id === 'en';
   const targetLangName = sourceLang === 'en' ? 'Português (BR)' : 'English';
   const targetLangCode = sourceLang === 'en' ? 'pt' : 'en';
 
@@ -26090,10 +26549,14 @@ function TranslatorPanel({
           </div>
           <div>
             <h3 className="text-sm font-semibold text-[#181D1B]">
-              Built-in Google Translate to {targetLangName}
+              {isPtBr
+                ? `Tradutor Integrado Google para ${targetLangName}`
+                : `Built-in Google Translate to ${targetLangName}`}
             </h3>
             <p className="text-[11px] text-[#5C6661]">
-              Instant translation into {targetLangName}
+              {isPtBr
+                ? `Tradução instantânea para ${targetLangName}`
+                : `Instant translation into ${targetLangName}`}
             </p>
           </div>
         </div>
@@ -26116,14 +26579,16 @@ function TranslatorPanel({
                 {lang.flag} {lang.name} → {lang.id === 'en' ? 'Português (BR)' : 'English'}
               </option>
             ))}
-            <option value="auto">🌐 Auto-Detect → English</option>
+            <option value="auto">
+              {isPtBr ? '🌐 Detectar Idioma' : '🌐 Auto-Detect → English'}
+            </option>
           </select>
 
           <button
             type="button"
             onClick={onClose}
             className="rounded-lg p-1 text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-            title="Close Translator"
+            title={isPtBr ? 'Fechar Tradutor' : 'Close Translator'}
           >
             <X className="h-4 w-4" />
           </button>
@@ -26134,7 +26599,11 @@ function TranslatorPanel({
         {/* Source Language Input Box */}
         <div className="flex flex-col">
           <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-[#5C6661]">
-            <span>Source Text ({currentLangMeta?.name || 'Source'})</span>
+            <span>
+              {isPtBr
+                ? 'Texto em Inglês'
+                : `Source Text (${currentLangMeta?.name || 'Source'})`}
+            </span>
             <div className="flex items-center gap-2">
               {inputText.trim() && (
                 <button
@@ -26145,7 +26614,7 @@ function TranslatorPanel({
                   className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-900 hover:underline"
                 >
                   <Volume2 className="h-3 w-3" />
-                  Listen
+                  {isPtBr ? 'Ouvir' : 'Listen'}
                 </button>
               )}
               {inputText && (
@@ -26157,7 +26626,7 @@ function TranslatorPanel({
                   }}
                   className="text-[11px] text-[#87928D] hover:text-[#181D1B]"
                 >
-                  Clear
+                  {isPtBr ? 'Limpar' : 'Clear'}
                 </button>
               )}
             </div>
@@ -26167,9 +26636,13 @@ function TranslatorPanel({
             rows={3}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder={`Paste or click "Translate" on any ${
-              currentLangMeta?.name || ''
-            } sentence in the story...`}
+            placeholder={
+              isPtBr
+                ? 'Cole uma frase aqui ou clique em "Traduzir" em qualquer frase da história...'
+                : `Paste or click "Translate" on any ${
+                    currentLangMeta?.name || ''
+                  } sentence in the story...`
+            }
             className="w-full rounded-xl border border-[#D5DDD9] bg-[#F7F9F8] p-3 font-serif text-base text-[#181D1B] placeholder:font-sans placeholder:text-xs placeholder:text-[#87928D] focus:border-stone-900 focus:outline-none"
           />
 
@@ -26180,7 +26653,11 @@ function TranslatorPanel({
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-[11px] font-medium text-[#5C6661] hover:text-stone-900 hover:underline"
             >
-              <span>Open in Google Translate Web</span>
+              <span>
+                {isPtBr
+                  ? 'Abrir no Google Tradutor'
+                  : 'Open in Google Translate Web'}
+              </span>
               <ExternalLink className="h-3 w-3" />
             </a>
 
@@ -26193,11 +26670,15 @@ function TranslatorPanel({
               {isTranslating ? (
                 <>
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Translating...</span>
+                  <span>{isPtBr ? 'Traduzindo...' : 'Translating...'}</span>
                 </>
               ) : (
                 <>
-                  <span>Translate to {targetLangName}</span>
+                  <span>
+                    {isPtBr
+                      ? `Traduzir para ${targetLangName}`
+                      : `Translate to ${targetLangName}`}
+                  </span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </>
               )}
@@ -26208,7 +26689,11 @@ function TranslatorPanel({
         {/* Translation Output Box */}
         <div className="flex flex-col">
           <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-[#5C6661]">
-            <span>{targetLangName} Translation (Google Translate)</span>
+            <span>
+              {isPtBr
+                ? `Tradução em ${targetLangName} (Google Tradutor)`
+                : `${targetLangName} Translation (Google Translate)`}
+            </span>
             {translatedText && (
               <button
                 type="button"
@@ -26218,12 +26703,14 @@ function TranslatorPanel({
                 {copied ? (
                   <>
                     <Check className="h-3 w-3 text-emerald-700" />
-                    <span className="text-emerald-800">Copied</span>
+                    <span className="text-emerald-800">
+                      {isPtBr ? 'Copiado' : 'Copied'}
+                    </span>
                   </>
                 ) : (
                   <>
                     <Copy className="h-3 w-3" />
-                    <span>Copy</span>
+                    <span>{isPtBr ? 'Copiar' : 'Copy'}</span>
                   </>
                 )}
               </button>
@@ -26234,7 +26721,9 @@ function TranslatorPanel({
             {isTranslating ? (
               <span className="flex items-center gap-2 text-xs text-[#737F79]">
                 <Loader2 className="h-4 w-4 animate-spin text-stone-700" />
-                Fetching {targetLangName} translation from Google Translate...
+                {isPtBr
+                  ? `Buscando tradução em ${targetLangName}...`
+                  : `Fetching ${targetLangName} translation from Google Translate...`}
               </span>
             ) : error ? (
               <span className="text-xs text-red-800">{error}</span>
@@ -26244,8 +26733,9 @@ function TranslatorPanel({
               </p>
             ) : (
               <span className="text-xs text-[#87928D]">
-                Click the &ldquo;Translate&rdquo; icon at the end of any sentence or type above to
-                translate into {targetLangName}.
+                {isPtBr
+                  ? 'Clique no botão "Traduzir" no final de qualquer frase ou digite acima para traduzir para o Português.'
+                  : `Click the "Translate" icon at the end of any sentence or type above to translate into ${targetLangName}.`}
               </span>
             )}
           </div>
@@ -26267,8 +26757,10 @@ function SettingsModal({
   onSaveSettings,
   onResetActiveProfile,
   activeProfileName,
+  langId,
   onClose,
 }) {
+  const isPtBr = langId === 'en';
   const [geminiApiKey, setGeminiApiKey] = useState(settings?.geminiApiKey || '');
   const [elevenLabsApiKey, setElevenLabsApiKey] = useState(
     settings?.elevenLabsApiKey || ''
@@ -26333,10 +26825,14 @@ function SettingsModal({
             </div>
             <div>
               <h2 className="font-serif text-lg font-bold text-[#181D1B]">
-                API Keys &amp; Audio Configuration
+                {isPtBr
+                  ? 'Configurações de Áudio e Chaves API'
+                  : 'API Keys & Audio Configuration'}
               </h2>
               <p className="text-xs text-[#5C6661]">
-                Saved locally in browser localStorage • Zero external database
+                {isPtBr
+                  ? 'Salvo no seu navegador • Seus dados ficam apenas no seu aparelho'
+                  : 'Saved locally in browser localStorage • Zero external database'}
               </p>
             </div>
           </div>
@@ -26492,7 +26988,9 @@ function SettingsModal({
               onClick={() => {
                 if (
                   window.confirm(
-                    `Reset ${activeProfileName} profile back to starter Chapter 1 and default vocabulary?`
+                    isPtBr
+                      ? 'Deseja reiniciar seu progresso neste curso de Inglês de volta para o Capítulo 1?'
+                      : `Reset ${activeProfileName} profile back to starter Chapter 1 and default vocabulary?`
                   )
                 ) {
                   onResetActiveProfile();
@@ -26502,7 +27000,11 @@ function SettingsModal({
               className="inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-red-50/80 px-3 py-1.5 text-xs font-medium text-red-900 hover:bg-red-100"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              <span>Reset {activeProfileName} Profile</span>
+              <span>
+                {isPtBr
+                  ? 'Reiniciar Curso de Inglês'
+                  : `Reset ${activeProfileName} Profile`}
+              </span>
             </button>
 
             <div className="flex items-center gap-2">
@@ -26511,14 +27013,14 @@ function SettingsModal({
                 onClick={onClose}
                 className="rounded-xl border border-[#D5DDD9] bg-[#F7F9F8] px-4 py-2 text-xs font-semibold text-[#5C6661] hover:bg-[#EEF2F0]"
               >
-                Cancel
+                {isPtBr ? 'Cancelar' : 'Cancel'}
               </button>
               <button
                 type="submit"
                 className="inline-flex items-center gap-1.5 rounded-xl bg-stone-900 px-4 py-2 text-xs font-semibold text-stone-100 shadow-xs hover:bg-stone-700"
               >
                 <Save className="h-3.5 w-3.5" />
-                <span>Save Settings</span>
+                <span>{isPtBr ? 'Salvar Configurações' : 'Save Settings'}</span>
               </button>
             </div>
           </div>
@@ -27074,6 +27576,7 @@ function App() {
           <AudioPlayerBar
             chapter={currentChapter}
             bcp47={activeProfile.bcp47}
+            langId={activeProfile.id}
             settings={settings}
             audioBlobUrls={audioBlobUrls}
             onCacheChapterBlobUrl={handleCacheChapterBlobUrl}
@@ -27149,6 +27652,7 @@ function App() {
           onSaveSettings={handleSaveSettings}
           onResetActiveProfile={handleResetActiveProfile}
           activeProfileName={activeProfile.name}
+          langId={activeProfile.id}
           onClose={() => setShowSettingsModal(false)}
         />
       )}

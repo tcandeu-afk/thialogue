@@ -178,6 +178,7 @@ export default function InteractiveReader({
   const activeDifficulty = chapter.activeDifficulty || 'maintain';
   const isCJK = profile.id === 'ja';
   const isJapanese = profile.id === 'ja';
+  const isPtBr = profile.id === 'en';
   const showPhonetics = isCJK && phoneticAid && !strictMode;
   const showEnglishUnderSentence = showEnglishTranslation && !strictMode;
 
@@ -224,23 +225,29 @@ export default function InteractiveReader({
   const difficultyOptions = [
     {
       id: 'simplify',
-      shortLabel: 'Too Hard (Simpler)',
-      title: 'Too Hard — Make Simpler',
-      desc: 'Shorter, easier version of this chapter with simpler sentences',
+      shortLabel: isPtBr ? 'Muito Difícil (Mais Simples)' : 'Too Hard (Simpler)',
+      title: isPtBr ? 'Muito Difícil — Deixar Mais Simples' : 'Too Hard — Make Simpler',
+      desc: isPtBr
+        ? 'Versão mais curta e fácil deste capítulo com frases mais simples'
+        : 'Shorter, easier version of this chapter with simpler sentences',
       icon: SlidersHorizontal,
     },
     {
       id: 'maintain',
-      shortLabel: 'Just Right (Standard)',
-      title: 'Just Right — Standard',
-      desc: 'Original baseline version of this chapter',
+      shortLabel: isPtBr ? 'Ideal (Padrão)' : 'Just Right (Standard)',
+      title: isPtBr ? 'Ideal — Padrão' : 'Just Right — Standard',
+      desc: isPtBr
+        ? 'Versão original padrão deste capítulo'
+        : 'Original baseline version of this chapter',
       icon: CheckCircle2,
     },
     {
       id: 'challenge',
-      shortLabel: 'Too Easy (More Complex)',
-      title: 'Too Easy — Challenge Me',
-      desc: 'Longer, richer version of this chapter with deeper grammar',
+      shortLabel: isPtBr ? 'Muito Fácil (Mais Complexo)' : 'Too Easy (More Complex)',
+      title: isPtBr ? 'Muito Fácil — Mais Complexo' : 'Too Easy — Challenge Me',
+      desc: isPtBr
+        ? 'Versão mais longa e rica deste capítulo'
+        : 'Longer, richer version of this chapter with deeper grammar',
       icon: Flame,
     },
   ];
@@ -263,7 +270,7 @@ export default function InteractiveReader({
               </span>
               {readerOnlyMode && (
                 <span className="rounded-md border border-[#CDE0D6] bg-[#EFF6F2] px-2 py-0.5 text-[#285943]">
-                  Reader View
+                  {isPtBr ? 'Modo Leitura' : 'Reader View'}
                 </span>
               )}
             </div>
@@ -290,7 +297,7 @@ export default function InteractiveReader({
                     onClick={() => onSelectChapterIndex(idx)}
                     className="px-3 py-1.5 cursor-pointer focus:outline-none"
                   >
-                    Ch. {idx + 1}
+                    {isPtBr ? `Cap. ${idx + 1}` : `Ch. ${idx + 1}`}
                   </button>
                   {!readerOnlyMode && totalChapters > 1 && onDeleteChapter && idx >= 3 && (
                     <button
@@ -299,8 +306,16 @@ export default function InteractiveReader({
                         e.stopPropagation();
                         onDeleteChapter(idx);
                       }}
-                      title={`Delete Chapter ${idx + 1}`}
-                      aria-label={`Delete Chapter ${idx + 1}`}
+                      title={
+                        isPtBr
+                          ? `Excluir Capítulo ${idx + 1}`
+                          : `Delete Chapter ${idx + 1}`
+                      }
+                      aria-label={
+                        isPtBr
+                          ? `Excluir Capítulo ${idx + 1}`
+                          : `Delete Chapter ${idx + 1}`
+                      }
                       className={`mr-1 flex h-4 w-4 items-center justify-center rounded-full transition ${
                         isActive
                           ? 'text-[#C6D8E4] hover:bg-white/20 hover:text-white'
@@ -320,17 +335,23 @@ export default function InteractiveReader({
                 disabled={isGeneratingChapter}
                 onClick={() => onGenerateNextChapter('maintain')}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-70 cursor-pointer"
-                title="Generate next chapter"
+                title={isPtBr ? 'Gerar próximo capítulo' : 'Generate next chapter'}
               >
                 {isGeneratingChapter ? (
                   <>
                     <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
-                    <span className="text-[#EA580C]">Generating Ch. {totalChapters + 1}...</span>
+                    <span className="text-[#EA580C]">
+                      {isPtBr
+                        ? `Gerando Cap. ${totalChapters + 1}...`
+                        : `Generating Ch. ${totalChapters + 1}...`}
+                    </span>
                   </>
                 ) : (
                   <>
                     <Plus className="h-3.5 w-3.5" />
-                    <span>Ch. {totalChapters + 1}</span>
+                    <span>
+                      {isPtBr ? `Cap. ${totalChapters + 1}` : `Ch. ${totalChapters + 1}`}
+                    </span>
                   </>
                 )}
               </button>
@@ -341,9 +362,9 @@ export default function InteractiveReader({
                 type="button"
                 onClick={onToggleReaderOnlyMode}
                 className="inline-flex items-center gap-1 rounded-xl border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#4A5550] transition hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-                title="Exit Reader View"
+                title={isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader View'}
               >
-                <span>Exit Reader</span>
+                <span>{isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader'}</span>
               </button>
             )}
           </div>
@@ -354,7 +375,7 @@ export default function InteractiveReader({
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
-                Level:
+                {isPtBr ? 'Nível:' : 'Level:'}
               </span>
               {difficultyOptions.map((opt) => {
                 const isSelected = activeDifficulty === opt.id;
@@ -373,9 +394,15 @@ export default function InteractiveReader({
                     {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
                     <span>
                       {opt.id === 'simplify'
-                        ? 'Simpler'
+                        ? isPtBr
+                          ? 'Mais Simples'
+                          : 'Simpler'
                         : opt.id === 'maintain'
-                        ? 'Standard'
+                        ? isPtBr
+                          ? 'Padrão'
+                          : 'Standard'
+                        : isPtBr
+                        ? 'Mais Complexo'
                         : 'More Complex'}
                     </span>
                   </button>
@@ -386,19 +413,27 @@ export default function InteractiveReader({
             {strictMode ? (
               <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#7A3E33]">
                 <EyeOff className="h-3.5 w-3.5 shrink-0 text-[#8C4A3E]" />
-                <span>Strict Mode ON (Uninterrupted reading)</span>
+                <span>
+                  {isPtBr
+                    ? 'Modo Sem Dicas ATIVO (Leitura direta)'
+                    : 'Strict Mode ON (Uninterrupted reading)'}
+                </span>
               </div>
             ) : (
               <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#5C6661]">
-                <span>Tap any word for instant meaning &amp; audio</span>
+                <span>
+                  {isPtBr
+                    ? 'Toque em qualquer palavra para ver a tradução e ouvir a pronúncia'
+                    : 'Tap any word for instant meaning & audio'}
+                </span>
                 <span className="hidden sm:inline text-[#C5CECA]">•</span>
                 <span className="inline-flex items-center gap-1 font-medium text-[#7C581E]">
                   <span className="inline-block h-2 w-2 rounded-full bg-[#C9963E]" />
-                  Learning
+                  {isPtBr ? 'Aprendendo' : 'Learning'}
                 </span>
                 <span className="inline-flex items-center gap-1 font-medium text-[#285943]">
                   <span className="inline-block h-2 w-2 rounded-full bg-[#3B7A57]" />
-                  Acquired
+                  {isPtBr ? 'Aprendida' : 'Acquired'}
                 </span>
               </div>
             )}
@@ -420,7 +455,7 @@ export default function InteractiveReader({
             className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#181D1B] shadow-2xs transition hover:bg-[#E4EFF6] active:scale-95"
           >
             <X className="h-3.5 w-3.5" />
-            <span>Close</span>
+            <span>{isPtBr ? 'Fechar' : 'Close'}</span>
           </button>
 
           <div className="pr-20 space-y-1.5">
@@ -434,7 +469,7 @@ export default function InteractiveReader({
                 </span>
               )}
               <span className="text-xs text-[#5C6661]">
-                Base:{' '}
+                {isPtBr ? 'Forma base:' : 'Base:'}{' '}
                 <strong className="font-semibold text-[#181D1B]">
                   {selectedTokenInfo.token.baseForm}
                 </strong>
@@ -452,10 +487,10 @@ export default function InteractiveReader({
                   speakSingleWord(selectedTokenInfo.token.surface, profile.bcp47)
                 }
                 className="inline-flex items-center gap-1.5 rounded-lg border border-[#234E68] bg-[#234E68] px-3 py-1 text-xs font-semibold text-white shadow-2xs transition hover:bg-[#1B3E54] active:scale-95"
-                title="Pronounce word again"
+                title={isPtBr ? 'Ouvir a pronúncia novamente' : 'Pronounce word again'}
               >
                 <Volume2 className="h-3.5 w-3.5" />
-                <span>Listen ({profile.bcp47})</span>
+                <span>{isPtBr ? 'Ouvir Pronúncia' : `Listen (${profile.bcp47})`}</span>
               </button>
 
               {selectedVocabEntry && (
@@ -469,14 +504,19 @@ export default function InteractiveReader({
                   {selectedVocabEntry.status === 'acquired' ? (
                     <>
                       <CheckCircle2 className="h-3.5 w-3.5 text-[#3B7A57]" />
-                      <span>Acquired ({selectedVocabEntry.exposures}/5)</span>
+                      <span>
+                        {isPtBr
+                          ? `Aprendida (${selectedVocabEntry.exposures}/5)`
+                          : `Acquired (${selectedVocabEntry.exposures}/5)`}
+                      </span>
                     </>
                   ) : (
                     <>
                       <BookMarked className="h-3.5 w-3.5 text-[#B88328]" />
                       <span>
-                        Saved ({selectedVocabEntry.exposures}/
-                        {ACQUISITION_EXPOSURE_THRESHOLD})
+                        {isPtBr
+                          ? `Salva no Banco (${selectedVocabEntry.exposures}/${ACQUISITION_EXPOSURE_THRESHOLD})`
+                          : `Saved (${selectedVocabEntry.exposures}/${ACQUISITION_EXPOSURE_THRESHOLD})`}
                       </span>
                     </>
                   )}
@@ -537,9 +577,15 @@ export default function InteractiveReader({
                   }
                   title={
                     isThisSentencePlaying
-                      ? `Pause sentence ${sIdx + 1} (ElevenLabs)`
+                      ? isPtBr
+                        ? `Pausar frase ${sIdx + 1}`
+                        : `Pause sentence ${sIdx + 1} (ElevenLabs)`
                       : isThisSentencePaused
-                      ? `Resume sentence ${sIdx + 1} (ElevenLabs)`
+                      ? isPtBr
+                        ? `Continuar frase ${sIdx + 1}`
+                        : `Resume sentence ${sIdx + 1} (ElevenLabs)`
+                      : isPtBr
+                      ? `Ouvir frase ${sIdx + 1}`
                       : `Play sentence ${sIdx + 1} (ElevenLabs)`
                   }
                   aria-label={
@@ -576,7 +622,11 @@ export default function InteractiveReader({
                       onStateChange: setSentenceAudioState,
                     })
                   }
-                  title={`Restart sentence ${sIdx + 1} from beginning (ElevenLabs)`}
+                  title={
+                    isPtBr
+                      ? `Repetir frase ${sIdx + 1} desde o início`
+                      : `Restart sentence ${sIdx + 1} from beginning (ElevenLabs)`
+                  }
                   aria-label={`Restart sentence ${sIdx + 1}`}
                   className="inline-flex h-6 w-6 items-center justify-center rounded-md text-[#5C6661] transition hover:bg-[#E4EFF6] hover:text-[#181D1B] cursor-pointer"
                 >
@@ -658,7 +708,11 @@ export default function InteractiveReader({
                     <button
                       type="button"
                       onClick={() => toggleGrammarNote(sIdx)}
-                      title="Pattern Recognition Note: Click for a plain-English explanation of this sentence's grammar pattern"
+                      title={
+                        isPtBr
+                          ? 'Explicação da Frase: Clique para ver uma explicação simples de como esta frase funciona'
+                          : "Pattern Recognition Note: Click for a plain-English explanation of this sentence's grammar pattern"
+                      }
                       className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition ${
                         isGrammarOpen
                           ? 'border-[#464E70] bg-[#464E70] text-white'
@@ -666,17 +720,25 @@ export default function InteractiveReader({
                       }`}
                     >
                       <Sparkles className="h-3 w-3" />
-                      <span className="hidden sm:inline">Pattern</span>
+                      <span className="hidden sm:inline">
+                        {isPtBr ? 'Explicação' : 'Pattern'}
+                      </span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => onTranslateSentence(sentence.fullSentence)}
-                      title="Open this sentence in the top Translator panel"
+                      title={
+                        isPtBr
+                          ? 'Abrir esta frase no painel do Tradutor no topo da página'
+                          : 'Open this sentence in the top Translator panel'
+                      }
                       className="inline-flex items-center gap-1 rounded-full border border-[#C9DCE8] bg-[#F2F7FA] px-2 py-0.5 text-[11px] font-medium text-[#234E68] opacity-80 transition hover:bg-[#E4EFF6] group-hover:opacity-100"
                     >
                       <Globe className="h-3 w-3" />
-                      <span className="hidden md:inline">Translate</span>
+                      <span className="hidden md:inline">
+                        {isPtBr ? 'Traduzir' : 'Translate'}
+                      </span>
                     </button>
                   </span>
                 )}
@@ -692,7 +754,10 @@ export default function InteractiveReader({
               {/* Optional English Translation Line (Quiet Nordic Sage-Mist) */}
               {showEnglishUnderSentence && (
                 <p className="mt-1.5 rounded-lg border-l-2 border-[#4C7C64] bg-[#F2F7F4] px-3 py-1 font-sans text-sm font-medium text-[#244233]">
-                  {englishLine || 'Translating sentence to English...'}
+                  {englishLine ||
+                    (isPtBr
+                      ? 'Traduzindo frase para o Português...'
+                      : 'Translating sentence to English...')}
                 </p>
               )}
 
@@ -701,7 +766,9 @@ export default function InteractiveReader({
                 <div className="mt-2.5 flex items-start gap-2 rounded-lg border border-[#D6D9E8] bg-[#F5F6FA] px-3.5 py-2 font-sans text-xs leading-relaxed text-[#333954]">
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#464E70]" />
                   <div>
-                    <span className="font-semibold">Sentence Pattern: </span>
+                    <span className="font-semibold">
+                      {isPtBr ? 'Explicação da Frase: ' : 'Sentence Pattern: '}
+                    </span>
                     <span>{sentence.grammarNote}</span>
                   </div>
                 </div>
@@ -718,7 +785,9 @@ export default function InteractiveReader({
           <div className="mt-8 border-t border-[#E8ECEA] pt-4">
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#5C6661]">
               <span className="font-semibold text-[#181D1B]">
-                Target Words Woven Into This Chapter:
+                {isPtBr
+                  ? 'Palavras-Alvo Praticadas Neste Capítulo:'
+                  : 'Target Words Woven Into This Chapter:'}
               </span>
               {chapter.recycledWordsUsed.map((word, idx) => (
                 <span
@@ -737,7 +806,7 @@ export default function InteractiveReader({
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E2E7E4] bg-[#F8FAF9] px-4 py-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-[#4A5550]">
-              Story Level:
+              {isPtBr ? 'Nível da História:' : 'Story Level:'}
             </span>
             {difficultyOptions.map((opt) => {
               const isSelected = activeDifficulty === opt.id;
@@ -765,14 +834,18 @@ export default function InteractiveReader({
             disabled={isGeneratingChapter}
             onClick={onRegenerateCurrentChapter}
             className="inline-flex items-center gap-1.5 rounded-lg border border-[#94B8CE] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E3EEF5] cursor-pointer disabled:opacity-50"
-            title="Generate a fresh story with new vocabulary for this chapter"
+            title={
+              isPtBr
+                ? 'Gerar uma nova variação desta história para praticar mais'
+                : 'Generate a fresh story with new vocabulary for this chapter'
+            }
           >
             {isGeneratingChapter ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-[#234E68]" />
             ) : (
               <RefreshCw className="h-3.5 w-3.5 text-[#234E68]" />
             )}
-            <span>New Story Variant</span>
+            <span>{isPtBr ? 'Nova Variação da História' : 'New Story Variant'}</span>
           </button>
 
           {generationError && (

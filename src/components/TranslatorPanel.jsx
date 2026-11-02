@@ -75,6 +75,7 @@ export default function TranslatorPanel({
 
   const currentLangMeta =
     LANGUAGE_METADATA.find((l) => l.translateCode === sourceLang) || activeProfile;
+  const isPtBr = activeProfile?.id === 'en';
   const targetLangName = sourceLang === 'en' ? 'Português (BR)' : 'English';
   const targetLangCode = sourceLang === 'en' ? 'pt' : 'en';
 
@@ -87,10 +88,14 @@ export default function TranslatorPanel({
           </div>
           <div>
             <h3 className="text-sm font-semibold text-[#181D1B]">
-              Built-in Google Translate to {targetLangName}
+              {isPtBr
+                ? `Tradutor Integrado Google para ${targetLangName}`
+                : `Built-in Google Translate to ${targetLangName}`}
             </h3>
             <p className="text-[11px] text-[#5C6661]">
-              Instant translation into {targetLangName}
+              {isPtBr
+                ? `Tradução instantânea para ${targetLangName}`
+                : `Instant translation into ${targetLangName}`}
             </p>
           </div>
         </div>
@@ -113,14 +118,16 @@ export default function TranslatorPanel({
                 {lang.flag} {lang.name} → {lang.id === 'en' ? 'Português (BR)' : 'English'}
               </option>
             ))}
-            <option value="auto">🌐 Auto-Detect → English</option>
+            <option value="auto">
+              {isPtBr ? '🌐 Detectar Idioma' : '🌐 Auto-Detect → English'}
+            </option>
           </select>
 
           <button
             type="button"
             onClick={onClose}
             className="rounded-lg p-1 text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-            title="Close Translator"
+            title={isPtBr ? 'Fechar Tradutor' : 'Close Translator'}
           >
             <X className="h-4 w-4" />
           </button>
@@ -131,7 +138,11 @@ export default function TranslatorPanel({
         {/* Source Language Input Box */}
         <div className="flex flex-col">
           <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-[#5C6661]">
-            <span>Source Text ({currentLangMeta?.name || 'Source'})</span>
+            <span>
+              {isPtBr
+                ? 'Texto em Inglês'
+                : `Source Text (${currentLangMeta?.name || 'Source'})`}
+            </span>
             <div className="flex items-center gap-2">
               {inputText.trim() && (
                 <button
@@ -142,7 +153,7 @@ export default function TranslatorPanel({
                   className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-900 hover:underline"
                 >
                   <Volume2 className="h-3 w-3" />
-                  Listen
+                  {isPtBr ? 'Ouvir' : 'Listen'}
                 </button>
               )}
               {inputText && (
@@ -154,7 +165,7 @@ export default function TranslatorPanel({
                   }}
                   className="text-[11px] text-[#87928D] hover:text-[#181D1B]"
                 >
-                  Clear
+                  {isPtBr ? 'Limpar' : 'Clear'}
                 </button>
               )}
             </div>
@@ -164,9 +175,13 @@ export default function TranslatorPanel({
             rows={3}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder={`Paste or click "Translate" on any ${
-              currentLangMeta?.name || ''
-            } sentence in the story...`}
+            placeholder={
+              isPtBr
+                ? 'Cole uma frase aqui ou clique em "Traduzir" em qualquer frase da história...'
+                : `Paste or click "Translate" on any ${
+                    currentLangMeta?.name || ''
+                  } sentence in the story...`
+            }
             className="w-full rounded-xl border border-[#D5DDD9] bg-[#F7F9F8] p-3 font-serif text-base text-[#181D1B] placeholder:font-sans placeholder:text-xs placeholder:text-[#87928D] focus:border-stone-900 focus:outline-none"
           />
 
@@ -177,7 +192,11 @@ export default function TranslatorPanel({
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-[11px] font-medium text-[#5C6661] hover:text-stone-900 hover:underline"
             >
-              <span>Open in Google Translate Web</span>
+              <span>
+                {isPtBr
+                  ? 'Abrir no Google Tradutor'
+                  : 'Open in Google Translate Web'}
+              </span>
               <ExternalLink className="h-3 w-3" />
             </a>
 
@@ -190,11 +209,15 @@ export default function TranslatorPanel({
               {isTranslating ? (
                 <>
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Translating...</span>
+                  <span>{isPtBr ? 'Traduzindo...' : 'Translating...'}</span>
                 </>
               ) : (
                 <>
-                  <span>Translate to {targetLangName}</span>
+                  <span>
+                    {isPtBr
+                      ? `Traduzir para ${targetLangName}`
+                      : `Translate to ${targetLangName}`}
+                  </span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </>
               )}
@@ -205,7 +228,11 @@ export default function TranslatorPanel({
         {/* Translation Output Box */}
         <div className="flex flex-col">
           <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-[#5C6661]">
-            <span>{targetLangName} Translation (Google Translate)</span>
+            <span>
+              {isPtBr
+                ? `Tradução em ${targetLangName} (Google Tradutor)`
+                : `${targetLangName} Translation (Google Translate)`}
+            </span>
             {translatedText && (
               <button
                 type="button"
@@ -215,12 +242,14 @@ export default function TranslatorPanel({
                 {copied ? (
                   <>
                     <Check className="h-3 w-3 text-emerald-700" />
-                    <span className="text-emerald-800">Copied</span>
+                    <span className="text-emerald-800">
+                      {isPtBr ? 'Copiado' : 'Copied'}
+                    </span>
                   </>
                 ) : (
                   <>
                     <Copy className="h-3 w-3" />
-                    <span>Copy</span>
+                    <span>{isPtBr ? 'Copiar' : 'Copy'}</span>
                   </>
                 )}
               </button>
@@ -231,7 +260,9 @@ export default function TranslatorPanel({
             {isTranslating ? (
               <span className="flex items-center gap-2 text-xs text-[#737F79]">
                 <Loader2 className="h-4 w-4 animate-spin text-stone-700" />
-                Fetching {targetLangName} translation from Google Translate...
+                {isPtBr
+                  ? `Buscando tradução em ${targetLangName}...`
+                  : `Fetching ${targetLangName} translation from Google Translate...`}
               </span>
             ) : error ? (
               <span className="text-xs text-red-800">{error}</span>
@@ -241,8 +272,9 @@ export default function TranslatorPanel({
               </p>
             ) : (
               <span className="text-xs text-[#87928D]">
-                Click the &ldquo;Translate&rdquo; icon at the end of any sentence or type above to
-                translate into {targetLangName}.
+                {isPtBr
+                  ? 'Clique no botão "Traduzir" no final de qualquer frase ou digite acima para traduzir para o Português.'
+                  : `Click the "Translate" icon at the end of any sentence or type above to translate into ${targetLangName}.`}
               </span>
             )}
           </div>

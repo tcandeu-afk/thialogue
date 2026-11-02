@@ -557,6 +557,7 @@ export default function App() {
           <AudioPlayerBar
             chapter={currentChapter}
             bcp47={activeProfile.bcp47}
+            langId={activeProfile.id}
             settings={settings}
             audioBlobUrls={audioBlobUrls}
             onCacheChapterBlobUrl={handleCacheChapterBlobUrl}
@@ -632,6 +633,7 @@ export default function App() {
           onSaveSettings={handleSaveSettings}
           onResetActiveProfile={handleResetActiveProfile}
           activeProfileName={activeProfile.name}
+          langId={activeProfile.id}
           onClose={() => setShowSettingsModal(false)}
         />
       )}

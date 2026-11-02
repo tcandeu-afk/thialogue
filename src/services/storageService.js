@@ -43,16 +43,28 @@ export function loadProfiles() {
 
       const combinedChapters =
         isCurrentVersion && savedChapters.length > 0
-          ? savedChapters.map((ch, idx) => ({
-              ...ch,
-              chapterNumber: idx + 1,
-            }))
+          ? savedChapters.map((ch, idx) => {
+              const starterCh = starterChapters[idx];
+              return {
+                ...ch,
+                chapterNumber: idx + 1,
+                ...(starterCh
+                  ? {
+                      chapterTitle: starterCh.chapterTitle,
+                      difficultyLabel: starterCh.difficultyLabel,
+                      updatedArcSummary: starterCh.updatedArcSummary,
+                    }
+                  : {}),
+              };
+            })
           : starterChapters;
 
       merged[langId] = {
         ...merged[langId],
         ...(isCurrentVersion ? savedProf : {}),
         storyTitle: merged[langId].storyTitle,
+        storyArcSummary: merged[langId].storyArcSummary,
+        difficultyModifier: merged[langId].difficultyModifier,
         vocabBank: combinedVocab,
         chapters: combinedChapters,
         activeChapterIndex: isCurrentVersion

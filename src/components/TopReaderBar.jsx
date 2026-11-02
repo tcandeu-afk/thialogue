@@ -60,6 +60,7 @@ export default function TopReaderBar({
   )}`;
 
   const isCJK = activeProfile?.id === 'ja';
+  const isPtBr = activeProfile?.id === 'en';
 
   const learningCount = (activeProfile?.vocabBank || []).filter(
     (w) => w.status === 'learning'
@@ -117,7 +118,7 @@ export default function TopReaderBar({
           <div className="relative flex shrink-0 items-center gap-1.5 sm:gap-2" ref={menuRef}>
             {strictMode && (
               <span className="hidden rounded-md bg-[#8C4A3E] px-2 py-0.5 text-[11px] font-semibold text-white lg:inline-block">
-                Strict ON
+                {isPtBr ? 'Modo Estrito' : 'Strict ON'}
               </span>
             )}
 
@@ -128,9 +129,15 @@ export default function TopReaderBar({
               disabled={strictMode}
               title={
                 strictMode
-                  ? 'Disable Strict Mode in Menu to show sentence translations'
+                  ? isPtBr
+                    ? 'Desative o Modo Estrito no Menu para mostrar a tradução das frases'
+                    : 'Disable Strict Mode in Menu to show sentence translations'
                   : showEnglishTranslation
-                  ? `Hide ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
+                  ? isPtBr
+                    ? 'Ocultar a tradução em Português (BR) abaixo de cada frase'
+                    : `Hide ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
+                  : isPtBr
+                  ? 'Mostrar a tradução em Português (BR) abaixo de cada frase'
                   : `Show ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
               }
               aria-label="Toggle Sentence Translation"
@@ -144,8 +151,13 @@ export default function TopReaderBar({
             >
               <Subtitles className="h-3.5 w-3.5" />
               <span>
-                {activeProfile?.id === 'en' ? 'PT' : 'EN'}{' '}
-                {showEnglishTranslation && !strictMode ? 'ON' : 'OFF'}
+                {isPtBr
+                  ? showEnglishTranslation && !strictMode
+                    ? 'Tradução PT: SIM'
+                    : 'Tradução PT: NÃO'
+                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'} ${
+                      showEnglishTranslation && !strictMode ? 'ON' : 'OFF'
+                    }`}
               </span>
             </button>
 
@@ -155,7 +167,11 @@ export default function TopReaderBar({
               onClick={onToggleReaderOnlyMode}
               title={
                 readerOnlyMode
-                  ? 'Exit Reader View (Show all tools & sidebars)'
+                  ? isPtBr
+                    ? 'Sair do Modo Leitura (Mostrar dicionário e exercícios)'
+                    : 'Exit Reader View (Show all tools & sidebars)'
+                  : isPtBr
+                  ? 'Modo Leitura: Mostrar apenas o texto e o áudio'
                   : 'Reader View: Simplified Text & Sound Only (Safari Reader style)'
               }
               aria-label="Toggle Simplified Text and Sound Only Reader View"
@@ -169,7 +185,13 @@ export default function TopReaderBar({
                 AA
               </span>
               <span className="hidden xs:inline sm:inline">
-                {readerOnlyMode ? 'Reader ON' : 'Reader'}
+                {readerOnlyMode
+                  ? isPtBr
+                    ? 'Leitura ATIVA'
+                    : 'Reader ON'
+                  : isPtBr
+                  ? 'Modo Leitura'
+                  : 'Reader'}
               </span>
             </button>
 
@@ -185,7 +207,7 @@ export default function TopReaderBar({
               }`}
             >
               {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              <span>Menu</span>
+              <span>{isPtBr ? 'Opções' : 'Menu'}</span>
               <span
                 className={`h-2 w-2 rounded-full ${
                   hasGeminiKey ? 'bg-[#3B7A57]' : 'bg-[#C88A32]'
@@ -197,7 +219,7 @@ export default function TopReaderBar({
             {menuOpen && (
               <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-[#DCE2DF] bg-[#FFFFFF] p-2.5 shadow-xl z-50 space-y-1.5">
                 <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#737F79]">
-                  Reading Modes &amp; Aids
+                  {isPtBr ? 'Modos de Leitura e Ajuda' : 'Reading Modes & Aids'}
                 </div>
 
                 {/* 0. Safari-Inspired Reader View (Text & Sound Only) Toggle */}
@@ -217,10 +239,20 @@ export default function TopReaderBar({
                     <span className="inline-flex h-4 w-5 items-center justify-center rounded bg-black/10 font-serif text-[11px] font-bold">
                       AA
                     </span>
-                    <span>Text &amp; Sound Only (Reader)</span>
+                    <span>
+                      {isPtBr
+                        ? 'Apenas Texto e Áudio (Leitura)'
+                        : 'Text & Sound Only (Reader)'}
+                    </span>
                   </span>
                   <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-black/10">
-                    {readerOnlyMode ? 'ON' : 'OFF'}
+                    {readerOnlyMode
+                      ? isPtBr
+                        ? 'SIM'
+                        : 'ON'
+                      : isPtBr
+                      ? 'NÃO'
+                      : 'OFF'}
                   </span>
                 </button>
 
@@ -236,10 +268,10 @@ export default function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <ShieldAlert className="h-4 w-4" />
-                    <span>Strict Mode</span>
+                    <span>{isPtBr ? 'Modo Sem Dicas (Estrito)' : 'Strict Mode'}</span>
                   </span>
                   <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-black/10">
-                    {strictMode ? 'ON' : 'OFF'}
+                    {strictMode ? (isPtBr ? 'SIM' : 'ON') : isPtBr ? 'NÃO' : 'OFF'}
                   </span>
                 </button>
 
@@ -268,7 +300,7 @@ export default function TopReaderBar({
                 )}
 
                 <div className="my-1 border-t border-[#E8ECEA] pt-1.5 px-2.5 text-[10px] font-bold uppercase tracking-wider text-[#737F79]">
-                  Tools &amp; Configuration
+                  {isPtBr ? 'Ferramentas e Ajustes' : 'Tools & Configuration'}
                 </div>
 
                 {/* 4. Built-in Translator Panel */}
@@ -286,10 +318,18 @@ export default function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    <span>Google Translator Panel</span>
+                    <span>
+                      {isPtBr ? 'Tradutor Google na Página' : 'Google Translator Panel'}
+                    </span>
                   </span>
                   <span className="text-[10px] font-semibold">
-                    {showTranslator ? 'Shown' : 'Open'}
+                    {showTranslator
+                      ? isPtBr
+                        ? 'Aberto'
+                        : 'Shown'
+                      : isPtBr
+                      ? 'Abrir'
+                      : 'Open'}
                   </span>
                 </button>
 
@@ -308,10 +348,14 @@ export default function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <BookmarkCheck className="h-4 w-4 text-[#D9A756]" />
-                    <span>Dictionary &amp; Vocab Sidebar</span>
+                    <span>
+                      {isPtBr
+                        ? 'Dicionário e Banco de Palavras'
+                        : 'Dictionary & Vocab Sidebar'}
+                    </span>
                   </span>
                   <span className="rounded-full bg-[#F6EBD8] px-2 py-0.5 text-[10px] font-bold text-[#6E4E19]">
-                    {learningCount}L/{acquiredCount}A
+                    {learningCount}/{acquiredCount}
                   </span>
                 </button>
 
@@ -326,7 +370,11 @@ export default function TopReaderBar({
                 >
                   <span className="flex items-center gap-2">
                     <Settings className="h-4 w-4 text-[#5C6661]" />
-                    <span>API Keys &amp; Audio Settings</span>
+                    <span>
+                      {isPtBr
+                        ? 'Configurações de Áudio e IA'
+                        : 'API Keys & Audio Settings'}
+                    </span>
                   </span>
                   <span
                     className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold ${
@@ -340,7 +388,13 @@ export default function TopReaderBar({
                         hasGeminiKey ? 'bg-[#3B7A57]' : 'bg-[#C88A32]'
                       }`}
                     />
-                    {hasGeminiKey ? 'Ready' : 'Setup'}
+                    {hasGeminiKey
+                      ? isPtBr
+                        ? 'Pronto'
+                        : 'Ready'
+                      : isPtBr
+                      ? 'Ajustar'
+                      : 'Setup'}
                   </span>
                 </button>
 
@@ -351,16 +405,28 @@ export default function TopReaderBar({
                     onClick={() => setShowQrCode((prev) => !prev)}
                     className="flex w-full items-center justify-between rounded-xl border border-[#C9DCE8] bg-[#F1F6FA] px-3 py-2 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E4EFF6]"
                   >
-                    <span>📱 Open on Your Phone (QR Code)</span>
+                    <span>
+                      {isPtBr
+                        ? '📱 Abrir no Celular (Código QR)'
+                        : '📱 Open on Your Phone (QR Code)'}
+                    </span>
                     <span className="text-[10px] font-bold text-[#234E68]">
-                      {showQrCode ? 'Hide' : 'Scan'}
+                      {showQrCode
+                        ? isPtBr
+                          ? 'Ocultar'
+                          : 'Hide'
+                        : isPtBr
+                        ? 'Ver QR'
+                        : 'Scan'}
                     </span>
                   </button>
 
                   {showQrCode && (
                     <div className="mt-2 rounded-xl border border-[#D5E1E8] bg-[#FFFFFF] p-3 text-center">
                       <p className="text-[11px] font-medium text-[#2A332F]">
-                        Scan with your phone camera (on the same Wi-Fi):
+                        {isPtBr
+                          ? 'Aponte a câmera do seu celular para o código abaixo:'
+                          : 'Scan with your phone camera (on the same Wi-Fi):'}
                       </p>
                       <div className="my-2 flex justify-center">
                         <img
@@ -370,10 +436,12 @@ export default function TopReaderBar({
                         />
                       </div>
                       <p className="font-mono text-[11px] font-semibold text-[#234E68] select-all">
-                        http://192.168.1.62:8080
+                        https://tcandeu-afk.github.io/thialogue/
                       </p>
                       <p className="mt-1 text-[10px] text-[#6E7A74]">
-                        Your saved ElevenLabs &amp; Gemini keys will sync automatically!
+                        {isPtBr
+                          ? 'Você pode estudar pelo celular ou computador a qualquer momento!'
+                          : 'Your saved ElevenLabs & Gemini keys will sync automatically!'}
                       </p>
                     </div>
                   )}
