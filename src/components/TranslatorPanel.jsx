@@ -54,7 +54,8 @@ export default function TranslatorPanel({
     setIsTranslating(true);
     setError(null);
     try {
-      const result = await translateToEnglish(trimmed, lang);
+      const targetLang = lang === 'en' ? 'pt' : 'en';
+      const result = await translateToEnglish(trimmed, lang, targetLang);
       setTranslatedText(result.translatedText);
     } catch (err) {
       setError(
@@ -74,6 +75,8 @@ export default function TranslatorPanel({
 
   const currentLangMeta =
     LANGUAGE_METADATA.find((l) => l.translateCode === sourceLang) || activeProfile;
+  const targetLangName = sourceLang === 'en' ? 'Português (BR)' : 'English';
+  const targetLangCode = sourceLang === 'en' ? 'pt' : 'en';
 
   return (
     <div className="mb-6 rounded-2xl border border-stone-900/30 bg-[#FFFFFF] p-5 shadow-sm">
@@ -84,10 +87,10 @@ export default function TranslatorPanel({
           </div>
           <div>
             <h3 className="text-sm font-semibold text-[#181D1B]">
-              Built-in Google Translate to English
+              Built-in Google Translate to {targetLangName}
             </h3>
             <p className="text-[11px] text-[#5C6661]">
-              Instant translation from French, Italian, Korean, Japanese &amp; Spanish to English
+              Instant translation into {targetLangName}
             </p>
           </div>
         </div>
@@ -107,7 +110,7 @@ export default function TranslatorPanel({
           >
             {LANGUAGE_METADATA.map((lang) => (
               <option key={lang.id} value={lang.translateCode}>
-                {lang.flag} {lang.name} ({lang.nativeName}) → English
+                {lang.flag} {lang.name} → {lang.id === 'en' ? 'Português (BR)' : 'English'}
               </option>
             ))}
             <option value="auto">🌐 Auto-Detect → English</option>
@@ -169,7 +172,7 @@ export default function TranslatorPanel({
 
           <div className="mt-2 flex items-center justify-between">
             <a
-              href={buildGoogleTranslateWebUrl(inputText, sourceLang)}
+              href={buildGoogleTranslateWebUrl(inputText, sourceLang, targetLangCode)}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-[11px] font-medium text-[#5C6661] hover:text-stone-900 hover:underline"
@@ -191,7 +194,7 @@ export default function TranslatorPanel({
                 </>
               ) : (
                 <>
-                  <span>Translate to English</span>
+                  <span>Translate to {targetLangName}</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </>
               )}
@@ -199,10 +202,10 @@ export default function TranslatorPanel({
           </div>
         </div>
 
-        {/* English Output Box */}
+        {/* Translation Output Box */}
         <div className="flex flex-col">
           <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-[#5C6661]">
-            <span>English Translation (Google Translate)</span>
+            <span>{targetLangName} Translation (Google Translate)</span>
             {translatedText && (
               <button
                 type="button"
@@ -228,7 +231,7 @@ export default function TranslatorPanel({
             {isTranslating ? (
               <span className="flex items-center gap-2 text-xs text-[#737F79]">
                 <Loader2 className="h-4 w-4 animate-spin text-stone-700" />
-                Fetching English translation from Google Translate...
+                Fetching {targetLangName} translation from Google Translate...
               </span>
             ) : error ? (
               <span className="text-xs text-red-800">{error}</span>
@@ -239,7 +242,7 @@ export default function TranslatorPanel({
             ) : (
               <span className="text-xs text-[#87928D]">
                 Click the &ldquo;Translate&rdquo; icon at the end of any sentence or type above to
-                translate into English.
+                translate into {targetLangName}.
               </span>
             )}
           </div>

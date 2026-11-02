@@ -14,6 +14,8 @@ import {
   synthesizeChapterWithElevenLabs,
   getSilentUnlockBlobUrl,
   ensurePlaybackAudioSession,
+  setGlobalPlaybackRate,
+  getTokenIndexAtProgress,
 } from '../services/audioService';
 import { DEFAULT_ELEVENLABS_VOICE_ID } from '../types/schema';
 
@@ -79,6 +81,8 @@ export default function AudioPlayerBar({
   onCacheChapterBlobUrl,
   activeSpokenSentenceIdx,
   setActiveSpokenSentenceIdx,
+  activeSpokenTokenIdx,
+  setActiveSpokenTokenIdx,
 }) {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -152,6 +156,7 @@ export default function AudioPlayerBar({
 
     setIsPlaying(false);
     setActiveSpokenSentenceIdx(null);
+    setActiveSpokenTokenIdx?.(null);
   };
 
   const playUrlOnHtmlAudio = async (targetUrl, targetSeekRatio = null) => {
@@ -317,6 +322,7 @@ export default function AudioPlayerBar({
     if (!seg) return;
 
     setActiveSpokenSentenceIdx(clampedIdx);
+    setActiveSpokenTokenIdx?.(0);
 
     const el = htmlAudioRef.current;
     if (
@@ -339,6 +345,7 @@ export default function AudioPlayerBar({
   const handleSpeedChange = (newRate) => {
     playbackRateRef.current = newRate;
     setPlaybackRate(newRate);
+    setGlobalPlaybackRate(newRate);
     if (htmlAudioRef.current) {
       htmlAudioRef.current.playbackRate = newRate;
     }
@@ -375,6 +382,7 @@ export default function AudioPlayerBar({
           setIsPlaying(true);
           if (activeSpokenSentenceIdx === null) {
             setActiveSpokenSentenceIdx(0);
+            setActiveSpokenTokenIdx?.(0);
           }
         }}
         onTimeUpdate={(e) => {
@@ -387,6 +395,21 @@ export default function AudioPlayerBar({
             const sIdx = getSentenceIndexAtTime(chapter?.sentences, t, d);
             if (sIdx !== null) {
               setActiveSpokenSentenceIdx(sIdx);
+              const seg = sentenceSegments[sIdx];
+              const sentenceObj = chapter?.sentences?.[sIdx];
+              if (seg && Array.isArray(sentenceObj?.tokens) && sentenceObj.tokens.length > 0) {
+                const overallProgress = Math.max(0, Math.min(0.9999, t / d));
+                const segRatio = Math.max(
+                  0,
+                  Math.min(
+                    0.9999,
+                    (overallProgress - seg.startRatio) /
+                      Math.max(0.001, seg.endRatio - seg.startRatio)
+                  )
+                );
+                const tokIdx = getTokenIndexAtProgress(sentenceObj.tokens, segRatio);
+                setActiveSpokenTokenIdx?.(tokIdx);
+              }
             }
           }
         }}
@@ -396,6 +419,7 @@ export default function AudioPlayerBar({
           setIsPlaying(false);
           setCurrentTime(0);
           setActiveSpokenSentenceIdx(null);
+          setActiveSpokenTokenIdx?.(null);
         }}
         onError={() => {
           if (isSilentUnlockActiveRef.current) return;
@@ -490,22 +514,30 @@ export default function AudioPlayerBar({
         </div>
 
         {/* Speed Selector */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <Volume2 className="h-4 w-4 text-[#87928D]" />
           <span className="text-[11px] font-medium text-[#5C6661]">Speed:</span>
-          <div className="flex rounded-lg border border-[#D5E1E8] bg-[#F4F8FA] p-0.5">
-            {[0.8, 0.95, 1.0, 1.15].map((rate) => (
+          <div className="flex flex-wrap rounded-lg border border-[#D5E1E8] bg-[#F4F8FA] p-0.5">
+            {[
+              { rate: 0.5, label: '0.5x (Very Slow)' },
+              { rate: 0.65, label: '0.65x (Slow)' },
+              { rate: 0.75, label: '0.75x' },
+              { rate: 0.85, label: '0.85x' },
+              { rate: 1.0, label: '1.0x' },
+              { rate: 1.15, label: '1.15x' },
+            ].map(({ rate, label }) => (
               <button
                 key={rate}
                 type="button"
                 onClick={() => handleSpeedChange(rate)}
-                className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition ${
+                title={`Set narration speed to ${label}`}
+                className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition cursor-pointer ${
                   playbackRate === rate
-                    ? 'bg-[#234E68] text-white'
+                    ? 'bg-[#234E68] text-white shadow-2xs'
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                {rate}x
+                {rate === 0.5 ? '0.5x' : rate === 0.65 ? '0.65x' : `${rate}x`}
               </button>
             ))}
           </div>

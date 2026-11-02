@@ -421,6 +421,156 @@ const BONUS_SCENE_BANK = {
       ],
     },
   ],
+  en: [
+    {
+      title: 'Afternoon Tea with Mrs. Miller (Chá da Tarde com a Sra. Miller)',
+      summary: 'Mrs. Miller invites Helena and her daughter Julia into the warm garden behind the flower shop for traditional English tea and homemade apple cake.',
+      recycled: ['morning', 'notebook', 'would', 'looking'],
+      sentences: [
+        {
+          fullSentence: 'Behind the flower shop, Mrs. Miller opens a small green door to a quiet garden.',
+          englishTranslation: 'Atrás da floricultura, a Sra. Miller abre uma pequena porta verde para um jardim tranquilo.',
+          romanisation: null,
+          grammarNote: 'Em inglês, os adjetivos vêm sempre antes do substantivo: "a small green door" (uma pequena porta verde) e "a quiet garden" (um jardim tranquilo).',
+          tokens: [
+            { surface: 'Behind', reading: null, baseForm: 'behind', contextualMeaning: 'atrás de' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+            { surface: 'flower', reading: null, baseForm: 'flower', contextualMeaning: 'de flores' },
+            { surface: 'shop,', reading: null, baseForm: 'shop', contextualMeaning: 'loja (floricultura)' },
+            { surface: 'Mrs.', reading: null, baseForm: 'Mrs.', contextualMeaning: 'Sra.' },
+            { surface: 'Miller', reading: null, baseForm: 'Miller', contextualMeaning: 'Miller' },
+            { surface: 'opens', reading: null, baseForm: 'open', contextualMeaning: 'abre' },
+            { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'uma' },
+            { surface: 'small', reading: null, baseForm: 'small', contextualMeaning: 'pequena' },
+            { surface: 'green', reading: null, baseForm: 'green', contextualMeaning: 'verde' },
+            { surface: 'door', reading: null, baseForm: 'door', contextualMeaning: 'porta' },
+            { surface: 'to', reading: null, baseForm: 'to', contextualMeaning: 'para' },
+            { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'um' },
+            { surface: 'quiet', reading: null, baseForm: 'quiet', contextualMeaning: 'tranquilo / silencioso' },
+            { surface: 'garden.', reading: null, baseForm: 'garden', contextualMeaning: 'jardim' },
+          ],
+        },
+        {
+          fullSentence: '"Would you like a cup of hot English tea and a piece of apple cake?" Mrs. Miller asks.',
+          englishTranslation: '— Vocês gostariam de uma xícara de chá inglês quente e um pedaço de bolo de maçã? — pergunta a Sra. Miller.',
+          romanisation: null,
+          grammarNote: '"Would you like...?" (Você gostaria de...?) é a estrutura fundamental para oferecer comida ou bebida com educação.',
+          tokens: [
+            { surface: '"Would', reading: null, baseForm: 'would', contextualMeaning: 'gostariam (com like)' },
+            { surface: 'you', reading: null, baseForm: 'you', contextualMeaning: 'vocês' },
+            { surface: 'like', reading: null, baseForm: 'like', contextualMeaning: 'gostar (would like = gostariam de)' },
+            { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'uma' },
+            { surface: 'cup', reading: null, baseForm: 'cup', contextualMeaning: 'xícara' },
+            { surface: 'of', reading: null, baseForm: 'of', contextualMeaning: 'de' },
+            { surface: 'hot', reading: null, baseForm: 'hot', contextualMeaning: 'quente' },
+            { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'inglês' },
+            { surface: 'tea', reading: null, baseForm: 'tea', contextualMeaning: 'chá' },
+            { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+            { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'um' },
+            { surface: 'piece', reading: null, baseForm: 'piece', contextualMeaning: 'pedaço / fatia' },
+            { surface: 'of', reading: null, baseForm: 'of', contextualMeaning: 'de' },
+            { surface: 'apple', reading: null, baseForm: 'apple', contextualMeaning: 'de maçã' },
+            { surface: 'cake?"', reading: null, baseForm: 'cake', contextualMeaning: 'bolo' },
+            { surface: 'Mrs.', reading: null, baseForm: 'Mrs.', contextualMeaning: 'Sra.' },
+            { surface: 'Miller', reading: null, baseForm: 'Miller', contextualMeaning: 'Miller' },
+            { surface: 'asks.', reading: null, baseForm: 'ask', contextualMeaning: 'pergunta' },
+          ],
+        },
+        {
+          fullSentence: 'Helena smiles happily and replies: "Yes, please! That sounds wonderful!"',
+          englishTranslation: 'Helena sorri alegremente e responde: — Sim, por favor! Isso parece maravilhoso!',
+          romanisation: null,
+          grammarNote: '"That sounds wonderful!" (Isso soa/parece maravilhoso!) é uma expressão muito natural para reagir positivamente a um convite.',
+          tokens: [
+            { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
+            { surface: 'smiles', reading: null, baseForm: 'smile', contextualMeaning: 'sorri' },
+            { surface: 'happily', reading: null, baseForm: 'happily', contextualMeaning: 'alegremente' },
+            { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+            { surface: 'replies:', reading: null, baseForm: 'reply', contextualMeaning: 'responde' },
+            { surface: '"Yes,', reading: null, baseForm: 'yes', contextualMeaning: 'sim' },
+            { surface: 'please!', reading: null, baseForm: 'please', contextualMeaning: 'por favor' },
+            { surface: 'That', reading: null, baseForm: 'that', contextualMeaning: 'isso' },
+            { surface: 'sounds', reading: null, baseForm: 'sound', contextualMeaning: 'soa / parece' },
+            { surface: 'wonderful!"', reading: null, baseForm: 'wonderful', contextualMeaning: 'maravilhoso' },
+          ],
+        },
+        {
+          fullSentence: 'Mrs. Miller opens the blue notebook and shows Helena the secret recipe for the cake.',
+          englishTranslation: 'A Sra. Miller abre o caderno azul e mostra para Helena a receita secreta do bolo.',
+          romanisation: null,
+          grammarNote: '"Shows Helena" significa "mostra para Helena". No presente simples com "Mrs. Miller" (ela), os verbos terminam em "-s": "opens" e "shows".',
+          tokens: [
+            { surface: 'Mrs.', reading: null, baseForm: 'Mrs.', contextualMeaning: 'Sra.' },
+            { surface: 'Miller', reading: null, baseForm: 'Miller', contextualMeaning: 'Miller' },
+            { surface: 'opens', reading: null, baseForm: 'open', contextualMeaning: 'abre' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
+            { surface: 'blue', reading: null, baseForm: 'blue', contextualMeaning: 'azul' },
+            { surface: 'notebook', reading: null, baseForm: 'notebook', contextualMeaning: 'caderno' },
+            { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+            { surface: 'shows', reading: null, baseForm: 'show', contextualMeaning: 'mostra' },
+            { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'para Helena' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+            { surface: 'secret', reading: null, baseForm: 'secret', contextualMeaning: 'secreta' },
+            { surface: 'recipe', reading: null, baseForm: 'recipe', contextualMeaning: 'receita' },
+            { surface: 'for', reading: null, baseForm: 'for', contextualMeaning: 'de / para' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
+            { surface: 'cake.', reading: null, baseForm: 'cake', contextualMeaning: 'bolo' },
+          ],
+        },
+        {
+          fullSentence: 'Inside the back cover of the notebook, Julia notices two golden tickets for a concert tonight.',
+          englishTranslation: 'Dentro da contracapa do caderno, Julia nota dois ingressos dourados para um concerto hoje à noite.',
+          romanisation: null,
+          grammarNote: '"Tonight" significa "hoje à noite" em uma única palavra, sem precisar de preposição antes.',
+          tokens: [
+            { surface: 'Inside', reading: null, baseForm: 'inside', contextualMeaning: 'dentro de' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+            { surface: 'back', reading: null, baseForm: 'back', contextualMeaning: 'de trás (back cover = contracapa)' },
+            { surface: 'cover', reading: null, baseForm: 'cover', contextualMeaning: 'capa' },
+            { surface: 'of', reading: null, baseForm: 'of', contextualMeaning: 'de' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
+            { surface: 'notebook,', reading: null, baseForm: 'notebook', contextualMeaning: 'caderno' },
+            { surface: 'Julia', reading: null, baseForm: 'Julia', contextualMeaning: 'Julia' },
+            { surface: 'notices', reading: null, baseForm: 'notice', contextualMeaning: 'nota / percebe' },
+            { surface: 'two', reading: null, baseForm: 'two', contextualMeaning: 'dois' },
+            { surface: 'golden', reading: null, baseForm: 'golden', contextualMeaning: 'dourados' },
+            { surface: 'tickets', reading: null, baseForm: 'ticket', contextualMeaning: 'ingressos' },
+            { surface: 'for', reading: null, baseForm: 'for', contextualMeaning: 'para' },
+            { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'um' },
+            { surface: 'concert', reading: null, baseForm: 'concert', contextualMeaning: 'concerto / show' },
+            { surface: 'tonight.', reading: null, baseForm: 'tonight', contextualMeaning: 'hoje à noite' },
+          ],
+        },
+        {
+          fullSentence: '"My husband cannot go tonight, so please take these two tickets and enjoy the music!" Mrs. Miller says warmly.',
+          englishTranslation: '— Meu marido não pode ir hoje à noite, então por favor levem estes dois ingressos e aproveitem a música! — diz a Sra. Miller calorosamente.',
+          romanisation: null,
+          grammarNote: '"Cannot" (ou "can\'t") significa "não pode" e é seguido diretamente pelo verbo principal ("cannot go" = não pode ir).',
+          tokens: [
+            { surface: '"My', reading: null, baseForm: 'my', contextualMeaning: 'meu' },
+            { surface: 'husband', reading: null, baseForm: 'husband', contextualMeaning: 'marido' },
+            { surface: 'cannot', reading: null, baseForm: 'cannot', contextualMeaning: 'não pode' },
+            { surface: 'go', reading: null, baseForm: 'go', contextualMeaning: 'ir' },
+            { surface: 'tonight,', reading: null, baseForm: 'tonight', contextualMeaning: 'hoje à noite' },
+            { surface: 'so', reading: null, baseForm: 'so', contextualMeaning: 'então / por isso' },
+            { surface: 'please', reading: null, baseForm: 'please', contextualMeaning: 'por favor' },
+            { surface: 'take', reading: null, baseForm: 'take', contextualMeaning: 'levem / peguem' },
+            { surface: 'these', reading: null, baseForm: 'these', contextualMeaning: 'estes' },
+            { surface: 'two', reading: null, baseForm: 'two', contextualMeaning: 'dois' },
+            { surface: 'tickets', reading: null, baseForm: 'ticket', contextualMeaning: 'ingressos' },
+            { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+            { surface: 'enjoy', reading: null, baseForm: 'enjoy', contextualMeaning: 'aproveitem' },
+            { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+            { surface: 'music!"', reading: null, baseForm: 'music', contextualMeaning: 'música' },
+            { surface: 'Mrs.', reading: null, baseForm: 'Mrs.', contextualMeaning: 'Sra.' },
+            { surface: 'Miller', reading: null, baseForm: 'Miller', contextualMeaning: 'Miller' },
+            { surface: 'says', reading: null, baseForm: 'say', contextualMeaning: 'diz' },
+            { surface: 'warmly.', reading: null, baseForm: 'warmly', contextualMeaning: 'calorosamente' },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 let offlineRegenerateCounter = 0;
@@ -504,6 +654,7 @@ export function generateOfflineBonusChapter(
     it: `Nuovo Indizio in Città — Episodio ${chapterNum} (New Clue in Town — Episode ${chapterNum})`,
     ja: `第${chapterNum}章：新たな手掛かり (New Clue — Episode ${chapterNum})`,
     es: `Nueva Pista en la Costa — Episodio ${chapterNum} (New Clue on the Coast — Episode ${chapterNum})`,
+    en: `A New Day in London — Episode ${chapterNum} (Um Novo Dia em Londres — Episódio ${chapterNum})`,
   };
 
   return {
@@ -570,9 +721,21 @@ You MUST naturally weave as many of these target words as fit the plot into the 
 - "reading" MUST be null for all tokens.
 - "romanisation" MUST be null for all sentences.`;
 
+  const translationLanguageRules =
+    profile.id === 'en'
+      ? `BRAZILIAN PORTUGUESE TRANSLATION & GRAMMAR NOTE RULES (CRITICAL FOR ENGLISH COURSE FOR BRAZILIANS):
+- The target story sentences ("fullSentence") MUST be written in natural A1 Beginner English.
+- Every token's "contextualMeaning" MUST be written in clear Brazilian Portuguese (Português do Brasil).
+- Every sentence's "englishTranslation" field MUST contain the natural BRAZILIAN PORTUGUESE translation of the English sentence (so a Brazilian Portuguese speaker can read the translation in Portuguese).
+- Every sentence's "grammarNote" MUST be written in friendly, plain-language BRAZILIAN PORTUGUESE explaining the English sentence pattern for a Brazilian beginner.
+- In "recapModule", write "subtitle", "construction.patternName", "construction.explanation", and all "english" translation fields in BRAZILIAN PORTUGUESE while keeping target sentences/phrases in English.`
+      : `ENGLISH TRANSLATION & GRAMMAR NOTE RULES:
+- Every sentence MUST include "englishTranslation" with a clear, natural English translation of the full sentence.
+- Every sentence MUST include a "grammarNote" consisting of a single, plain-English sentence explaining the core recurring sentence pattern used in that sentence, avoiding dense academic jargon.`;
+
   const systemPrompt = `You are a bestselling fiction author and master graded-reader creator trained in Stephen Krashen's Comprehensible Input (i+1) hypothesis and Olly Richards' StoryLearning method.
 
-Write Chapter ${nextChapterNumber} of the ongoing serial story "${profile.storyTitle}" in ${profile.name} (${profile.nativeName}), strictly calibrated for ${profile.cefrLevel}.
+Write Chapter ${nextChapterNumber} of the ongoing serial story "${profile.storyTitle}" in ${profile.nativeName || profile.name}, strictly calibrated for ${profile.cefrLevel}.
 
 CONTINUOUS PLOT CONTEXT (storyArcSummary so far):
 "${profile.storyArcSummary}"
@@ -590,16 +753,14 @@ ${targetWordsPromptBlock}
 
 ${scriptSpecificRules}
 
-ENGLISH TRANSLATION & GRAMMAR NOTE RULES:
-- Every sentence MUST include "englishTranslation" with a clear, natural English translation of the full sentence.
-- Every sentence MUST include a "grammarNote" consisting of a single, plain-English sentence explaining the core recurring sentence pattern used in that sentence, avoiding dense academic jargon.
+${translationLanguageRules}
 
 CHAPTER LENGTH & LEARNING MODULE:
 - Write 8 to 9 cohesive, character-and-dialogue-driven sentences with fresh, practical vocabulary that advance the plot naturally.
 - In "recapModule", generate a complete Chapter Consolidation & Transfer Lab tailored to this chapter:
   1. "subtitle": brief summary of the grammar and lexical focus of this chapter.
   2. "vocabReuses": 3 key expressions from this chapter, showing "storyContext" (the sentence from the story) and "newPhrase" + "english" (a brand-new everyday sentence transferring that expression into a fresh real-life context).
-  3. "construction": 1 core grammatical pattern from this chapter ("patternName", plain-English "explanation", 3-4 chip "formula", and 3 fresh "examples" each with "target", "english", and "highlight").`;
+  3. "construction": 1 core grammatical pattern from this chapter ("patternName", plain-language "explanation", 3-4 chip "formula", and 3 fresh "examples" each with "target", "english", and "highlight").`;
 
   const requestBody = JSON.stringify({
     contents: [
@@ -861,6 +1022,52 @@ const CHALLENGE_EXTENSION_BANK = {
       ],
     },
   ],
+  en: [
+    {
+      fullSentence: 'While they walk through the market, Helena practices her English with every friendly shopkeeper she meets.',
+      englishTranslation: 'Enquanto elas caminham pelo mercado, Helena pratica seu inglês com cada lojista simpático que ela conhece.',
+      romanisation: null,
+      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo.',
+      tokens: [
+        { surface: 'While', reading: null, baseForm: 'while', contextualMeaning: 'enquanto' },
+        { surface: 'they', reading: null, baseForm: 'they', contextualMeaning: 'elas' },
+        { surface: 'walk', reading: null, baseForm: 'walk', contextualMeaning: 'caminham' },
+        { surface: 'through', reading: null, baseForm: 'through', contextualMeaning: 'através de / pelo' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
+        { surface: 'market,', reading: null, baseForm: 'market', contextualMeaning: 'mercado' },
+        { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
+        { surface: 'practices', reading: null, baseForm: 'practice', contextualMeaning: 'pratica' },
+        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
+        { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'inglês' },
+        { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
+        { surface: 'every', reading: null, baseForm: 'every', contextualMeaning: 'cada / todo' },
+        { surface: 'friendly', reading: null, baseForm: 'friendly', contextualMeaning: 'simpático' },
+        { surface: 'shopkeeper', reading: null, baseForm: 'shopkeeper', contextualMeaning: 'lojista / vendedor' },
+        { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'que ela' },
+        { surface: 'meets.', reading: null, baseForm: 'meet', contextualMeaning: 'conhece / encontra' },
+      ],
+    },
+    {
+      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions right away.',
+      englishTranslation: 'Como ela fala devagar e educadamente, todos entendem suas perguntas imediatamente.',
+      romanisation: null,
+      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem).',
+      tokens: [
+        { surface: 'Because', reading: null, baseForm: 'because', contextualMeaning: 'porque / como' },
+        { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
+        { surface: 'speaks', reading: null, baseForm: 'speak', contextualMeaning: 'fala' },
+        { surface: 'slowly', reading: null, baseForm: 'slowly', contextualMeaning: 'devagar / lentamente' },
+        { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+        { surface: 'politely,', reading: null, baseForm: 'politely', contextualMeaning: 'educadamente' },
+        { surface: 'everyone', reading: null, baseForm: 'everyone', contextualMeaning: 'todos / todo mundo' },
+        { surface: 'understands', reading: null, baseForm: 'understand', contextualMeaning: 'entendem (verbo no singular)' },
+        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'suas / dela' },
+        { surface: 'questions', reading: null, baseForm: 'question', contextualMeaning: 'perguntas' },
+        { surface: 'right', reading: null, baseForm: 'right', contextualMeaning: 'imediatamente (right away)' },
+        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (right away)' },
+      ],
+    },
+  ],
 };
 
 /**
@@ -955,7 +1162,12 @@ Rewrite and expand the exact fiction story of this chapter into a LONGER, RICHER
 
       : `LATIN SCRIPT RULES: Split into individual clickable word tokens. "reading" and "romanisation" MUST be null.`;
 
-  const prompt = `You are an expert language teacher adapting Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.name} (${profile.cefrLevel}).
+  const translationInstructions =
+    profile.id === 'en'
+      ? `Every sentence MUST be in English, with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
+      : `Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
+
+  const prompt = `You are an expert language teacher adapting Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).
 
 ORIGINAL "JUST RIGHT" CHAPTER SENTENCES:
 ${originalSentencesText}
@@ -964,7 +1176,7 @@ ${rewriteDirective}
 
 ${scriptSpecificRules}
 
-Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
+${translationInstructions}`;
 
   try {
     const response = await fetch(

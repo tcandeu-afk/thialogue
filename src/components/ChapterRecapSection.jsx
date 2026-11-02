@@ -5097,6 +5097,1274 @@ const COURSE_RECAP_BANK = {
         ]
       }
     }
+  },
+  "en": {
+    "1": {
+      "subtitle": "Pedidos Educados com 'Would Like', Preposições de Lugar ('Near', 'Next to', 'Inside') & Existência com 'There is'",
+      "vocabReuses": [
+        {
+          "word": "would like (gostaria de)",
+          "storyContext": "\"I would like a large cup of coffee with hot milk, please.\"",
+          "newPhrase": "We would like a small table near the window, please.",
+          "english": "Nós gostaríamos de uma mesa pequena perto da janela, por favor."
+        },
+        {
+          "word": "next to (ao lado de)",
+          "storyContext": "When she puts her bag on the chair next to her, she sees a small blue notebook.",
+          "newPhrase": "The pharmacy is right next to the supermarket on the main street.",
+          "english": "A farmácia fica bem ao lado do supermercado na rua principal."
+        },
+        {
+          "word": "belongs to (pertence a)",
+          "storyContext": "\"Oh! That belongs to the woman from the flower shop!\"",
+          "newPhrase": "Excuse me, does this black umbrella belong to you?",
+          "english": "Com licença, este guarda-chuva preto pertence a você?"
+        }
+      ],
+      "construction": {
+        "patternName": "Pedidos Educados: [Sujeito] + would like + [Substantivo / to + Verbo]",
+        "formula": [
+          "I / We / You",
+          "+ would like",
+          "+ a cup of coffee / to drink tea",
+          "+ please"
+        ],
+        "explanation": "Em inglês, dizer \"I want\" (Eu quero) para o garçom ou atendente soa muito direto ou rude. A fórmula mágica e educada em qualquer café, restaurante ou hotel é sempre \"I would like...\" (Eu gostaria de...) ou \"What would you like...?\" (O que você gostaria...?).",
+        "examples": [
+          {
+            "target": "I would like a glass of cold water, please.",
+            "english": "Eu gostaria de um copo de água gelada, por favor.",
+            "highlight": "I would like"
+          },
+          {
+            "target": "What would you like to eat this morning?",
+            "english": "O que você gostaria de comer esta manhã?",
+            "highlight": "What would you like"
+          },
+          {
+            "target": "We would like to pay the bill now, please.",
+            "english": "Nós gostaríamos de pagar a conta agora, por favor.",
+            "highlight": "We would like to"
+          }
+        ]
+      },
+      "drills": {
+        "cloze": [
+          {
+            "promptEnglish": "Eu gostaria de uma xícara grande de chá quente, por favor.",
+            "sentenceParts": [
+              "I ",
+              " a large cup of hot tea, please."
+            ],
+            "correctAnswer": "would like",
+            "options": [
+              "would like",
+              "likes to",
+              "am liking",
+              "would liking"
+            ],
+            "explanation": "« Would like » ('gostaria de') é a expressão educada padrão para fazer pedidos em inglês."
+          },
+          {
+            "promptEnglish": "Está uma manhã muito fria hoje, então eu visto meu casaco.",
+            "sentenceParts": [
+              "",
+              " is a very cold morning today, so I put on my coat."
+            ],
+            "correctAnswer": "It",
+            "options": [
+              "It",
+              "There",
+              "She",
+              "Who"
+            ],
+            "explanation": "Em inglês, sempre usamos o pronome neutro « It » antes de « is » para falar sobre o clima ou a temperatura (« It is a cold morning »)."
+          },
+          {
+            "promptEnglish": "Ela se senta perto da janela e olha para os ônibus vermelhos.",
+            "sentenceParts": [
+              "She sits near the window and ",
+              " the red buses."
+            ],
+            "correctAnswer": "looks at",
+            "options": [
+              "looks at",
+              "looks for",
+              "looks after",
+              "looks out"
+            ],
+            "explanation": "« Look at » significa 'olhar para' algo específico, enquanto « look for » significa 'procurar'."
+          },
+          {
+            "promptEnglish": "Há um cartão branco com um endereço dentro da bolsa.",
+            "sentenceParts": [
+              "",
+              " a white card with an address inside the bag."
+            ],
+            "correctAnswer": "There is",
+            "options": [
+              "There is",
+              "Have",
+              "It has",
+              "There are"
+            ],
+            "explanation": "Em inglês, não usamos o verbo 'have' (ter) para dizer que algo existe em um lugar; usamos « There is » ('Há / Tem') no singular."
+          },
+          {
+            "promptEnglish": "A cliente deixou o guarda-chuva na cadeira ao lado da porta.",
+            "sentenceParts": [
+              "The customer left her umbrella on the chair ",
+              " the door."
+            ],
+            "correctAnswer": "next to",
+            "options": [
+              "next to",
+              "between of",
+              "inside to",
+              "from at"
+            ],
+            "explanation": "« Next to » significa 'ao lado de'."
+          },
+          {
+            "promptEnglish": "Este caderno azul pertence à professora de música.",
+            "sentenceParts": [
+              "This blue notebook ",
+              " the music teacher."
+            ],
+            "correctAnswer": "belongs to",
+            "options": [
+              "belongs to",
+              "belong for",
+              "is belong",
+              "belonging at"
+            ],
+            "explanation": "O verbo « belong » sempre pede a preposição « to » ('pertence a') e leva « -s » na 3ª pessoa do singular (« belongs to »)."
+          }
+        ],
+        "dialogue": [
+          {
+            "speakerA": "Waiter: \"Good morning! Welcome to our café. What would you like to drink today?\"",
+            "speakerAEnglish": "Garçom: \"Bom dia! Bem-vinda à nossa cafeteria. O que a senhora gostaria de beber hoje?\"",
+            "promptEnglish": "Responda educadamente que você gostaria de uma xícara grande de café com leite quente:",
+            "correctAnswer": "I would like a large cup of coffee with hot milk, please.",
+            "options": [
+              "I would like a large cup of coffee with hot milk, please.",
+              "I am looking for the train station near the market.",
+              "Someone left this blue notebook on the wooden chair.",
+              "There are three red buses on the busy street today."
+            ],
+            "explanation": "« I would like a large cup of coffee with hot milk, please » responde diretamente à pergunta do garçom usando a estrutura educada do capítulo."
+          },
+          {
+            "speakerA": "Customer: \"Excuse me, waiter, I found this small bag on the chair next to my table.\"",
+            "speakerAEnglish": "Cliente: \"Com licença, garçom, encontrei esta bolsa pequena na cadeira ao lado da minha mesa.\"",
+            "promptEnglish": "Como garçom, diga que há um cartão com um nome dentro da bolsa:",
+            "correctAnswer": "Oh, thank you! Let's see—there is a card with a name inside the bag.",
+            "options": [
+              "Oh, thank you! Let's see—there is a card with a name inside the bag.",
+              "Yes, I would like two pieces of warm bread with butter, please.",
+              "It is raining very hard in the city this morning.",
+              "We always sit near the big window in the afternoon."
+            ],
+            "explanation": "Usa « there is » ('há / tem') e « inside the bag » ('dentro da bolsa')."
+          },
+          {
+            "speakerA": "Friend: \"Where do you want to sit? The café is very quiet this morning.\"",
+            "speakerAEnglish": "Amiga: \"Onde você quer se sentar? A cafeteria está bem tranquila esta manhã.\"",
+            "promptEnglish": "Diga que você gostaria de se sentar perto da janela grande para olhar a rua:",
+            "correctAnswer": "I would like to sit near the big window to look at the street.",
+            "options": [
+              "I would like to sit near the big window to look at the street.",
+              "That umbrella belongs to the gentleman in the grey coat.",
+              "Excuse me, how much is a cup of hot tea with lemon?",
+              "She puts her keys inside her coat pocket every morning."
+            ],
+            "explanation": "Combina « I would like to sit » (Eu gostaria de me sentar) com « near the big window » (perto da janela grande) e « look at » (olhar para)."
+          },
+          {
+            "speakerA": "Receptionist: \"Do you know whose key this is on the counter?\"",
+            "speakerAEnglish": "Recepcionista: \"Você sabe de quem é esta chave em cima do balcão?\"",
+            "promptEnglish": "Responda que ela pertence ao médico do segundo andar:",
+            "correctAnswer": "Yes, that key belongs to the doctor from the second floor.",
+            "options": [
+              "Yes, that key belongs to the doctor from the second floor.",
+              "No, I would like a glass of orange juice without ice.",
+              "Yes, there is a bakery next to the pharmacy on the corner.",
+              "No, the waiter comes to our table with a warm smile."
+            ],
+            "explanation": "« Belongs to » expressa posse ('pertence a')."
+          },
+          {
+            "speakerA": "Daughter: \"Mom, how is the weather outside in London right now?\"",
+            "speakerAEnglish": "Filha: \"Mãe, como está o tempo lá fora em Londres agora?\"",
+            "promptEnglish": "Diga que está uma manhã fria, mas o café está quentinho:",
+            "correctAnswer": "It is a cold morning outside, but the café is nice and warm.",
+            "options": [
+              "It is a cold morning outside, but the café is nice and warm.",
+              "Someone left a family photo inside the blue notebook.",
+              "What would you like to eat for breakfast today?",
+              "The friendly waiter brings two cups of coffee to the table."
+            ],
+            "explanation": "Usa « It is a cold morning » para descrever o tempo/clima."
+          },
+          {
+            "speakerA": "Shopkeeper: \"Can I help you, madam? You look worried.\"",
+            "speakerAEnglish": "Lojista: \"Posso ajudar a senhora? A senhora parece preocupada.\"",
+            "promptEnglish": "Diga com educação que você deixou seu caderno azul na cadeira:",
+            "correctAnswer": "Excuse me, I left my blue notebook on the chair five minutes ago.",
+            "options": [
+              "Excuse me, I left my blue notebook on the chair five minutes ago.",
+              "I would like a small cup of black coffee with sugar, please.",
+              "She sits next to her sister on the red bus every day.",
+              "There is a lovely flower shop near the train station."
+            ],
+            "explanation": "« Excuse me, I left... » ('Com licença, eu deixei/esqueci...') usa o passado « left » do verbo « leave »."
+          }
+        ],
+        "audio_comprehension": [
+          {
+            "audioSentence": "Good morning! I would like a large cup of hot coffee with milk, please.",
+            "correctAnswer": "Bom dia! Eu gostaria de uma xícara grande de café quente com leite, por favor.",
+            "options": [
+              "Bom dia! Eu gostaria de uma xícara grande de café quente com leite, por favor.",
+              "Boa tarde! Eu gostaria de um copo de água gelada com limão, por favor.",
+              "Bom dia! Onde fica a cafeteria pequena perto da estação de ônibus?",
+              "Com licença! Alguém deixou uma xícara de café na mesa ao lado da janela."
+            ],
+            "explanation": "« Good morning! I would like a large cup of hot coffee with milk, please. »"
+          },
+          {
+            "audioSentence": "Inside the small blue notebook, there is a family photo and a white card.",
+            "correctAnswer": "Dentro do pequeno caderno azul, há uma foto de família e um cartão branco.",
+            "options": [
+              "Dentro do pequeno caderno azul, há uma foto de família e um cartão branco.",
+              "Em cima da cadeira azul, há uma bolsa grande e um guarda-chuva preto.",
+              "Perto da janela grande, há uma mesa vazia com duas cadeiras de madeira.",
+              "Ao lado da cafeteria, há uma floricultura cheia de rosas amarelas."
+            ],
+            "explanation": "« Inside the small blue notebook, there is a family photo and a white card. »"
+          },
+          {
+            "audioSentence": "The traveler sits near the window and looks at the red buses on the street.",
+            "correctAnswer": "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
+            "options": [
+              "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
+              "O garçom caminha até a porta e abre o guarda-chuva na rua fria.",
+              "A viajante pega o ônibus vermelho e desce perto do mercado de flores.",
+              "A cliente coloca a bolsa na cadeira e pede um pedaço de bolo quente."
+            ],
+            "explanation": "« The traveler sits near the window and looks at the red buses on the street. »"
+          },
+          {
+            "audioSentence": "Excuse me, someone left this phone on the chair next to the door.",
+            "correctAnswer": "Com licença, alguém deixou este telefone na cadeira ao lado da porta.",
+            "options": [
+              "Com licença, alguém deixou este telefone na cadeira ao lado da porta.",
+              "Por favor, você pode trazer o cardápio para a mesa ao lado da porta?",
+              "Com licença, este telefone preto pertence ao jovem garçom da cafeteria.",
+              "Desculpe, eu esqueci o endereço da floricultura em cima da mesa."
+            ],
+            "explanation": "« Excuse me, someone left this phone on the chair next to the door. »"
+          },
+          {
+            "audioSentence": "The friendly young waiter comes to our table with a warm smile.",
+            "correctAnswer": "O jovem garçom simpático vem até a nossa mesa com um sorriso acolhedor.",
+            "options": [
+              "O jovem garçom simpático vem até a nossa mesa com um sorriso acolhedor.",
+              "A dona da floricultura abre a loja cedo todas as manhãs com um sorriso.",
+              "O jovem garçom traz duas xícaras de chá quente para a mesa da esquina.",
+              "Nossa amiga espera por nós na frente da cafeteria com um casaco quente."
+            ],
+            "explanation": "« The friendly young waiter comes to our table with a warm smile. »"
+          },
+          {
+            "audioSentence": "That white card with the address belongs to the woman from the bakery.",
+            "correctAnswer": "Aquele cartão branco com o endereço pertence à mulher da padaria.",
+            "options": [
+              "Aquele cartão branco com o endereço pertence à mulher da padaria.",
+              "Este caderno azul com a foto pertence ao professor de inglês.",
+              "Aquele cartão branco mostra o caminho para a estação de trem.",
+              "A mulher da padaria escreveu o endereço dela em um papel branco."
+            ],
+            "explanation": "« That white card with the address belongs to the woman from the bakery. »"
+          }
+        ],
+        "grammar_contrast": [
+          {
+            "promptEnglish": "Como se diz corretamente em inglês: \"Está uma manhã fria em Londres\"?",
+            "correctAnswer": "It is a cold morning in London.",
+            "options": [
+              "It is a cold morning in London.",
+              "Is a morning cold in London.",
+              "Have cold morning in London.",
+              "There are a cold morning on London."
+            ],
+            "explanation": "1) Em inglês nunca deixamos o verbo « is » sem sujeito (precisamos de « It is »), e 2) o adjetivo « cold » vem antes do substantivo « morning »."
+          },
+          {
+            "promptEnglish": "Qual frase traduz corretamente: \"Há uma foto de família dentro do caderno\"?",
+            "correctAnswer": "There is a family photo inside the notebook.",
+            "options": [
+              "There is a family photo inside the notebook.",
+              "Has a photo of family inside the notebook.",
+              "Have a family photo in the notebook.",
+              "There are a family photo inside the notebook."
+            ],
+            "explanation": "Em português costumamos dizer \"Tem uma foto...\", mas em inglês NUNCA usamos \"Have/Has\" para existência; usamos « There is » no singular."
+          },
+          {
+            "promptEnglish": "Escolha a forma correta para: \"Ela se senta perto da janela e olha para a rua\":",
+            "correctAnswer": "She sits near the window and looks at the street.",
+            "options": [
+              "She sits near the window and looks at the street.",
+              "She sit near the window and look for the street.",
+              "She is sit near to the window and looks the street.",
+              "Her sits next the window and looks at the street."
+            ],
+            "explanation": "No presente simples com « She », os verbos recebem « -s » (« sits », « looks »), e o verbo « look » precisa da preposição « at » antes do objeto (« looks at the street »)."
+          },
+          {
+            "promptEnglish": "Como você pergunta educadamente: \"O que você gostaria de beber hoje?\"",
+            "correctAnswer": "What would you like to drink today?",
+            "options": [
+              "What would you like to drink today?",
+              "What you would like drink today?",
+              "What do you would like for drink today?",
+              "Which would you liking to drink today?"
+            ],
+            "explanation": "Em perguntas com « would », colocamos « would » antes do sujeito « you » (« What would you like...? ») seguido de « to + verbo » (« to drink »)."
+          },
+          {
+            "promptEnglish": "Qual é a ordem correta das palavras para: \"um pequeno caderno azul\"?",
+            "correctAnswer": "a small blue notebook",
+            "options": [
+              "a small blue notebook",
+              "a notebook small and blue",
+              "a blue notebook small",
+              "an small notebook blue"
+            ],
+            "explanation": "Em inglês, todos os adjetivos vêm ANTES do substantivo, na ordem Tamanho + Cor + Substantivo: « a small blue notebook »."
+          },
+          {
+            "promptEnglish": "Escolha a frase correta para: \"Isso pertence à mulher da floricultura\":",
+            "correctAnswer": "That belongs to the woman from the flower shop.",
+            "options": [
+              "That belongs to the woman from the flower shop.",
+              "That belong at the woman of the shop of flowers.",
+              "That is belong to the woman from the flower shop.",
+              "That belongs for the woman in the flowers shop."
+            ],
+            "explanation": "Com « That » (3ª pessoa do singular), o verbo recebe « -s » e pede « to »: « belongs to »."
+          }
+        ],
+        "sentence_order": [
+          {
+            "promptEnglish": "Eu gostaria de uma xícara grande de café, por favor.",
+            "chunks": [
+              "I would like",
+              "a large cup",
+              "of coffee,",
+              "please."
+            ],
+            "explanation": "Pedido educado (« I would like ») + Quantidade (« a large cup ») + Bebida (« of coffee, ») + Cortesia (« please. »)."
+          },
+          {
+            "promptEnglish": "O que você gostaria de beber esta manhã?",
+            "chunks": [
+              "What",
+              "would you like",
+              "to drink",
+              "this morning?"
+            ],
+            "explanation": "Pronome interrogativo (« What ») + Estrutura condicional (« would you like ») + Infinitivo (« to drink ») + Tempo (« this morning? »)."
+          },
+          {
+            "promptEnglish": "Ela vê um pequeno caderno azul na cadeira.",
+            "chunks": [
+              "She sees",
+              "a small",
+              "blue notebook",
+              "on the chair."
+            ],
+            "explanation": "Sujeito e verbo (« She sees ») + Tamanho + Cor + Objeto (« a small blue notebook ») + Lugar (« on the chair. »)."
+          },
+          {
+            "promptEnglish": "Dentro do caderno, há uma foto de família.",
+            "chunks": [
+              "Inside",
+              "the notebook,",
+              "there is",
+              "a family photo."
+            ],
+            "explanation": "Localização (« Inside the notebook, ») + Existência (« there is ») + Objeto (« a family photo. »)."
+          },
+          {
+            "promptEnglish": "Ela se senta perto da janela grande e olha para a rua.",
+            "chunks": [
+              "She sits",
+              "near the big window",
+              "and looks at",
+              "the street."
+            ],
+            "explanation": "Primeira ação (« She sits near the big window ») + Segunda ação (« and looks at the street. »)."
+          },
+          {
+            "promptEnglish": "Alguém deixou esta bolsa na cadeira ao lado de mim.",
+            "chunks": [
+              "Someone left",
+              "this bag",
+              "on the chair",
+              "next to me."
+            ],
+            "explanation": "Sujeito e verbo no passado (« Someone left ») + Objeto (« this bag ») + Lugar (« on the chair next to me. »)."
+          }
+        ]
+      }
+    },
+    "2": {
+      "subtitle": "Pedindo e Dando Direções ('How can I get to...?', 'Walk straight ahead', 'Turn left') & Present Continuous ('is waiting for', 'are looking for')",
+      "vocabReuses": [
+        {
+          "word": "How can I get to...? (Como posso chegar a...?)",
+          "storyContext": "\"How can I get to the flower shop from here?\" she asks the waiter.",
+          "newPhrase": "Excuse me, how can I get to the nearest underground station from here?",
+          "english": "Com licença, como posso chegar à estação de metrô mais próxima saindo daqui?"
+        },
+        {
+          "word": "straight ahead / turn left (reto em frente / vire à esquerda)",
+          "storyContext": "\"Walk straight ahead for five minutes and turn left at the corner.\"",
+          "newPhrase": "Walk straight ahead past the bank and turn left at the traffic lights.",
+          "english": "Caminhe reto em frente passando pelo banco e vire à esquerda no semáforo."
+        },
+        {
+          "word": "looking for (procurando)",
+          "storyContext": "\"First we are looking for the flower shop.\"",
+          "newPhrase": "We are looking for a pharmacy because my mother needs some medicine.",
+          "english": "Nós estamos procurando uma farmácia porque minha mãe precisa de um remédio."
+        }
+      ],
+      "construction": {
+        "patternName": "Ações em Andamento: [Sujeito] + am / is / are + [Verbo com -ing] + for",
+        "formula": [
+          "I am / She is / We are",
+          "+ waiting / looking",
+          "+ for",
+          "+ [Pessoa ou Lugar]"
+        ],
+        "explanation": "Para dizer o que alguém está fazendo neste exato momento, usamos o verbo \"to be\" (am / is / are) + o verbo com final \"-ing\". Dois verbos muito úteis em viagens sempre pedem a preposição \"for\" depois deles: \"waiting for\" (esperando por) e \"looking for\" (procurando).",
+        "examples": [
+          {
+            "target": "My daughter is waiting for me outside the café.",
+            "english": "Minha filha está esperando por mim do lado de fora da cafeteria.",
+            "highlight": "is waiting for"
+          },
+          {
+            "target": "We are looking for the flower market on this street.",
+            "english": "Nós estamos procurando o mercado de flores nesta rua.",
+            "highlight": "are looking for"
+          },
+          {
+            "target": "Are you looking for the bus stop?",
+            "english": "Você está procurando o ponto de ônibus?",
+            "highlight": "Are you looking for"
+          }
+        ]
+      },
+      "drills": {
+        "cloze": [
+          {
+            "promptEnglish": "Como eu posso chegar ao museu saindo daqui?",
+            "sentenceParts": [
+              "\"How can I ",
+              " the museum from here?\""
+            ],
+            "correctAnswer": "get to",
+            "options": [
+              "get to",
+              "arrive in",
+              "go for",
+              "walk at"
+            ],
+            "explanation": "« How can I get to...? » é a expressão idiomática padrão em inglês para perguntar 'Como posso chegar a...?'."
+          },
+          {
+            "promptEnglish": "Caminhe reto em frente por cinco minutos e vire à esquerda na esquina.",
+            "sentenceParts": [
+              "Walk ",
+              " for five minutes and turn left at the corner."
+            ],
+            "correctAnswer": "straight ahead",
+            "options": [
+              "straight ahead",
+              "front right",
+              "direct before",
+              "near ahead"
+            ],
+            "explanation": "« Walk straight ahead » significa 'Caminhe reto em frente'."
+          },
+          {
+            "promptEnglish": "Ela paga pelo café, agradece ao garçom e sai para a rua.",
+            "sentenceParts": [
+              "She ",
+              " her coffee, thanks the waiter, and steps out onto the street."
+            ],
+            "correctAnswer": "pays for",
+            "options": [
+              "pays for",
+              "pays to",
+              "pay with",
+              "paying of"
+            ],
+            "explanation": "Em inglês, sempre usamos a preposição « for » depois do verbo « pay » quando dizemos o que estamos pagando (« pays for her coffee »)."
+          },
+          {
+            "promptEnglish": "Do lado de fora da estação, nossa amiga está esperando por nós.",
+            "sentenceParts": [
+              "Outside the station, our friend ",
+              " us."
+            ],
+            "correctAnswer": "is waiting for",
+            "options": [
+              "is waiting for",
+              "waits to",
+              "is wait for",
+              "waiting at"
+            ],
+            "explanation": "« Is waiting for » ('está esperando por') combina o Present Continuous (« is waiting ») com a preposição obrigatória « for »."
+          },
+          {
+            "promptEnglish": "Você está pronta para visitar o mercado esta manhã?",
+            "sentenceParts": [
+              "\"",
+              " ready to visit the market this morning?\""
+            ],
+            "correctAnswer": "Are you",
+            "options": [
+              "Are you",
+              "Do you",
+              "You are",
+              "Is you"
+            ],
+            "explanation": "Com o adjetivo « ready » (pronto/pronta), fazemos perguntas invertendo o verbo « to be »: « Are you ready...? »."
+          },
+          {
+            "promptEnglish": "Nós estamos procurando uma padaria perto do hotel.",
+            "sentenceParts": [
+              "We ",
+              " a bakery near the hotel."
+            ],
+            "correctAnswer": "are looking for",
+            "options": [
+              "are looking for",
+              "are looking at",
+              "look to",
+              "is looking for"
+            ],
+            "explanation": "« Are looking for » significa 'estamos procurando'."
+          }
+        ],
+        "dialogue": [
+          {
+            "speakerA": "Tourist: \"Excuse me! How can I get to the bookshop from here?\"",
+            "speakerAEnglish": "Turista: \"Com licença! Como eu posso chegar à livraria saindo daqui?\"",
+            "promptEnglish": "Explique que é bem pertinho: caminhe reto por cinco minutos e vire à esquerda na esquina:",
+            "correctAnswer": "It is very close! Walk straight ahead for five minutes and turn left at the corner.",
+            "options": [
+              "It is very close! Walk straight ahead for five minutes and turn left at the corner.",
+              "Yes, I would like to buy two books about London history, please.",
+              "My daughter is waiting for me inside the small coffee shop.",
+              "Someone left a blue umbrella next to the wooden counter."
+            ],
+            "explanation": "Usa os blocos de direção do capítulo: « It is very close! Walk straight ahead... and turn left at the corner »."
+          },
+          {
+            "speakerA": "Daughter: \"Hi, Mom! Are you ready to visit the park this morning?\"",
+            "speakerAEnglish": "Filha: \"Oi, mãe! Você está pronta para visitar o parque esta manhã?\"",
+            "promptEnglish": "Responda que sim, mas primeiro vocês estão procurando a floricultura da rua principal:",
+            "correctAnswer": "Yes, my dear, but first we are looking for the flower shop on the main street.",
+            "options": [
+              "Yes, my dear, but first we are looking for the flower shop on the main street.",
+              "No, it is raining hard and the buses are not running today.",
+              "Excuse me, waiter, how much do I pay for the hot milk?",
+              "They walk together past the museum every Sunday afternoon."
+            ],
+            "explanation": "Usa « Yes, my dear, but first we are looking for... » ('mas primeiro nós estamos procurando...')."
+          },
+          {
+            "speakerA": "Friend: \"Where is your sister? I don't see her inside the restaurant.\"",
+            "speakerAEnglish": "Amiga: \"Onde está sua irmã? Não a vejo dentro do restaurante.\"",
+            "promptEnglish": "Diga que ela está esperando por você do lado de fora, perto da esquina:",
+            "correctAnswer": "She is waiting for me outside, near the corner.",
+            "options": [
+              "She is waiting for me outside, near the corner.",
+              "She pays for her tea and asks the waiter for the address.",
+              "We would like a table for three people near the garden.",
+              "Walk straight ahead and turn right after the bridge."
+            ],
+            "explanation": "Usa « She is waiting for me outside » ('Ela está esperando por mim lá fora')."
+          },
+          {
+            "speakerA": "Waiter: \"Thank you very much, madam. Have a lovely day in London!\"",
+            "speakerAEnglish": "Garçom: \"Muito obrigado, senhora. Tenha um ótimo dia em Londres!\"",
+            "promptEnglish": "Agradeça pela ajuda e diga que agora você quer devolver o caderno à dona:",
+            "correctAnswer": "Thank you for your help! Now I want to return this notebook to its owner.",
+            "options": [
+              "Thank you for your help! Now I want to return this notebook to its owner.",
+              "What would you like to drink with your breakfast this morning?",
+              "There is a cold wind blowing on the street today.",
+              "Are you ready to order your coffee now, sir?"
+            ],
+            "explanation": "Usa « want to return » (quero devolver) com « to » ligando os dois verbos."
+          },
+          {
+            "speakerA": "Police Officer: \"Good morning! Can I help you find a street on your map?\"",
+            "speakerAEnglish": "Policial: \"Bom dia! Posso ajudar você a encontrar uma rua no seu mapa?\"",
+            "promptEnglish": "Pergunte como você pode chegar ao Mercado Portobello saindo daqui:",
+            "correctAnswer": "Yes, please! How can I get to Portobello Market from here?",
+            "options": [
+              "Yes, please! How can I get to Portobello Market from here?",
+              "Yes, that coat belongs to my daughter.",
+              "No, I left my glasses on the table at the café.",
+              "We always drink hot tea in the afternoon."
+            ],
+            "explanation": "« How can I get to [Lugar] from here? » é a pergunta curinga para pedir direções."
+          },
+          {
+            "speakerA": "Traveler: \"Should we take a taxi to the market, or can we walk?\"",
+            "speakerAEnglish": "Viajante: \"Devemos pegar um táxi até o mercado, ou podemos ir andando?\"",
+            "promptEnglish": "Diga que é bem pertinho e vocês podem caminhar juntas passando pelas casas coloridas:",
+            "correctAnswer": "It is very close! We can walk together past the colorful houses.",
+            "options": [
+              "It is very close! We can walk together past the colorful houses.",
+              "Someone left a white card inside the small blue notebook.",
+              "He is waiting for the train at the central station.",
+              "I would like a cup of coffee without sugar, please."
+            ],
+            "explanation": "Usa « It is very close! » e « walk together past the colorful houses »."
+          }
+        ],
+        "audio_comprehension": [
+          {
+            "audioSentence": "How can I get to the flower market from this station?",
+            "correctAnswer": "Como eu posso chegar ao mercado de flores saindo desta estação?",
+            "options": [
+              "Como eu posso chegar ao mercado de flores saindo desta estação?",
+              "A que horas abre o mercado de flores perto da estação?",
+              "Quanto custa a passagem de ônibus para o mercado de flores?",
+              "Onde posso comprar flores amarelas perto desta estação?"
+            ],
+            "explanation": "« How can I get to the flower market from this station? »"
+          },
+          {
+            "audioSentence": "Walk straight ahead for five minutes and turn left at the busy corner.",
+            "correctAnswer": "Caminhe reto em frente por cinco minutos e vire à esquerda na esquina movimentada.",
+            "options": [
+              "Caminhe reto em frente por cinco minutos e vire à esquerda na esquina movimentada.",
+              "Pegue o ônibus vermelho por cinco minutos e desça em frente ao parque.",
+              "Vire à direita na primeira rua e espere perto da cafeteria ensolarada.",
+              "Atravesse a rua na esquina e entre na loja ao lado do banco."
+            ],
+            "explanation": "« Walk straight ahead for five minutes and turn left at the busy corner. »"
+          },
+          {
+            "audioSentence": "Outside the café, her daughter is waiting for her with a warm coat.",
+            "correctAnswer": "Do lado de fora da cafeteria, a filha dela está esperando por ela com um casaco quentinho.",
+            "options": [
+              "Do lado de fora da cafeteria, a filha dela está esperando por ela com um casaco quentinho.",
+              "Dentro da cafeteria, a mãe dela está tomando um café quente perto da janela.",
+              "Na frente do mercado, duas amigas estão comprando casacos de inverno.",
+              "Ao lado da porta, o garçom está segurando um guarda-chuva azul."
+            ],
+            "explanation": "« Outside the café, her daughter is waiting for her with a warm coat. »"
+          },
+          {
+            "audioSentence": "Are you ready to visit the museum this morning, or do you want more coffee?",
+            "correctAnswer": "Você está pronta para visitar o museu esta manhã, ou você quer mais café?",
+            "options": [
+              "Você está pronta para visitar o museu esta manhã, ou você quer mais café?",
+              "Você gostaria de visitar o mercado agora, ou prefere almoçar no hotel?",
+              "Você sabe onde fica o museu, ou precisamos perguntar ao garçom?",
+              "Você pagou pelo café esta manhã, ou deixou o dinheiro na mesa?"
+            ],
+            "explanation": "« Are you ready to visit the museum this morning, or do you want more coffee? »"
+          },
+          {
+            "audioSentence": "We are looking for the little bakery near the colorful houses.",
+            "correctAnswer": "Nós estamos procurando a pequena padaria perto das casas coloridas.",
+            "options": [
+              "Nós estamos procurando a pequena padaria perto das casas coloridas.",
+              "Nós estamos olhando para as casas coloridas através da janela do ônibus.",
+              "Elas estão esperando pelo padeiro na esquina da rua ensolarada.",
+              "Eu estou voltando da padaria com pão quente para o café da manhã."
+            ],
+            "explanation": "« We are looking for the little bakery near the colorful houses. »"
+          },
+          {
+            "audioSentence": "She pays for her breakfast, thanks the waiter, and steps out onto the sunny street.",
+            "correctAnswer": "Ela paga pelo café da manhã, agradece ao garçom e sai para a rua ensolarada.",
+            "options": [
+              "Ela paga pelo café da manhã, agradece ao garçom e sai para a rua ensolarada.",
+              "Ela pede o café da manhã, sorri para o garçom e abre o caderno azul.",
+              "Ele prepara o café quente, chama a cliente e entrega o recibo.",
+              "Elas saem do hotel cedo, caminham pela rua ensolarada e entram no mercado."
+            ],
+            "explanation": "« She pays for her breakfast, thanks the waiter, and steps out onto the sunny street. »"
+          }
+        ],
+        "grammar_contrast": [
+          {
+            "promptEnglish": "Como você pergunta corretamente em inglês: \"Você está pronta para visitar o mercado?\"",
+            "correctAnswer": "Are you ready to visit the market?",
+            "options": [
+              "Are you ready to visit the market?",
+              "Do you ready for visit the market?",
+              "You are ready to visiting the market?",
+              "Is you ready to visit the market?"
+            ],
+            "explanation": "« Ready » é um adjetivo ('pronta'), então usamos o verbo « to be » invertido (« Are you ready...? ») seguido de « to + verbo » (« to visit »)."
+          },
+          {
+            "promptEnglish": "Qual frase traduz corretamente: \"Minha filha está esperando por mim lá fora\"?",
+            "correctAnswer": "My daughter is waiting for me outside.",
+            "options": [
+              "My daughter is waiting for me outside.",
+              "My daughter is waiting me outside.",
+              "My daughter waits to me outside.",
+              "My daughter are waiting for I outside."
+            ],
+            "explanation": "O verbo « wait » SEMPRE precisa da preposição « for » antes da pessoa por quem se espera: « waiting for me »."
+          },
+          {
+            "promptEnglish": "Escolha a tradução correta para: \"Nós estamos procurando a floricultura da Sra. Miller\":",
+            "correctAnswer": "We are looking for Mrs. Miller's flower shop.",
+            "options": [
+              "We are looking for Mrs. Miller's flower shop.",
+              "We are looking at the shop of flowers of Mrs. Miller.",
+              "We looking for Mrs. Miller flower's shop.",
+              "We is looking to Mrs. Miller's flower shop."
+            ],
+            "explanation": "1) « Looking for » significa 'procurando', e 2) a posse com pessoas usa « 's »: « Mrs. Miller's flower shop »."
+          },
+          {
+            "promptEnglish": "Como se diz corretamente: \"Ela paga pelo café e agradece ao garçom\"?",
+            "correctAnswer": "She pays for her coffee and thanks the waiter.",
+            "options": [
+              "She pays for her coffee and thanks the waiter.",
+              "She pays her coffee and thanks to the waiter.",
+              "She pay for her coffee and thank for the waiter.",
+              "She is pay for the coffee and thanks at the waiter."
+            ],
+            "explanation": "Atenção ao contraste com o português: dizemos « pay FOR » (pagar por algo), mas « thank [alguém] » SEM preposição 'to' (« thanks the waiter »)."
+          },
+          {
+            "promptEnglish": "Qual frase dá a direção correta: \"Caminhe reto em frente e vire à esquerda na esquina\"?",
+            "correctAnswer": "Walk straight ahead and turn left at the corner.",
+            "options": [
+              "Walk straight ahead and turn left at the corner.",
+              "Walk straight front and turn to left in the corner.",
+              "Walking ahead straight and turns left on corner.",
+              "Go straightly and turn left for the corner."
+            ],
+            "explanation": "No imperativo em inglês, usamos o verbo na forma base sem 'to': « Walk straight ahead » e « turn left at the corner »."
+          },
+          {
+            "promptEnglish": "Como se diz: \"Ela quer devolver o caderno\"?",
+            "correctAnswer": "She wants to return the notebook.",
+            "options": [
+              "She wants to return the notebook.",
+              "She want return the notebook.",
+              "She wants returning the notebook.",
+              "She is want to return the notebook."
+            ],
+            "explanation": "Com « She », o verbo « want » recebe « -s » (« wants »), e entre dois verbos usamos « to » (« wants to return »)."
+          }
+        ],
+        "sentence_order": [
+          {
+            "promptEnglish": "Como eu posso chegar à floricultura saindo daqui?",
+            "chunks": [
+              "How can I",
+              "get to",
+              "the flower shop",
+              "from here?"
+            ],
+            "explanation": "Pergunta (« How can I ») + Verbo de direção (« get to ») + Destino (« the flower shop ») + Origem (« from here? »)."
+          },
+          {
+            "promptEnglish": "Caminhe reto em frente e vire à esquerda na esquina.",
+            "chunks": [
+              "Walk",
+              "straight ahead",
+              "and turn left",
+              "at the corner."
+            ],
+            "explanation": "Primeira instrução (« Walk straight ahead ») + Segunda instrução (« and turn left at the corner. »)."
+          },
+          {
+            "promptEnglish": "Sua filha está esperando por ela com um casaco quentinho.",
+            "chunks": [
+              "Her daughter",
+              "is waiting",
+              "for her",
+              "with a warm coat."
+            ],
+            "explanation": "Sujeito (« Her daughter ») + Verbo contínuo (« is waiting ») + Preposição e pronome (« for her ») + Detalhe (« with a warm coat. »)."
+          },
+          {
+            "promptEnglish": "Você está pronta para visitar o mercado esta manhã?",
+            "chunks": [
+              "Are you",
+              "ready",
+              "to visit the market",
+              "this morning?"
+            ],
+            "explanation": "Pergunta com verbo to be (« Are you ready ») + Infinitivo (« to visit the market ») + Tempo (« this morning? »)."
+          },
+          {
+            "promptEnglish": "Primeiro nós estamos procurando a floricultura na rua principal.",
+            "chunks": [
+              "First",
+              "we are",
+              "looking for",
+              "the flower shop."
+            ],
+            "explanation": "Advérbio (« First ») + Sujeito e verbo (« we are looking for ») + Objeto (« the flower shop. »)."
+          },
+          {
+            "promptEnglish": "Elas caminham juntas passando pelas casas coloridas.",
+            "chunks": [
+              "They walk",
+              "together",
+              "past",
+              "the colorful houses."
+            ],
+            "explanation": "Sujeito e verbo (« They walk ») + Modo (« together ») + Preposição de movimento (« past ») + Lugar (« the colorful houses. »)."
+          }
+        ]
+      }
+    },
+    "3": {
+      "subtitle": "Oferecendo Ajuda ('Can I help you...?'), Demonstrativos ('This' vs. 'These'), Passado Contínuo ('I was looking for') & Passado Simples ('spoke', 'made')",
+      "vocabReuses": [
+        {
+          "word": "Can I help you...? (Posso ajudar você...?)",
+          "storyContext": "\"Yes, I am! Can I help you find some flowers today?\"",
+          "newPhrase": "Good afternoon! Can I help you carry those heavy bags?",
+          "english": "Boa tarde! Posso ajudar você a carregar essas sacolas pesadas?"
+        },
+        {
+          "word": "was looking for (estava procurando)",
+          "storyContext": "\"I was looking for my grandmother's recipe book all morning!\"",
+          "newPhrase": "I was looking for my reading glasses everywhere, and they were in my bag!",
+          "english": "Eu estava procurando meus óculos de leitura por toda parte, e eles estavam na minha bolsa!"
+        },
+        {
+          "word": "these (estes / estas — plural)",
+          "storyContext": "\"Please take these flowers for your family.\"",
+          "newPhrase": "These yellow apples from the market are delicious and very sweet.",
+          "english": "Estas maçãs amarelas do mercado estão deliciosas e bem docinhas."
+        }
+      ],
+      "construction": {
+        "patternName": "Passado Contínuo vs. Passado Simples: I was looking for... / She spoke & made",
+        "formula": [
+          "I / She + was + Verbo-ing",
+          "(estava fazendo)",
+          "•",
+          "She + spoke / made (fez / falou)"
+        ],
+        "explanation": "Para contar o que estava acontecendo durante a manhã, usamos \"was\" (estava) + verbo com \"-ing\": \"I was looking for...\" (Eu estava procurando...). Já para ações concluídas no passado, muitos verbos comuns têm uma forma especial curta: \"speak\" (falar) vira \"spoke\" (falou), e \"make\" (fazer) vira \"made\" (fez).",
+        "examples": [
+          {
+            "target": "I was looking for my keys all morning!",
+            "english": "Eu estava procurando minhas chaves a manhã toda!",
+            "highlight": "I was looking for"
+          },
+          {
+            "target": "She spoke English with the woman at the flower shop.",
+            "english": "Ela falou inglês com a mulher na floricultura.",
+            "highlight": "She spoke"
+          },
+          {
+            "target": "We made a wonderful new friend in London today.",
+            "english": "Nós fizemos uma nova amiga maravilhosa em Londres hoje.",
+            "highlight": "We made"
+          }
+        ]
+      },
+      "drills": {
+        "cloze": [
+          {
+            "promptEnglish": "Na entrada do mercado, elas veem uma linda loja cheia de rosas amarelas.",
+            "sentenceParts": [
+              "At the entrance of the market, they see a lovely shop ",
+              " yellow roses."
+            ],
+            "correctAnswer": "full of",
+            "options": [
+              "full of",
+              "full with",
+              "filled by",
+              "full from"
+            ],
+            "explanation": "« Full of » significa 'cheio(a) de'."
+          },
+          {
+            "promptEnglish": "Uma mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira.",
+            "sentenceParts": [
+              "A kind woman with silver hair is standing ",
+              " the wooden counter."
+            ],
+            "correctAnswer": "behind",
+            "options": [
+              "behind",
+              "between",
+              "among",
+              "during"
+            ],
+            "explanation": "« Behind » significa 'atrás de'."
+          },
+          {
+            "promptEnglish": "— Sim, eu sou! Posso ajudar você a encontrar algumas flores hoje?",
+            "sentenceParts": [
+              "\"Yes, I am! ",
+              " find some flowers today?\""
+            ],
+            "correctAnswer": "Can I help you",
+            "options": [
+              "Can I help you",
+              "Do I help to you",
+              "Can I helping you",
+              "Am I help you"
+            ],
+            "explanation": "« Can I help you...? » ('Posso ajudar você...?') é a frase padrão usada por vendedores e atendentes."
+          },
+          {
+            "promptEnglish": "Muito obrigada mesmo! Eu estava procurando o livro de receitas a manhã toda!",
+            "sentenceParts": [
+              "\"Thank you so much! I ",
+              " my recipe book all morning!\""
+            ],
+            "correctAnswer": "was looking for",
+            "options": [
+              "was looking for",
+              "were looking at",
+              "am look for",
+              "was looked to"
+            ],
+            "explanation": "« I was looking for » é o passado contínuo ('Eu estava procurando')."
+          },
+          {
+            "promptEnglish": "Por favor, leve estas flores amarelas para a sua família.",
+            "sentenceParts": [
+              "\"Please take ",
+              " yellow flowers for your family.\""
+            ],
+            "correctAnswer": "these",
+            "options": [
+              "these",
+              "this",
+              "that",
+              "it"
+            ],
+            "explanation": "Antes de substantivos no plural (« yellow flowers »), usamos « these » ('estas / estes'), enquanto « this » é apenas para o singular."
+          },
+          {
+            "promptEnglish": "Ela sorri com orgulho porque falou inglês a manhã toda.",
+            "sentenceParts": [
+              "She smiles proudly because she ",
+              " English all morning."
+            ],
+            "correctAnswer": "spoke",
+            "options": [
+              "spoke",
+              "speaked",
+              "speaking",
+              "is speak"
+            ],
+            "explanation": "« Spoke » ('falou') é o passado simples do verbo irregular « speak » (falar)."
+          }
+        ],
+        "dialogue": [
+          {
+            "speakerA": "Visitor: \"Excuse me, are you the owner of this flower shop?\"",
+            "speakerAEnglish": "Visitante: \"Com licença, a senhora é a dona desta floricultura?\"",
+            "promptEnglish": "Responda que sim (\"Yes, I am!\") e pergunte se pode ajudar a encontrar algumas flores hoje:",
+            "correctAnswer": "Yes, I am! Can I help you find some flowers today?",
+            "options": [
+              "Yes, I am! Can I help you find some flowers today?",
+              "No, I was waiting for the red bus at the corner.",
+              "Yes, I would like a cup of coffee with hot milk, please.",
+              "Walk straight ahead for five minutes and turn left."
+            ],
+            "explanation": "Em inglês, respondemos a « Are you...? » com « Yes, I am! », seguido da oferta educada « Can I help you find...? »."
+          },
+          {
+            "speakerA": "Customer: \"Look what I found on the chair at the café—here is your blue notebook!\"",
+            "speakerAEnglish": "Cliente: \"Olhe o que eu encontrei na cadeira da cafeteria — aqui está o seu caderno azul!\"",
+            "promptEnglish": "Agradeça calorosamente e diga que você estava procurando o livro de receitas da sua avó a manhã toda:",
+            "correctAnswer": "Oh, thank you so much! I was looking for my grandmother's recipe book all morning!",
+            "options": [
+              "Oh, thank you so much! I was looking for my grandmother's recipe book all morning!",
+              "Excuse me, how can I get to the train station from here?",
+              "My daughter is standing near the big window in the café.",
+              "There are three yellow roses inside the wooden box."
+            ],
+            "explanation": "Combina « Thank you so much! » (Muito obrigada mesmo!) com « I was looking for... all morning! »."
+          },
+          {
+            "speakerA": "Florist: \"You were so kind to bring my notebook back to the market.\"",
+            "speakerAEnglish": "Florista: \"Você foi tão gentil em trazer meu caderno de volta ao mercado.\"",
+            "promptEnglish": "Como florista, ofereça um buquê e peça para ela levar estas flores para a família:",
+            "correctAnswer": "Please take these yellow flowers for your family!",
+            "options": [
+              "Please take these yellow flowers for your family!",
+              "Someone left this coat on the chair next to me.",
+              "Are you ready to pay for the breakfast now?",
+              "She sits near the window and drinks hot tea."
+            ],
+            "explanation": "Usa o imperativo educado « Please take... » com o plural « these yellow flowers »."
+          },
+          {
+            "speakerA": "Daughter: \"Mom, you look so happy! How was your morning in London?\"",
+            "speakerAEnglish": "Filha: \"Mãe, você parece tão feliz! Como foi a sua manhã em Londres?\"",
+            "promptEnglish": "Diga que você está feliz porque falou inglês a manhã toda e fez uma nova amiga:",
+            "correctAnswer": "I am happy because I spoke English all morning and made a wonderful new friend!",
+            "options": [
+              "I am happy because I spoke English all morning and made a wonderful new friend!",
+              "I am looking for the address on the white card inside my bag.",
+              "It is a very cold morning, so please wear your warm coat.",
+              "The waiter brings a cup of coffee to the small table."
+            ],
+            "explanation": "Usa os dois verbos no passado do capítulo: « spoke English » (falei inglês) e « made a wonderful new friend » (fiz uma nova amiga maravilhosa)."
+          },
+          {
+            "speakerA": "Friend: \"Which shop at the entrance of the market is the flower shop?\"",
+            "speakerAEnglish": "Amiga: \"Qual loja na entrada do mercado é a floricultura?\"",
+            "promptEnglish": "Diga que é a linda loja cheia de rosas amarelas:",
+            "correctAnswer": "It is the lovely shop full of yellow roses at the entrance.",
+            "options": [
+              "It is the lovely shop full of yellow roses at the entrance.",
+              "That blue notebook belongs to the teacher from our school.",
+              "Walk straight ahead and wait for me at the bus stop.",
+              "I would like two tickets for the concert tonight, please."
+            ],
+            "explanation": "Usa « lovely shop full of yellow roses » ('linda loja cheia de rosas amarelas')."
+          },
+          {
+            "speakerA": "Customer: \"Excuse me, where is the cashier? I would like to pay for this bouquet.\"",
+            "speakerAEnglish": "Cliente: \"Com licença, onde está o caixa? Eu gostaria de pagar por este buquê.\"",
+            "promptEnglish": "Diga que a mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira:",
+            "correctAnswer": "The kind woman with silver hair is standing behind the wooden counter.",
+            "options": [
+              "The kind woman with silver hair is standing behind the wooden counter.",
+              "We are walking together past the colorful houses on the street.",
+              "She took the notebook out of her bag and gave it to me.",
+              "What would you like to drink with your cake this afternoon?"
+            ],
+            "explanation": "Usa « is standing behind the wooden counter » ('está em pé atrás do balcão de madeira')."
+          }
+        ],
+        "audio_comprehension": [
+          {
+            "audioSentence": "At the entrance of the market, we see a lovely shop full of yellow roses.",
+            "correctAnswer": "Na entrada do mercado, nós vemos uma linda loja cheia de rosas amarelas.",
+            "options": [
+              "Na entrada do mercado, nós vemos uma linda loja cheia de rosas amarelas.",
+              "Na esquina da rua, nós vemos uma padaria pequena cheia de pão quente.",
+              "Dentro da floricultura, há três vasos grandes de rosas vermelhas.",
+              "Do lado de fora do mercado, a florista está esperando pela filha dela."
+            ],
+            "explanation": "« At the entrance of the market, we see a lovely shop full of yellow roses. »"
+          },
+          {
+            "audioSentence": "A kind woman with silver hair is standing behind the wooden counter.",
+            "correctAnswer": "Uma mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira.",
+            "options": [
+              "Uma mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira.",
+              "Um jovem garçom simpático está limpando a mesa de madeira perto da janela.",
+              "Uma senhora elegante está sentada na cadeira ao lado da porta verde.",
+              "A dona da loja está colocando um buquê de flores dentro da sacola."
+            ],
+            "explanation": "« A kind woman with silver hair is standing behind the wooden counter. »"
+          },
+          {
+            "audioSentence": "Thank you so much! I was looking for my grandmother's recipe book all morning!",
+            "correctAnswer": "Muito obrigada mesmo! Eu estava procurando o livro de receitas da minha avó a manhã toda!",
+            "options": [
+              "Muito obrigada mesmo! Eu estava procurando o livro de receitas da minha avó a manhã toda!",
+              "Muito obrigada! Eu gostaria de comprar um livro de receitas para a minha avó hoje!",
+              "Que maravilha! Minha avó preparou este bolo de maçã para nós esta manhã!",
+              "Desculpe o atraso! Eu estava esperando pelo ônibus vermelho a manhã toda!"
+            ],
+            "explanation": "« Thank you so much! I was looking for my grandmother's recipe book all morning! »"
+          },
+          {
+            "audioSentence": "She takes the blue notebook out of her bag and gives it to the florist.",
+            "correctAnswer": "Ela tira o caderno azul da bolsa e o entrega para a florista.",
+            "options": [
+              "Ela tira o caderno azul da bolsa e o entrega para a florista.",
+              "Ela encontra o caderno azul na cadeira e o mostra para o garçom.",
+              "Ela abre a bolsa pequena e guarda o cartão branco com cuidado.",
+              "A florista pega o papel azul e escreve o endereço da cafeteria."
+            ],
+            "explanation": "« She takes the blue notebook out of her bag and gives it to the florist. »"
+          },
+          {
+            "audioSentence": "Please take these yellow flowers for your family and have a wonderful day!",
+            "correctAnswer": "Por favor, leve estas flores amarelas para a sua família e tenha um dia maravilhoso!",
+            "options": [
+              "Por favor, leve estas flores amarelas para a sua família e tenha um dia maravilhoso!",
+              "Por favor, escolha uma destas flores amarelas para colocar na sua mesa!",
+              "Onde posso comprar estas flores amarelas para o aniversário da minha mãe?",
+              "Muito obrigada por trazer estas flores lindas para o nosso jardim!"
+            ],
+            "explanation": "« Please take these yellow flowers for your family and have a wonderful day! »"
+          },
+          {
+            "audioSentence": "She smiles proudly because she spoke English all morning and made a new friend.",
+            "correctAnswer": "Ela sorri com orgulho porque falou inglês a manhã toda e fez uma nova amiga.",
+            "options": [
+              "Ela sorri com orgulho porque falou inglês a manhã toda e fez uma nova amiga.",
+              "Ela estuda inglês todos os dias porque quer visitar a filha em Londres.",
+              "Ela ficou feliz porque entendeu todas as direções até o mercado de flores.",
+              "Elas conversaram em inglês durante o café da manhã na pequena cafeteria."
+            ],
+            "explanation": "« She smiles proudly because she spoke English all morning and made a new friend. »"
+          }
+        ],
+        "grammar_contrast": [
+          {
+            "promptEnglish": "Qual é a resposta curta correta em inglês para a pergunta: \"Are you Mrs. Miller?\"",
+            "correctAnswer": "Yes, I am!",
+            "options": [
+              "Yes, I am!",
+              "Yes, I do!",
+              "Yes, I have!",
+              "Yes, is me!"
+            ],
+            "explanation": "Quando a pergunta começa com « Are you...? » (verbo to be), a resposta curta usa o mesmo verbo: « Yes, I am! » ('Sim, eu sou/estou!')."
+          },
+          {
+            "promptEnglish": "Como se diz corretamente: \"Por favor, leve estas flores para a sua família\"?",
+            "correctAnswer": "Please take these flowers for your family.",
+            "options": [
+              "Please take these flowers for your family.",
+              "Please take this flowers for your family.",
+              "Please to take these flower for yours family.",
+              "Please takes that flowers for your family."
+            ],
+            "explanation": "« Flowers » está no plural, por isso exige o demonstrativo plural « these » ('estas'), nunca « this » (que é apenas singular)."
+          },
+          {
+            "promptEnglish": "Escolha a frase correta para: \"Eu estava procurando o livro de receitas a manhã toda\":",
+            "correctAnswer": "I was looking for the recipe book all morning.",
+            "options": [
+              "I was looking for the recipe book all morning.",
+              "I were looking at the book of recipes all the morning.",
+              "I was look for the recipe book all morning.",
+              "I am looking for the recipe book yesterday morning."
+            ],
+            "explanation": "Com « I » no passado contínuo, usamos « was + verbo-ing » (« I was looking for »)."
+          },
+          {
+            "promptEnglish": "Como se diz no passado: \"Ela falou inglês a manhã toda e fez uma nova amiga\"?",
+            "correctAnswer": "She spoke English all morning and made a new friend.",
+            "options": [
+              "She spoke English all morning and made a new friend.",
+              "She speaked English all morning and maked a new friend.",
+              "She did speak English all morning and do a new friend.",
+              "She spoken English all morning and make a new friend."
+            ],
+            "explanation": "Os verbos « speak » e « make » são irregulares no passado: « spoke » (falou) e « made » (fez). Além disso, em inglês dizemos « make a friend » (nunca 'do a friend')."
+          },
+          {
+            "promptEnglish": "Qual opção traduz corretamente: \"Ela tira o caderno da bolsa e o entrega para mim\"?",
+            "correctAnswer": "She takes the notebook out of her bag and gives it to me.",
+            "options": [
+              "She takes the notebook out of her bag and gives it to me.",
+              "She takes out the notebook from her bag and gives to me.",
+              "She take the notebook out her bag and give it for me.",
+              "She is take the notebook out of bag and gives me it."
+            ],
+            "explanation": "Em inglês, o verbo « give » precisa do pronome objeto « it » ('o') representando o caderno, seguido de « to + pessoa »: « gives it to me »."
+          },
+          {
+            "promptEnglish": "Como se diz: \"uma linda loja cheia de rosas amarelas\"?",
+            "correctAnswer": "a lovely shop full of yellow roses",
+            "options": [
+              "a lovely shop full of yellow roses",
+              "a shop lovely full with roses yellows",
+              "a lovely shop filled of yellows roses",
+              "an lovely shop full from yellow rose"
+            ],
+            "explanation": "« Full of » significa 'cheia de', e os adjetivos em inglês (« lovely », « yellow ») vêm antes do substantivo e NUNCA vão para o plural (« yellow roses »)."
+          }
+        ],
+        "sentence_order": [
+          {
+            "promptEnglish": "Na entrada do mercado, nós vemos uma loja cheia de rosas amarelas.",
+            "chunks": [
+              "At the entrance",
+              "of the market,",
+              "we see a shop",
+              "full of yellow roses."
+            ],
+            "explanation": "Localização (« At the entrance of the market, ») + Sujeito, verbo e objeto (« we see a shop ») + Descrição (« full of yellow roses. »)."
+          },
+          {
+            "promptEnglish": "Uma mulher gentil está em pé atrás do balcão de madeira.",
+            "chunks": [
+              "A kind woman",
+              "is standing",
+              "behind",
+              "the wooden counter."
+            ],
+            "explanation": "Sujeito (« A kind woman ») + Verbo contínuo (« is standing ») + Preposição (« behind ») + Lugar (« the wooden counter. »)."
+          },
+          {
+            "promptEnglish": "Posso ajudar você a encontrar algumas flores hoje?",
+            "chunks": [
+              "Can I",
+              "help you",
+              "find",
+              "some flowers today?"
+            ],
+            "explanation": "Oferta (« Can I help you ») + Verbo (« find ») + Objeto e tempo (« some flowers today? »)."
+          },
+          {
+            "promptEnglish": "Eu estava procurando o livro de receitas da minha avó a manhã toda!",
+            "chunks": [
+              "I was",
+              "looking for",
+              "my grandmother's recipe book",
+              "all morning!"
+            ],
+            "explanation": "Passado contínuo (« I was looking for ») + Objeto (« my grandmother's recipe book ») + Duração (« all morning! »)."
+          },
+          {
+            "promptEnglish": "Por favor, leve estas flores amarelas para a sua família.",
+            "chunks": [
+              "Please take",
+              "these",
+              "yellow flowers",
+              "for your family."
+            ],
+            "explanation": "Pedido educado (« Please take ») + Demonstrativo plural e objeto (« these yellow flowers ») + Destinatário (« for your family. »)."
+          },
+          {
+            "promptEnglish": "Ela falou inglês a manhã toda e fez uma nova amiga.",
+            "chunks": [
+              "She spoke English",
+              "all morning",
+              "and made",
+              "a new friend."
+            ],
+            "explanation": "Primeira ação no passado (« She spoke English all morning ») + Segunda ação no passado (« and made a new friend. »)."
+          }
+        ]
+      }
+    }
   }
 };
 
@@ -5122,7 +6390,8 @@ function deterministicShuffle(array, seedNum) {
  * so learners can never cheat by matching character names between English and the target language.
  */
 const CHARACTER_NAME_REPLACEMENTS = [
-  { regex: /\b(Clara|Sofia|Elena)\b/g, target: 'Mon amie', en: 'My friend' },
+  { regex: /\b(Clara|Sofia|Elena|Helena|Julia)\b/g, target: 'My friend', en: 'Minha amiga' },
+  { regex: /\b(Oliver)\b/g, target: 'the waiter', en: 'o garçom' },
   { regex: /\b(Lucas|Henri|Paul|Marco|Mateo)\b/g, target: 'Mon ami', en: 'My friend' },
   { regex: /민호|지수/g, target: '친구', en: 'My friend' },
   { regex: /遥|蓮/g, target: '友人', en: 'My friend' },
@@ -6207,11 +7476,19 @@ export default function ChapterRecapSection({
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => onPlaySentenceAudio(q.audioSentence, 0.8)}
-                                  className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-semibold transition-colors cursor-pointer"
+                                  onClick={() => onPlaySentenceAudio(q.audioSentence, 0.75)}
+                                  className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-semibold transition-colors cursor-pointer"
                                 >
                                   <Headphones className="w-3.5 h-3.5 shrink-0" />
-                                  <span>Listen Slow (0.8x)</span>
+                                  <span>Slow (0.75x)</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => onPlaySentenceAudio(q.audioSentence, 0.55)}
+                                  className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold transition-colors cursor-pointer"
+                                >
+                                  <Headphones className="w-3.5 h-3.5 shrink-0" />
+                                  <span>Very Slow (0.55x)</span>
                                 </button>
                               </>
                             )}

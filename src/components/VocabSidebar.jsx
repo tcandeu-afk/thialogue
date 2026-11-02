@@ -91,8 +91,9 @@ export default function VocabSidebar({
     setDictError(null);
     setJustAddedToBank(false);
 
-    const sl = dictDirection === 'to_en' ? profile.translateCode : 'en';
-    const tl = dictDirection === 'to_en' ? 'en' : profile.translateCode;
+    const helperCode = profile?.id === 'en' ? 'pt' : 'en';
+    const sl = dictDirection === 'to_en' ? profile.translateCode : helperCode;
+    const tl = dictDirection === 'to_en' ? helperCode : profile.translateCode;
 
     try {
       const res = await lookupDictionaryWordOrPhrase({
@@ -124,6 +125,8 @@ export default function VocabSidebar({
     setJustAddedToBank(true);
   };
 
+  const helperLangLabel = profile?.id === 'en' ? 'Português (BR)' : 'English';
+
   return (
     <aside className="space-y-4">
       {/* 1. Interactive Dictionary & Phrase Lookup Box (Quiet Fjord Blue Zone) */}
@@ -145,8 +148,8 @@ export default function VocabSidebar({
           >
             <span>
               {dictDirection === 'to_en'
-                ? `${profile.name} → English`
-                : `English → ${profile.name}`}
+                ? `${profile.name.split(' ')[0]} → ${helperLangLabel}`
+                : `${helperLangLabel} → ${profile.name.split(' ')[0]}`}
             </span>
             <ArrowLeftRight className="h-3 w-3 text-[#234E68]" />
           </button>

@@ -45,6 +45,7 @@ export default function InteractiveReader({
   isGeneratingChapter,
   generationError,
   activeSpokenSentenceIdx,
+  activeSpokenTokenIdx,
   onTranslateSentence,
 }) {
   const [selectedTokenInfo, setSelectedTokenInfo] = useState(null);
@@ -53,14 +54,64 @@ export default function InteractiveReader({
   const [sentenceAudioState, setSentenceAudioState] = useState({
     sentenceKey: null,
     status: 'idle', // 'idle' | 'loading' | 'playing' | 'paused'
+    tokenIndex: null,
   });
   const popupCardRef = useRef(null);
+  const sentenceCardRefs = useRef({});
+  const lastScrolledSentenceRef = useRef(null);
 
   useEffect(() => {
     setSelectedTokenInfo(null);
     stopSentenceAudio();
-    setSentenceAudioState({ sentenceKey: null, status: 'idle' });
+    setSentenceAudioState({ sentenceKey: null, status: 'idle', tokenIndex: null });
+    lastScrolledSentenceRef.current = null;
   }, [strictMode, chapter?.id, profile?.id]);
+
+  // Smoothly auto-scroll the active narrated sentence into comfortable view as narration progresses
+  useEffect(() => {
+    let targetSentenceIdx = null;
+    if (activeSpokenSentenceIdx !== null && activeSpokenSentenceIdx !== undefined) {
+      targetSentenceIdx = activeSpokenSentenceIdx;
+    } else if (
+      sentenceAudioState.status === 'playing' &&
+      sentenceAudioState.sentenceKey &&
+      chapter?.id &&
+      sentenceAudioState.sentenceKey.startsWith(`${chapter.id}-`)
+    ) {
+      const parsedIdx = Number(
+        sentenceAudioState.sentenceKey.slice(`${chapter.id}-`.length)
+      );
+      if (Number.isFinite(parsedIdx)) {
+        targetSentenceIdx = parsedIdx;
+      }
+    }
+
+    if (targetSentenceIdx === null) {
+      lastScrolledSentenceRef.current = null;
+      return;
+    }
+
+    const scrollKey = `${chapter?.id}-${targetSentenceIdx}`;
+    if (lastScrolledSentenceRef.current === scrollKey) return;
+    lastScrolledSentenceRef.current = scrollKey;
+
+    const cardEl = sentenceCardRefs.current[targetSentenceIdx];
+    if (cardEl && typeof cardEl.getBoundingClientRect === 'function') {
+      const rect = cardEl.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      // Account for sticky top header (~145px) and bottom breathing room
+      const topSafeBoundary = 155;
+      const bottomSafeBoundary = viewportHeight - 120;
+      if (rect.top < topSafeBoundary || rect.bottom > bottomSafeBoundary) {
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [
+    activeSpokenSentenceIdx,
+    sentenceAudioState.status,
+    sentenceAudioState.sentenceKey,
+    chapter?.id,
+  ]);
 
   // Close word popup when tapping anywhere outside the popup or pressing Escape
   useEffect(() => {
@@ -97,7 +148,8 @@ export default function InteractiveReader({
     chapter.sentences.forEach((sentence, idx) => {
       const cacheKey = `${chapter.id}-${idx}`;
       if (!sentence.englishTranslation && !fetchedTranslations[cacheKey]) {
-        translateToEnglish(sentence.fullSentence, profile.translateCode)
+        const targetLang = profile.id === 'en' ? 'pt' : 'en';
+        translateToEnglish(sentence.fullSentence, profile.translateCode, targetLang)
           .then((res) => {
             if (res?.translatedText) {
               setFetchedTranslations((prev) => ({
@@ -110,7 +162,7 @@ export default function InteractiveReader({
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showEnglishTranslation, strictMode, chapter?.id, profile?.translateCode]);
+  }, [showEnglishTranslation, strictMode, chapter?.id, profile?.translateCode, profile?.id]);
 
   if (!chapter) return null;
 
@@ -448,9 +500,12 @@ export default function InteractiveReader({
           return (
             <div
               key={sIdx}
-              className={`group relative rounded-xl border px-3.5 py-3 transition-colors ${
+              ref={(el) => {
+                sentenceCardRefs.current[sIdx] = el;
+              }}
+              className={`group relative rounded-xl border px-3.5 py-3 transition-all duration-200 ${
                 isSentenceSpeaking
-                  ? 'border-[#94B8CE] bg-[#EEF5F9] ring-1 ring-[#94B8CE]'
+                  ? 'border-[#234E68] bg-[#EEF6FB] ring-2 ring-[#234E68]/25 shadow-sm'
                   : 'border-[#E6ECE9] bg-[#FCFDFC] hover:border-[#C9D8D1] hover:bg-[#F8FAF9]'
               }`}
             >
@@ -462,6 +517,7 @@ export default function InteractiveReader({
                     controlSentenceAudio({
                       sentenceKey,
                       sentenceText: sentence.fullSentence,
+                      tokens: sentence.tokens || [],
                       bcp47: profile.bcp47,
                       forceRestart: false,
                       onStateChange: setSentenceAudioState,
@@ -502,6 +558,7 @@ export default function InteractiveReader({
                     controlSentenceAudio({
                       sentenceKey,
                       sentenceText: sentence.fullSentence,
+                      tokens: sentence.tokens || [],
                       bcp47: profile.bcp47,
                       forceRestart: true,
                       onStateChange: setSentenceAudioState,
@@ -524,11 +581,19 @@ export default function InteractiveReader({
                     selectedTokenInfo?.sentenceIndex === sIdx &&
                     selectedTokenInfo?.tokenIndex === tIdx;
 
+                  const isSpokenWordNow =
+                    (activeSpokenSentenceIdx === sIdx && activeSpokenTokenIdx === tIdx) ||
+                    ((isThisSentencePlaying || isThisSentencePaused) &&
+                      sentenceAudioState.tokenIndex === tIdx);
+
                   const shouldRenderRuby =
                     isJapanese && showPhonetics && Boolean(token.reading);
 
                   let statusClasses = '';
-                  if (!strictMode) {
+                  if (isSpokenWordNow) {
+                    statusClasses =
+                      'bg-[#FDE68A] text-[#7C2D12] font-semibold rounded-md px-1 ring-2 ring-[#EA580C] shadow-xs transition-all duration-100';
+                  } else if (!strictMode) {
                     if (isSelected) {
                       statusClasses =
                         'bg-[#DCEBF4] text-[#181D1B] rounded px-1 ring-1 ring-[#234E68]';

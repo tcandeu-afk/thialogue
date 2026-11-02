@@ -121,19 +121,19 @@ export default function TopReaderBar({
               </span>
             )}
 
-            {/* Direct Top-Bar English Translation Toggle Button (EN ON / EN OFF) */}
+            {/* Direct Top-Bar Translation Toggle Button (EN ON/OFF or PT ON/OFF) */}
             <button
               type="button"
               onClick={onToggleEnglishTranslation}
               disabled={strictMode}
               title={
                 strictMode
-                  ? 'Disable Strict Mode in Menu to show English translations'
+                  ? 'Disable Strict Mode in Menu to show sentence translations'
                   : showEnglishTranslation
-                  ? 'Hide English sentence translations (EN OFF)'
-                  : 'Show English sentence translations (EN ON)'
+                  ? `Hide ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
+                  : `Show ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
               }
-              aria-label="Toggle English Translation"
+              aria-label="Toggle Sentence Translation"
               className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
                 strictMode
                   ? 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400'
@@ -143,7 +143,10 @@ export default function TopReaderBar({
               }`}
             >
               <Subtitles className="h-3.5 w-3.5" />
-              <span>{showEnglishTranslation && !strictMode ? 'EN ON' : 'EN OFF'}</span>
+              <span>
+                {activeProfile?.id === 'en' ? 'PT' : 'EN'}{' '}
+                {showEnglishTranslation && !strictMode ? 'ON' : 'OFF'}
+              </span>
             </button>
 
             {/* Safari Reader-Inspired "Text & Sound Only" Quick Toggle (AA Reader) */}

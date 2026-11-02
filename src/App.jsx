@@ -39,6 +39,7 @@ export default function App() {
   const [isGeneratingChapter, setIsGeneratingChapter] = useState(false);
   const [generationError, setGenerationError] = useState(null);
   const [activeSpokenSentenceIdx, setActiveSpokenSentenceIdx] = useState(null);
+  const [activeSpokenTokenIdx, setActiveSpokenTokenIdx] = useState(null);
 
   // Ephemeral in-memory Blob URL cache for ElevenLabs chapter audio (NEVER stored in localStorage)
   const [audioBlobUrls, setAudioBlobUrls] = useState({});
@@ -561,6 +562,8 @@ export default function App() {
             onCacheChapterBlobUrl={handleCacheChapterBlobUrl}
             activeSpokenSentenceIdx={activeSpokenSentenceIdx}
             setActiveSpokenSentenceIdx={setActiveSpokenSentenceIdx}
+            activeSpokenTokenIdx={activeSpokenTokenIdx}
+            setActiveSpokenTokenIdx={setActiveSpokenTokenIdx}
           />
         </div>
       </div>
@@ -603,6 +606,7 @@ export default function App() {
               isGeneratingChapter={isGeneratingChapter}
               generationError={generationError}
               activeSpokenSentenceIdx={activeSpokenSentenceIdx}
+              activeSpokenTokenIdx={activeSpokenTokenIdx}
               onTranslateSentence={handleTranslateSentence}
             />
           </div>

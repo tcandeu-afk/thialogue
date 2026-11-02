@@ -2,15 +2,17 @@
  * Built-in Google Translate & Dictionary service for translating and looking up words/sentences
  * across French (fr), Italian (it), Korean (ko), Japanese (ja), Spanish (es), Thai (th), and English (en).
  */
-export async function translateToEnglish(text, sourceLang = 'auto') {
+export async function translateToEnglish(text, sourceLang = 'auto', targetLang = 'en') {
   const trimmed = (text || '').trim();
   if (!trimmed) {
     return { translatedText: '', detectedSourceLang: sourceLang };
   }
 
+  const effectiveTarget = targetLang || (sourceLang === 'en' ? 'pt' : 'en');
+
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(
     sourceLang
-  )}&tl=en&dt=t&q=${encodeURIComponent(trimmed)}`;
+  )}&tl=${encodeURIComponent(effectiveTarget)}&dt=t&q=${encodeURIComponent(trimmed)}`;
 
   const response = await fetch(url);
   if (!response.ok) {

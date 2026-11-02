@@ -10473,5 +10473,2550 @@ export const INITIAL_PROFILES = {
         ]
       }
     ]
+  },
+  "en": {
+    "id": "en",
+    "name": "English (para Brasileiros)",
+    "nativeName": "English",
+    "cefrLevel": "A1 Beginner",
+    "bcp47": "en-US",
+    "translateCode": "en",
+    "translationTargetCode": "pt",
+    "translationShortCode": "PT",
+    "flag": "🇺🇸🇧🇷",
+    "isCJK": false,
+    "hasFurigana": false,
+    "noWordSpaces": false,
+    "storyTitle": "The Sunny Café in London (A Cafeteria Ensolarada em Londres)",
+    "storyArcSummary": "Helena, a Brazilian mother visiting her daughter Julia in London, walks into the cozy Sunny Café on a rainy morning. With the help of the friendly waiter Oliver, she finds a lost blue notebook with a family recipe card and a Concert Ticket inside, leading them to Portobello Market to return it to its grateful owner, Mrs. Miller.",
+    "difficultyModifier": "Baseline A1 Beginner",
+    "activeChapterIndex": 0,
+    "vocabBank": [
+      {
+        "word": "morning",
+        "reading": null,
+        "baseForm": "morning",
+        "contextualMeaning": "manhã",
+        "exposures": 2,
+        "status": "learning",
+        "addedAt": 1729630000000
+      },
+      {
+        "word": "looking",
+        "reading": null,
+        "baseForm": "look",
+        "contextualMeaning": "procurando / olhando",
+        "exposures": 2,
+        "status": "learning",
+        "addedAt": 1729630001000
+      },
+      {
+        "word": "notebook",
+        "reading": null,
+        "baseForm": "notebook",
+        "contextualMeaning": "caderno",
+        "exposures": 2,
+        "status": "learning",
+        "addedAt": 1729630002000
+      },
+      {
+        "word": "would",
+        "reading": null,
+        "baseForm": "would",
+        "contextualMeaning": "gostaria (usado em 'would like')",
+        "exposures": 2,
+        "status": "learning",
+        "addedAt": 1729630003000
+      }
+    ],
+    "chapters": [
+      {
+        "id": "en-ch-1",
+        "chapterNumber": 1,
+        "difficultyLabel": "A1 Beginner",
+        "chapterTitle": "Chapter 1: A Warm Cup of Coffee (Uma Xícara de Café Quente)",
+        "updatedArcSummary": "On a cold morning in London, Helena enters the Sunny Café, orders hot coffee and warm bread in English from the waiter Oliver, and discovers a small blue notebook on the chair next to her table.",
+        "recycledWordsUsed": [
+          "morning",
+          "would",
+          "notebook"
+        ],
+        "sentences": [
+          {
+            "fullSentence": "It is a cold morning in London when Helena walks into the small Sunny Café.",
+            "englishTranslation": "Está uma manhã fria em Londres quando Helena entra na pequena cafeteria Sunny Café.",
+            "romanisation": null,
+            "grammarNote": "Em inglês, sempre precisamos usar o pronome \"It\" antes do verbo \"is\" para falar do clima ou do tempo: \"It is a cold morning\" (literalmente: \"Isto é uma manhã fria\").",
+            "tokens": [
+              {
+                "surface": "It",
+                "reading": null,
+                "baseForm": "it",
+                "contextualMeaning": "isto / ele (usado para tempo/clima)"
+              },
+              {
+                "surface": "is",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "é / está"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma / um"
+              },
+              {
+                "surface": "cold",
+                "reading": null,
+                "baseForm": "cold",
+                "contextualMeaning": "fria / frio"
+              },
+              {
+                "surface": "morning",
+                "reading": null,
+                "baseForm": "morning",
+                "contextualMeaning": "manhã"
+              },
+              {
+                "surface": "in",
+                "reading": null,
+                "baseForm": "in",
+                "contextualMeaning": "em"
+              },
+              {
+                "surface": "London",
+                "reading": null,
+                "baseForm": "London",
+                "contextualMeaning": "Londres"
+              },
+              {
+                "surface": "when",
+                "reading": null,
+                "baseForm": "when",
+                "contextualMeaning": "quando"
+              },
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "walks",
+                "reading": null,
+                "baseForm": "walk",
+                "contextualMeaning": "caminha / entra"
+              },
+              {
+                "surface": "into",
+                "reading": null,
+                "baseForm": "into",
+                "contextualMeaning": "para dentro de"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a / o"
+              },
+              {
+                "surface": "small",
+                "reading": null,
+                "baseForm": "small",
+                "contextualMeaning": "pequena / pequeno"
+              },
+              {
+                "surface": "Sunny",
+                "reading": null,
+                "baseForm": "Sunny",
+                "contextualMeaning": "Ensolarado (nome do café)"
+              },
+              {
+                "surface": "Café.",
+                "reading": null,
+                "baseForm": "café",
+                "contextualMeaning": "cafeteria / café"
+              }
+            ]
+          },
+          {
+            "fullSentence": "She sits near the big window and looks at the red buses on the street.",
+            "englishTranslation": "Ela se senta perto da janela grande e olha para os ônibus vermelhos na rua.",
+            "romanisation": null,
+            "grammarNote": "No presente simples em inglês, quando falamos de \"he\" (ele) ou \"she\" (ela), adicionamos um \"-s\" no final do verbo: \"She sits\" (Ela senta) e \"looks at\" (olha para).",
+            "tokens": [
+              {
+                "surface": "She",
+                "reading": null,
+                "baseForm": "she",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "sits",
+                "reading": null,
+                "baseForm": "sit",
+                "contextualMeaning": "senta-se"
+              },
+              {
+                "surface": "near",
+                "reading": null,
+                "baseForm": "near",
+                "contextualMeaning": "perto de"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a / o"
+              },
+              {
+                "surface": "big",
+                "reading": null,
+                "baseForm": "big",
+                "contextualMeaning": "grande"
+              },
+              {
+                "surface": "window",
+                "reading": null,
+                "baseForm": "window",
+                "contextualMeaning": "janela"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "looks",
+                "reading": null,
+                "baseForm": "look",
+                "contextualMeaning": "olha"
+              },
+              {
+                "surface": "at",
+                "reading": null,
+                "baseForm": "at",
+                "contextualMeaning": "para (usado com look)"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "os / as"
+              },
+              {
+                "surface": "red",
+                "reading": null,
+                "baseForm": "red",
+                "contextualMeaning": "vermelhos"
+              },
+              {
+                "surface": "buses",
+                "reading": null,
+                "baseForm": "bus",
+                "contextualMeaning": "ônibus (plural)"
+              },
+              {
+                "surface": "on",
+                "reading": null,
+                "baseForm": "on",
+                "contextualMeaning": "em / na (para ruas)"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "street.",
+                "reading": null,
+                "baseForm": "street",
+                "contextualMeaning": "rua"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Oliver, a friendly young waiter, comes to her table with a warm smile.",
+            "englishTranslation": "Oliver, um jovem garçom simpático, vem até a mesa dela com um sorriso acolhedor.",
+            "romanisation": null,
+            "grammarNote": "Em inglês, as características (adjetivos) vêm ANTES do substantivo: \"a friendly young waiter\" (um simpático jovem garçom) e \"a warm smile\" (um acolhedor sorriso).",
+            "tokens": [
+              {
+                "surface": "Oliver,",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "Oliver"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "friendly",
+                "reading": null,
+                "baseForm": "friendly",
+                "contextualMeaning": "simpático / amigável"
+              },
+              {
+                "surface": "young",
+                "reading": null,
+                "baseForm": "young",
+                "contextualMeaning": "jovem"
+              },
+              {
+                "surface": "waiter,",
+                "reading": null,
+                "baseForm": "waiter",
+                "contextualMeaning": "garçom"
+              },
+              {
+                "surface": "comes",
+                "reading": null,
+                "baseForm": "come",
+                "contextualMeaning": "vem"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "até / para"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "sua / dela"
+              },
+              {
+                "surface": "table",
+                "reading": null,
+                "baseForm": "table",
+                "contextualMeaning": "mesa"
+              },
+              {
+                "surface": "with",
+                "reading": null,
+                "baseForm": "with",
+                "contextualMeaning": "com"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "warm",
+                "reading": null,
+                "baseForm": "warm",
+                "contextualMeaning": "acolhedor / quentinho"
+              },
+              {
+                "surface": "smile.",
+                "reading": null,
+                "baseForm": "smile",
+                "contextualMeaning": "sorriso"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Good morning, madam! What would you like to drink today?\" Oliver asks politely.",
+            "englishTranslation": "— Bom dia, senhora! O que você gostaria de beber hoje? — Oliver pergunta educadamente.",
+            "romanisation": null,
+            "grammarNote": "\"What would you like...?\" (\"O que você gostaria...?\") é a forma mais educada e natural em inglês para fazer ou anotar pedidos em restaurantes e cafés.",
+            "tokens": [
+              {
+                "surface": "\"Good",
+                "reading": null,
+                "baseForm": "good",
+                "contextualMeaning": "bom"
+              },
+              {
+                "surface": "morning,",
+                "reading": null,
+                "baseForm": "morning",
+                "contextualMeaning": "dia (pela manhã)"
+              },
+              {
+                "surface": "madam!",
+                "reading": null,
+                "baseForm": "madam",
+                "contextualMeaning": "senhora"
+              },
+              {
+                "surface": "What",
+                "reading": null,
+                "baseForm": "what",
+                "contextualMeaning": "o que"
+              },
+              {
+                "surface": "would",
+                "reading": null,
+                "baseForm": "would",
+                "contextualMeaning": "gostaria (auxiliar condicional)"
+              },
+              {
+                "surface": "you",
+                "reading": null,
+                "baseForm": "you",
+                "contextualMeaning": "você / a senhora"
+              },
+              {
+                "surface": "like",
+                "reading": null,
+                "baseForm": "like",
+                "contextualMeaning": "gostar (would like = gostaria)"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "de (antes de verbo)"
+              },
+              {
+                "surface": "drink",
+                "reading": null,
+                "baseForm": "drink",
+                "contextualMeaning": "beber / tomar"
+              },
+              {
+                "surface": "today?\"",
+                "reading": null,
+                "baseForm": "today",
+                "contextualMeaning": "hoje"
+              },
+              {
+                "surface": "Oliver",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "Oliver"
+              },
+              {
+                "surface": "asks",
+                "reading": null,
+                "baseForm": "ask",
+                "contextualMeaning": "pergunta"
+              },
+              {
+                "surface": "politely.",
+                "reading": null,
+                "baseForm": "politely",
+                "contextualMeaning": "educadamente"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Helena smiles and says: \"I would like a large cup of coffee with hot milk, please.\"",
+            "englishTranslation": "Helena sorri e diz: — Eu gostaria de uma xícara grande de café com leite quente, por favor.",
+            "romanisation": null,
+            "grammarNote": "Para fazer um pedido educado em inglês, use sempre \"I would like...\" (Eu gostaria de...) em vez de \"I want\" (Eu quero), que pode soar direto demais.",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "smiles",
+                "reading": null,
+                "baseForm": "smile",
+                "contextualMeaning": "sorri"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "says:",
+                "reading": null,
+                "baseForm": "say",
+                "contextualMeaning": "diz"
+              },
+              {
+                "surface": "\"I",
+                "reading": null,
+                "baseForm": "I",
+                "contextualMeaning": "eu"
+              },
+              {
+                "surface": "would",
+                "reading": null,
+                "baseForm": "would",
+                "contextualMeaning": "gostaria (com like)"
+              },
+              {
+                "surface": "like",
+                "reading": null,
+                "baseForm": "like",
+                "contextualMeaning": "gostaria de"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma"
+              },
+              {
+                "surface": "large",
+                "reading": null,
+                "baseForm": "large",
+                "contextualMeaning": "grande"
+              },
+              {
+                "surface": "cup",
+                "reading": null,
+                "baseForm": "cup",
+                "contextualMeaning": "xícara"
+              },
+              {
+                "surface": "of",
+                "reading": null,
+                "baseForm": "of",
+                "contextualMeaning": "de"
+              },
+              {
+                "surface": "coffee",
+                "reading": null,
+                "baseForm": "coffee",
+                "contextualMeaning": "café"
+              },
+              {
+                "surface": "with",
+                "reading": null,
+                "baseForm": "with",
+                "contextualMeaning": "com"
+              },
+              {
+                "surface": "hot",
+                "reading": null,
+                "baseForm": "hot",
+                "contextualMeaning": "quente"
+              },
+              {
+                "surface": "milk,",
+                "reading": null,
+                "baseForm": "milk",
+                "contextualMeaning": "leite"
+              },
+              {
+                "surface": "please.\"",
+                "reading": null,
+                "baseForm": "please",
+                "contextualMeaning": "por favor"
+              }
+            ]
+          },
+          {
+            "fullSentence": "When she puts her bag on the chair next to her, she sees a small blue notebook.",
+            "englishTranslation": "Quando ela coloca a bolsa na cadeira ao lado dela, ela vê um pequeno caderno azul.",
+            "romanisation": null,
+            "grammarNote": "\"Next to\" significa \"ao lado de\". Observe também a ordem dos adjetivos antes do substantivo: tamanho + cor + objeto (\"a small blue notebook\").",
+            "tokens": [
+              {
+                "surface": "When",
+                "reading": null,
+                "baseForm": "when",
+                "contextualMeaning": "quando"
+              },
+              {
+                "surface": "she",
+                "reading": null,
+                "baseForm": "she",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "puts",
+                "reading": null,
+                "baseForm": "put",
+                "contextualMeaning": "coloca / põe"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "sua / dela"
+              },
+              {
+                "surface": "bag",
+                "reading": null,
+                "baseForm": "bag",
+                "contextualMeaning": "bolsa"
+              },
+              {
+                "surface": "on",
+                "reading": null,
+                "baseForm": "on",
+                "contextualMeaning": "em cima de / na"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "chair",
+                "reading": null,
+                "baseForm": "chair",
+                "contextualMeaning": "cadeira"
+              },
+              {
+                "surface": "next",
+                "reading": null,
+                "baseForm": "next",
+                "contextualMeaning": "ao lado (next to)"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "de (next to)"
+              },
+              {
+                "surface": "her,",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "she",
+                "reading": null,
+                "baseForm": "she",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "sees",
+                "reading": null,
+                "baseForm": "see",
+                "contextualMeaning": "vê"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "small",
+                "reading": null,
+                "baseForm": "small",
+                "contextualMeaning": "pequeno"
+              },
+              {
+                "surface": "blue",
+                "reading": null,
+                "baseForm": "blue",
+                "contextualMeaning": "azul"
+              },
+              {
+                "surface": "notebook.",
+                "reading": null,
+                "baseForm": "notebook",
+                "contextualMeaning": "caderno"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Inside the notebook, there is a family photo and a white card with an address.",
+            "englishTranslation": "Dentro do caderno, há uma foto de família e um cartão branco com um endereço.",
+            "romanisation": null,
+            "grammarNote": "Em inglês, usamos \"There is\" para dizer \"Há\" ou \"Tem\" (no sentido de existir) no singular: \"There is a family photo\" (Tem/Há uma foto de família).",
+            "tokens": [
+              {
+                "surface": "Inside",
+                "reading": null,
+                "baseForm": "inside",
+                "contextualMeaning": "dentro de"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "notebook,",
+                "reading": null,
+                "baseForm": "notebook",
+                "contextualMeaning": "caderno"
+              },
+              {
+                "surface": "there",
+                "reading": null,
+                "baseForm": "there",
+                "contextualMeaning": "há / tem (com is)"
+              },
+              {
+                "surface": "is",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "há / existe (there is)"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma"
+              },
+              {
+                "surface": "family",
+                "reading": null,
+                "baseForm": "family",
+                "contextualMeaning": "de família"
+              },
+              {
+                "surface": "photo",
+                "reading": null,
+                "baseForm": "photo",
+                "contextualMeaning": "foto"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "white",
+                "reading": null,
+                "baseForm": "white",
+                "contextualMeaning": "branco"
+              },
+              {
+                "surface": "card",
+                "reading": null,
+                "baseForm": "card",
+                "contextualMeaning": "cartão"
+              },
+              {
+                "surface": "with",
+                "reading": null,
+                "baseForm": "with",
+                "contextualMeaning": "com"
+              },
+              {
+                "surface": "an",
+                "reading": null,
+                "baseForm": "an",
+                "contextualMeaning": "um (usado antes de vogal)"
+              },
+              {
+                "surface": "address.",
+                "reading": null,
+                "baseForm": "address",
+                "contextualMeaning": "endereço"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Excuse me, Oliver, someone left this blue notebook on the chair,\" Helena says.",
+            "englishTranslation": "— Com licença, Oliver, alguém deixou este caderno azul na cadeira — diz Helena.",
+            "romanisation": null,
+            "grammarNote": "\"Excuse me\" (Com licença) é a expressão essencial para chamar a atenção de alguém com educação. \"Left\" é o passado do verbo \"leave\" (deixar/esquecer).",
+            "tokens": [
+              {
+                "surface": "\"Excuse",
+                "reading": null,
+                "baseForm": "excuse",
+                "contextualMeaning": "com licença (excuse me)"
+              },
+              {
+                "surface": "me,",
+                "reading": null,
+                "baseForm": "me",
+                "contextualMeaning": "me (excuse me = com licença)"
+              },
+              {
+                "surface": "Oliver,",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "Oliver"
+              },
+              {
+                "surface": "someone",
+                "reading": null,
+                "baseForm": "someone",
+                "contextualMeaning": "alguém"
+              },
+              {
+                "surface": "left",
+                "reading": null,
+                "baseForm": "leave",
+                "contextualMeaning": "deixou / esqueceu"
+              },
+              {
+                "surface": "this",
+                "reading": null,
+                "baseForm": "this",
+                "contextualMeaning": "este"
+              },
+              {
+                "surface": "blue",
+                "reading": null,
+                "baseForm": "blue",
+                "contextualMeaning": "azul"
+              },
+              {
+                "surface": "notebook",
+                "reading": null,
+                "baseForm": "notebook",
+                "contextualMeaning": "caderno"
+              },
+              {
+                "surface": "on",
+                "reading": null,
+                "baseForm": "on",
+                "contextualMeaning": "na / em cima da"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "chair,\"",
+                "reading": null,
+                "baseForm": "chair",
+                "contextualMeaning": "cadeira"
+              },
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "says.",
+                "reading": null,
+                "baseForm": "say",
+                "contextualMeaning": "diz"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Oliver looks at the card and says: \"Oh! That belongs to Mrs. Miller from the flower shop!\"",
+            "englishTranslation": "Oliver olha para o cartão e diz: — Ah! Isso pertence à Sra. Miller da floricultura!",
+            "romanisation": null,
+            "grammarNote": "\"Belongs to\" significa \"pertence a\". Em inglês, substantivos também podem funcionar como adjetivos antes de outro substantivo: \"the flower shop\" (a loja de flores / floricultura).",
+            "tokens": [
+              {
+                "surface": "Oliver",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "Oliver"
+              },
+              {
+                "surface": "looks",
+                "reading": null,
+                "baseForm": "look",
+                "contextualMeaning": "olha"
+              },
+              {
+                "surface": "at",
+                "reading": null,
+                "baseForm": "at",
+                "contextualMeaning": "para"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "card",
+                "reading": null,
+                "baseForm": "card",
+                "contextualMeaning": "cartão"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "says:",
+                "reading": null,
+                "baseForm": "say",
+                "contextualMeaning": "diz"
+              },
+              {
+                "surface": "\"Oh!",
+                "reading": null,
+                "baseForm": "oh",
+                "contextualMeaning": "ah!"
+              },
+              {
+                "surface": "That",
+                "reading": null,
+                "baseForm": "that",
+                "contextualMeaning": "isso / aquilo"
+              },
+              {
+                "surface": "belongs",
+                "reading": null,
+                "baseForm": "belong",
+                "contextualMeaning": "pertence"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "a / para"
+              },
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra. (Senhora)"
+              },
+              {
+                "surface": "Miller",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "Miller"
+              },
+              {
+                "surface": "from",
+                "reading": null,
+                "baseForm": "from",
+                "contextualMeaning": "de / da"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "flower",
+                "reading": null,
+                "baseForm": "flower",
+                "contextualMeaning": "de flores"
+              },
+              {
+                "surface": "shop!\"",
+                "reading": null,
+                "baseForm": "shop",
+                "contextualMeaning": "loja (flower shop = floricultura)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "en-ch-2",
+        "chapterNumber": 2,
+        "difficultyLabel": "A1 Beginner",
+        "chapterTitle": "Chapter 2: Walking to Portobello Market (Caminhando até o Mercado Portobello)",
+        "updatedArcSummary": "Helena finishes her coffee and asks Oliver for directions to Mrs. Miller's flower shop at Portobello Market. Along the way, she meets her daughter Julia and they walk together down the colorful street.",
+        "recycledWordsUsed": [
+          "morning",
+          "looking",
+          "notebook"
+        ],
+        "sentences": [
+          {
+            "fullSentence": "Helena drinks her warm coffee and wants to return the notebook to Mrs. Miller.",
+            "englishTranslation": "Helena toma seu café quentinho e quer devolver o caderno para a Sra. Miller.",
+            "romanisation": null,
+            "grammarNote": "Quando colocamos dois verbos juntos em inglês, usamos \"to\" entre eles: \"wants to return\" (quer devolver).",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "drinks",
+                "reading": null,
+                "baseForm": "drink",
+                "contextualMeaning": "bebe / toma"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "seu / dela"
+              },
+              {
+                "surface": "warm",
+                "reading": null,
+                "baseForm": "warm",
+                "contextualMeaning": "quentinho"
+              },
+              {
+                "surface": "coffee",
+                "reading": null,
+                "baseForm": "coffee",
+                "contextualMeaning": "café"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "wants",
+                "reading": null,
+                "baseForm": "want",
+                "contextualMeaning": "quer"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "partícula de infinitivo"
+              },
+              {
+                "surface": "return",
+                "reading": null,
+                "baseForm": "return",
+                "contextualMeaning": "devolver"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "notebook",
+                "reading": null,
+                "baseForm": "notebook",
+                "contextualMeaning": "caderno"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "para"
+              },
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra."
+              },
+              {
+                "surface": "Miller.",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "Miller"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"How can I get to the flower shop from here?\" Helena asks the waiter.",
+            "englishTranslation": "— Como eu posso chegar à floricultura saindo daqui? — Helena pergunta ao garçom.",
+            "romanisation": null,
+            "grammarNote": "\"How can I get to...?\" (Como posso chegar a...?) é a pergunta mais útil em viagens para pedir direções a qualquer lugar na cidade.",
+            "tokens": [
+              {
+                "surface": "\"How",
+                "reading": null,
+                "baseForm": "how",
+                "contextualMeaning": "como"
+              },
+              {
+                "surface": "can",
+                "reading": null,
+                "baseForm": "can",
+                "contextualMeaning": "posso / consigo"
+              },
+              {
+                "surface": "I",
+                "reading": null,
+                "baseForm": "I",
+                "contextualMeaning": "eu"
+              },
+              {
+                "surface": "get",
+                "reading": null,
+                "baseForm": "get",
+                "contextualMeaning": "chegar (get to)"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "a / até"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "flower",
+                "reading": null,
+                "baseForm": "flower",
+                "contextualMeaning": "de flores"
+              },
+              {
+                "surface": "shop",
+                "reading": null,
+                "baseForm": "shop",
+                "contextualMeaning": "loja (floricultura)"
+              },
+              {
+                "surface": "from",
+                "reading": null,
+                "baseForm": "from",
+                "contextualMeaning": "a partir de / saindo de"
+              },
+              {
+                "surface": "here?\"",
+                "reading": null,
+                "baseForm": "here",
+                "contextualMeaning": "aqui"
+              },
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "asks",
+                "reading": null,
+                "baseForm": "ask",
+                "contextualMeaning": "pergunta"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "ao / o"
+              },
+              {
+                "surface": "waiter.",
+                "reading": null,
+                "baseForm": "waiter",
+                "contextualMeaning": "garçom"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"It is very close! Walk straight ahead for five minutes and turn left at the corner,\" Oliver explains.",
+            "englishTranslation": "— É bem pertinho! Caminhe reto por cinco minutos e vire à esquerda na esquina — explica Oliver.",
+            "romanisation": null,
+            "grammarNote": "Para dar ou entender direções em inglês, memorize estes três blocos essenciais: \"Walk straight ahead\" (Caminhe reto em frente), \"turn left\" (vire à esquerda) e \"at the corner\" (na esquina).",
+            "tokens": [
+              {
+                "surface": "\"It",
+                "reading": null,
+                "baseForm": "it",
+                "contextualMeaning": "ele (o local)"
+              },
+              {
+                "surface": "is",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "é / fica"
+              },
+              {
+                "surface": "very",
+                "reading": null,
+                "baseForm": "very",
+                "contextualMeaning": "muito / bem"
+              },
+              {
+                "surface": "close!",
+                "reading": null,
+                "baseForm": "close",
+                "contextualMeaning": "perto / pertinho"
+              },
+              {
+                "surface": "Walk",
+                "reading": null,
+                "baseForm": "walk",
+                "contextualMeaning": "caminhe / ande"
+              },
+              {
+                "surface": "straight",
+                "reading": null,
+                "baseForm": "straight",
+                "contextualMeaning": "reto"
+              },
+              {
+                "surface": "ahead",
+                "reading": null,
+                "baseForm": "ahead",
+                "contextualMeaning": "em frente"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "por / durante"
+              },
+              {
+                "surface": "five",
+                "reading": null,
+                "baseForm": "five",
+                "contextualMeaning": "cinco"
+              },
+              {
+                "surface": "minutes",
+                "reading": null,
+                "baseForm": "minute",
+                "contextualMeaning": "minutos"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "turn",
+                "reading": null,
+                "baseForm": "turn",
+                "contextualMeaning": "vire"
+              },
+              {
+                "surface": "left",
+                "reading": null,
+                "baseForm": "left",
+                "contextualMeaning": "à esquerda"
+              },
+              {
+                "surface": "at",
+                "reading": null,
+                "baseForm": "at",
+                "contextualMeaning": "na / em"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "corner,\"",
+                "reading": null,
+                "baseForm": "corner",
+                "contextualMeaning": "esquina"
+              },
+              {
+                "surface": "Oliver",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "Oliver"
+              },
+              {
+                "surface": "explains.",
+                "reading": null,
+                "baseForm": "explain",
+                "contextualMeaning": "explica"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Helena pays for her coffee, thanks Oliver, and steps out onto the sunny street.",
+            "englishTranslation": "Helena paga pelo seu café, agradece a Oliver e sai para a rua ensolarada.",
+            "romanisation": null,
+            "grammarNote": "Em inglês dizemos \"pay for\" (pagar por algo): \"Helena pays for her coffee\". Mas para agradecer alguém, o verbo \"thank\" não usa preposição: \"thanks Oliver\" (agradece a Oliver).",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "pays",
+                "reading": null,
+                "baseForm": "pay",
+                "contextualMeaning": "paga"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "por / pelo"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "seu / dela"
+              },
+              {
+                "surface": "coffee,",
+                "reading": null,
+                "baseForm": "coffee",
+                "contextualMeaning": "café"
+              },
+              {
+                "surface": "thanks",
+                "reading": null,
+                "baseForm": "thank",
+                "contextualMeaning": "agradece"
+              },
+              {
+                "surface": "Oliver,",
+                "reading": null,
+                "baseForm": "Oliver",
+                "contextualMeaning": "a Oliver"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "steps",
+                "reading": null,
+                "baseForm": "step",
+                "contextualMeaning": "dá um passo / sai (steps out)"
+              },
+              {
+                "surface": "out",
+                "reading": null,
+                "baseForm": "out",
+                "contextualMeaning": "para fora"
+              },
+              {
+                "surface": "onto",
+                "reading": null,
+                "baseForm": "onto",
+                "contextualMeaning": "em direção a / para"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "sunny",
+                "reading": null,
+                "baseForm": "sunny",
+                "contextualMeaning": "ensolarada"
+              },
+              {
+                "surface": "street.",
+                "reading": null,
+                "baseForm": "street",
+                "contextualMeaning": "rua"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Outside the café, her daughter Julia is waiting for her with a warm coat.",
+            "englishTranslation": "Do lado de fora da cafeteria, sua filha Julia está esperando por ela com um casaco quentinho.",
+            "romanisation": null,
+            "grammarNote": "\"Is waiting for\" (está esperando por) usa o Present Continuous (verbo \"to be\" + verbo com \"-ing\") para mostrar uma ação que está acontecendo exatamente agora.",
+            "tokens": [
+              {
+                "surface": "Outside",
+                "reading": null,
+                "baseForm": "outside",
+                "contextualMeaning": "do lado de fora de"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "café,",
+                "reading": null,
+                "baseForm": "café",
+                "contextualMeaning": "cafeteria"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "sua / dela"
+              },
+              {
+                "surface": "daughter",
+                "reading": null,
+                "baseForm": "daughter",
+                "contextualMeaning": "filha"
+              },
+              {
+                "surface": "Julia",
+                "reading": null,
+                "baseForm": "Julia",
+                "contextualMeaning": "Julia"
+              },
+              {
+                "surface": "is",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "está"
+              },
+              {
+                "surface": "waiting",
+                "reading": null,
+                "baseForm": "wait",
+                "contextualMeaning": "esperando"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "por (usado com wait)"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "with",
+                "reading": null,
+                "baseForm": "with",
+                "contextualMeaning": "com"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "warm",
+                "reading": null,
+                "baseForm": "warm",
+                "contextualMeaning": "quentinho"
+              },
+              {
+                "surface": "coat.",
+                "reading": null,
+                "baseForm": "coat",
+                "contextualMeaning": "casaco"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Hi, Mom! Are you ready to visit the market this morning?\" Julia asks happily.",
+            "englishTranslation": "— Oi, mãe! Você está pronta para visitar o mercado esta manhã? — Julia pergunta alegremente.",
+            "romanisation": null,
+            "grammarNote": "Para fazer perguntas com o verbo \"to be\" (ser/estar), invertemos a ordem: em vez de \"You are ready\" (Você está pronta), dizemos \"Are you ready...?\" (Está você pronta...?).",
+            "tokens": [
+              {
+                "surface": "\"Hi,",
+                "reading": null,
+                "baseForm": "hi",
+                "contextualMeaning": "oi"
+              },
+              {
+                "surface": "Mom!",
+                "reading": null,
+                "baseForm": "mom",
+                "contextualMeaning": "mãe"
+              },
+              {
+                "surface": "Are",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "está (em pergunta)"
+              },
+              {
+                "surface": "you",
+                "reading": null,
+                "baseForm": "you",
+                "contextualMeaning": "você"
+              },
+              {
+                "surface": "ready",
+                "reading": null,
+                "baseForm": "ready",
+                "contextualMeaning": "pronta"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "para"
+              },
+              {
+                "surface": "visit",
+                "reading": null,
+                "baseForm": "visit",
+                "contextualMeaning": "visitar"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "market",
+                "reading": null,
+                "baseForm": "market",
+                "contextualMeaning": "mercado"
+              },
+              {
+                "surface": "this",
+                "reading": null,
+                "baseForm": "this",
+                "contextualMeaning": "esta"
+              },
+              {
+                "surface": "morning?\"",
+                "reading": null,
+                "baseForm": "morning",
+                "contextualMeaning": "manhã"
+              },
+              {
+                "surface": "Julia",
+                "reading": null,
+                "baseForm": "Julia",
+                "contextualMeaning": "Julia"
+              },
+              {
+                "surface": "asks",
+                "reading": null,
+                "baseForm": "ask",
+                "contextualMeaning": "pergunta"
+              },
+              {
+                "surface": "happily.",
+                "reading": null,
+                "baseForm": "happily",
+                "contextualMeaning": "alegremente / feliz"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Yes, my dear, but first we are looking for Mrs. Miller's flower shop,\" Helena replies.",
+            "englishTranslation": "— Sim, minha querida, mas primeiro nós estamos procurando a floricultura da Sra. Miller — Helena responde.",
+            "romanisation": null,
+            "grammarNote": "\"We are looking for\" significa \"Nós estamos procurando\". O apóstrofo + s em \"Mrs. Miller's flower shop\" indica posse: a floricultura DA Sra. Miller.",
+            "tokens": [
+              {
+                "surface": "\"Yes,",
+                "reading": null,
+                "baseForm": "yes",
+                "contextualMeaning": "sim"
+              },
+              {
+                "surface": "my",
+                "reading": null,
+                "baseForm": "my",
+                "contextualMeaning": "minha"
+              },
+              {
+                "surface": "dear,",
+                "reading": null,
+                "baseForm": "dear",
+                "contextualMeaning": "querida"
+              },
+              {
+                "surface": "but",
+                "reading": null,
+                "baseForm": "but",
+                "contextualMeaning": "mas"
+              },
+              {
+                "surface": "first",
+                "reading": null,
+                "baseForm": "first",
+                "contextualMeaning": "primeiro"
+              },
+              {
+                "surface": "we",
+                "reading": null,
+                "baseForm": "we",
+                "contextualMeaning": "nós"
+              },
+              {
+                "surface": "are",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "estamos"
+              },
+              {
+                "surface": "looking",
+                "reading": null,
+                "baseForm": "look",
+                "contextualMeaning": "procurando (looking for)"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "por (usado com look para significar procurar)"
+              },
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra."
+              },
+              {
+                "surface": "Miller's",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "da Miller (posse com 's)"
+              },
+              {
+                "surface": "flower",
+                "reading": null,
+                "baseForm": "flower",
+                "contextualMeaning": "de flores"
+              },
+              {
+                "surface": "shop,\"",
+                "reading": null,
+                "baseForm": "shop",
+                "contextualMeaning": "loja (floricultura)"
+              },
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "replies.",
+                "reading": null,
+                "baseForm": "reply",
+                "contextualMeaning": "responde"
+              }
+            ]
+          },
+          {
+            "fullSentence": "They walk together past the colorful houses and turn left at the busy corner.",
+            "englishTranslation": "Elas caminham juntas passando pelas casas coloridas e viram à esquerda na esquina movimentada.",
+            "romanisation": null,
+            "grammarNote": "Com \"They\" (eles/elas), o verbo no presente simples não leva \"-s\": \"They walk\" (Elas caminham) e \"turn left\" (viram à esquerda).",
+            "tokens": [
+              {
+                "surface": "They",
+                "reading": null,
+                "baseForm": "they",
+                "contextualMeaning": "elas"
+              },
+              {
+                "surface": "walk",
+                "reading": null,
+                "baseForm": "walk",
+                "contextualMeaning": "caminham"
+              },
+              {
+                "surface": "together",
+                "reading": null,
+                "baseForm": "together",
+                "contextualMeaning": "juntas"
+              },
+              {
+                "surface": "past",
+                "reading": null,
+                "baseForm": "past",
+                "contextualMeaning": "passando por"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "as"
+              },
+              {
+                "surface": "colorful",
+                "reading": null,
+                "baseForm": "colorful",
+                "contextualMeaning": "coloridas"
+              },
+              {
+                "surface": "houses",
+                "reading": null,
+                "baseForm": "house",
+                "contextualMeaning": "casas"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "turn",
+                "reading": null,
+                "baseForm": "turn",
+                "contextualMeaning": "viram"
+              },
+              {
+                "surface": "left",
+                "reading": null,
+                "baseForm": "left",
+                "contextualMeaning": "à esquerda"
+              },
+              {
+                "surface": "at",
+                "reading": null,
+                "baseForm": "at",
+                "contextualMeaning": "na"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "busy",
+                "reading": null,
+                "baseForm": "busy",
+                "contextualMeaning": "movimentada"
+              },
+              {
+                "surface": "corner.",
+                "reading": null,
+                "baseForm": "corner",
+                "contextualMeaning": "esquina"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "en-ch-3",
+        "chapterNumber": 3,
+        "difficultyLabel": "A1 Beginner",
+        "chapterTitle": "Chapter 3: A New Friend at the Flower Shop (Uma Nova Amiga na Floricultura)",
+        "updatedArcSummary": "At Portobello Market, Helena and Julia find the flower shop with yellow roses. Mrs. Miller is overjoyed to get her grandmother's recipe notebook back and gifts Helena a bouquet of yellow roses and homemade tea.",
+        "recycledWordsUsed": [
+          "morning",
+          "looking",
+          "notebook",
+          "would"
+        ],
+        "sentences": [
+          {
+            "fullSentence": "At the entrance of Portobello Market, they see a lovely shop full of yellow roses.",
+            "englishTranslation": "Na entrada do Mercado Portobello, elas veem uma linda loja cheia de rosas amarelas.",
+            "romanisation": null,
+            "grammarNote": "\"Full of\" significa \"cheio(a) de\": \"full of yellow roses\" (cheia de rosas amarelas).",
+            "tokens": [
+              {
+                "surface": "At",
+                "reading": null,
+                "baseForm": "at",
+                "contextualMeaning": "em / na (ponto específico)"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "entrance",
+                "reading": null,
+                "baseForm": "entrance",
+                "contextualMeaning": "entrada"
+              },
+              {
+                "surface": "of",
+                "reading": null,
+                "baseForm": "of",
+                "contextualMeaning": "de / do"
+              },
+              {
+                "surface": "Portobello",
+                "reading": null,
+                "baseForm": "Portobello",
+                "contextualMeaning": "Portobello"
+              },
+              {
+                "surface": "Market,",
+                "reading": null,
+                "baseForm": "market",
+                "contextualMeaning": "Mercado"
+              },
+              {
+                "surface": "they",
+                "reading": null,
+                "baseForm": "they",
+                "contextualMeaning": "elas"
+              },
+              {
+                "surface": "see",
+                "reading": null,
+                "baseForm": "see",
+                "contextualMeaning": "veem"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma"
+              },
+              {
+                "surface": "lovely",
+                "reading": null,
+                "baseForm": "lovely",
+                "contextualMeaning": "linda / encantadora"
+              },
+              {
+                "surface": "shop",
+                "reading": null,
+                "baseForm": "shop",
+                "contextualMeaning": "loja"
+              },
+              {
+                "surface": "full",
+                "reading": null,
+                "baseForm": "full",
+                "contextualMeaning": "cheia"
+              },
+              {
+                "surface": "of",
+                "reading": null,
+                "baseForm": "of",
+                "contextualMeaning": "de"
+              },
+              {
+                "surface": "yellow",
+                "reading": null,
+                "baseForm": "yellow",
+                "contextualMeaning": "amarelas"
+              },
+              {
+                "surface": "roses.",
+                "reading": null,
+                "baseForm": "rose",
+                "contextualMeaning": "rosas"
+              }
+            ]
+          },
+          {
+            "fullSentence": "A kind woman with silver hair is standing behind the wooden counter.",
+            "englishTranslation": "Uma mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira.",
+            "romanisation": null,
+            "grammarNote": "\"Is standing\" significa \"está em pé\". Em inglês, usamos o Present Continuous para descrever a posição em que alguém se encontra no momento.",
+            "tokens": [
+              {
+                "surface": "A",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma"
+              },
+              {
+                "surface": "kind",
+                "reading": null,
+                "baseForm": "kind",
+                "contextualMeaning": "gentil / bondosa"
+              },
+              {
+                "surface": "woman",
+                "reading": null,
+                "baseForm": "woman",
+                "contextualMeaning": "mulher"
+              },
+              {
+                "surface": "with",
+                "reading": null,
+                "baseForm": "with",
+                "contextualMeaning": "com / de"
+              },
+              {
+                "surface": "silver",
+                "reading": null,
+                "baseForm": "silver",
+                "contextualMeaning": "prateados / grisalhos"
+              },
+              {
+                "surface": "hair",
+                "reading": null,
+                "baseForm": "hair",
+                "contextualMeaning": "cabelo(s)"
+              },
+              {
+                "surface": "is",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "está"
+              },
+              {
+                "surface": "standing",
+                "reading": null,
+                "baseForm": "stand",
+                "contextualMeaning": "em pé"
+              },
+              {
+                "surface": "behind",
+                "reading": null,
+                "baseForm": "behind",
+                "contextualMeaning": "atrás de"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "wooden",
+                "reading": null,
+                "baseForm": "wooden",
+                "contextualMeaning": "de madeira"
+              },
+              {
+                "surface": "counter.",
+                "reading": null,
+                "baseForm": "counter",
+                "contextualMeaning": "balcão"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Helena walks up to her and asks: \"Excuse me, are you Mrs. Miller?\"",
+            "englishTranslation": "Helena se aproxima dela e pergunta: — Com licença, a senhora é a Sra. Miller?",
+            "romanisation": null,
+            "grammarNote": "Novamente vemos a inversão em perguntas com o verbo \"to be\": \"Are you Mrs. Miller?\" (Você/A senhora é a Sra. Miller?).",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "walks",
+                "reading": null,
+                "baseForm": "walk",
+                "contextualMeaning": "caminha (walks up to = aproxima-se de)"
+              },
+              {
+                "surface": "up",
+                "reading": null,
+                "baseForm": "up",
+                "contextualMeaning": "para perto"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "de / até"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "asks:",
+                "reading": null,
+                "baseForm": "ask",
+                "contextualMeaning": "pergunta"
+              },
+              {
+                "surface": "\"Excuse",
+                "reading": null,
+                "baseForm": "excuse",
+                "contextualMeaning": "com licença (excuse me)"
+              },
+              {
+                "surface": "me,",
+                "reading": null,
+                "baseForm": "me",
+                "contextualMeaning": "me (com licença)"
+              },
+              {
+                "surface": "are",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "é (em pergunta)"
+              },
+              {
+                "surface": "you",
+                "reading": null,
+                "baseForm": "you",
+                "contextualMeaning": "você / a senhora"
+              },
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra."
+              },
+              {
+                "surface": "Miller?\"",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "Miller"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Yes, I am! Can I help you find some flowers today?\" the woman answers warmly.",
+            "englishTranslation": "— Sim, eu sou! Posso ajudar você a encontrar algumas flores hoje? — a mulher responde calorosamente.",
+            "romanisation": null,
+            "grammarNote": "Quando alguém pergunta \"Are you...?\", a resposta curta afirmativa padrão em inglês é \"Yes, I am!\" (Sim, eu sou/estou!). \"Can I help you...?\" significa \"Posso ajudar você...?\".",
+            "tokens": [
+              {
+                "surface": "\"Yes,",
+                "reading": null,
+                "baseForm": "yes",
+                "contextualMeaning": "sim"
+              },
+              {
+                "surface": "I",
+                "reading": null,
+                "baseForm": "I",
+                "contextualMeaning": "eu"
+              },
+              {
+                "surface": "am!",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "sou / estou"
+              },
+              {
+                "surface": "Can",
+                "reading": null,
+                "baseForm": "can",
+                "contextualMeaning": "posso"
+              },
+              {
+                "surface": "I",
+                "reading": null,
+                "baseForm": "I",
+                "contextualMeaning": "eu"
+              },
+              {
+                "surface": "help",
+                "reading": null,
+                "baseForm": "help",
+                "contextualMeaning": "ajudar"
+              },
+              {
+                "surface": "you",
+                "reading": null,
+                "baseForm": "you",
+                "contextualMeaning": "você"
+              },
+              {
+                "surface": "find",
+                "reading": null,
+                "baseForm": "find",
+                "contextualMeaning": "a encontrar"
+              },
+              {
+                "surface": "some",
+                "reading": null,
+                "baseForm": "some",
+                "contextualMeaning": "algumas"
+              },
+              {
+                "surface": "flowers",
+                "reading": null,
+                "baseForm": "flower",
+                "contextualMeaning": "flores"
+              },
+              {
+                "surface": "today?\"",
+                "reading": null,
+                "baseForm": "today",
+                "contextualMeaning": "hoje"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "a"
+              },
+              {
+                "surface": "woman",
+                "reading": null,
+                "baseForm": "woman",
+                "contextualMeaning": "mulher"
+              },
+              {
+                "surface": "answers",
+                "reading": null,
+                "baseForm": "answer",
+                "contextualMeaning": "responde"
+              },
+              {
+                "surface": "warmly.",
+                "reading": null,
+                "baseForm": "warmly",
+                "contextualMeaning": "calorosamente"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Helena takes the blue notebook out of her bag and gives it to Mrs. Miller.",
+            "englishTranslation": "Helena tira o caderno azul da bolsa e o entrega para a Sra. Miller.",
+            "romanisation": null,
+            "grammarNote": "\"Takes ... out of\" significa \"tira ... de dentro de\", e \"gives it to\" significa \"o entrega para\".",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "takes",
+                "reading": null,
+                "baseForm": "take",
+                "contextualMeaning": "tira / pega (takes out)"
+              },
+              {
+                "surface": "the",
+                "reading": null,
+                "baseForm": "the",
+                "contextualMeaning": "o"
+              },
+              {
+                "surface": "blue",
+                "reading": null,
+                "baseForm": "blue",
+                "contextualMeaning": "azul"
+              },
+              {
+                "surface": "notebook",
+                "reading": null,
+                "baseForm": "notebook",
+                "contextualMeaning": "caderno"
+              },
+              {
+                "surface": "out",
+                "reading": null,
+                "baseForm": "out",
+                "contextualMeaning": "para fora"
+              },
+              {
+                "surface": "of",
+                "reading": null,
+                "baseForm": "of",
+                "contextualMeaning": "de"
+              },
+              {
+                "surface": "her",
+                "reading": null,
+                "baseForm": "her",
+                "contextualMeaning": "sua / dela"
+              },
+              {
+                "surface": "bag",
+                "reading": null,
+                "baseForm": "bag",
+                "contextualMeaning": "bolsa"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "gives",
+                "reading": null,
+                "baseForm": "give",
+                "contextualMeaning": "dá / entrega"
+              },
+              {
+                "surface": "it",
+                "reading": null,
+                "baseForm": "it",
+                "contextualMeaning": "o (o caderno)"
+              },
+              {
+                "surface": "to",
+                "reading": null,
+                "baseForm": "to",
+                "contextualMeaning": "para"
+              },
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra."
+              },
+              {
+                "surface": "Miller.",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "Miller"
+              }
+            ]
+          },
+          {
+            "fullSentence": "\"Oh, thank you so much! I was looking for my grandmother's recipe book all morning!\" she says.",
+            "englishTranslation": "— Ah, muito obrigada mesmo! Eu estava procurando o livro de receitas da minha avó a manhã toda! — ela diz.",
+            "romanisation": null,
+            "grammarNote": "\"Thank you so much!\" (Muito obrigada mesmo!) é uma forma calorosa e intensa de agradecer. \"I was looking for\" é o passado contínuo: \"Eu estava procurando\".",
+            "tokens": [
+              {
+                "surface": "\"Oh,",
+                "reading": null,
+                "baseForm": "oh",
+                "contextualMeaning": "ah"
+              },
+              {
+                "surface": "thank",
+                "reading": null,
+                "baseForm": "thank",
+                "contextualMeaning": "obrigada (thank you)"
+              },
+              {
+                "surface": "you",
+                "reading": null,
+                "baseForm": "you",
+                "contextualMeaning": "a você"
+              },
+              {
+                "surface": "so",
+                "reading": null,
+                "baseForm": "so",
+                "contextualMeaning": "tanto / muito (so much)"
+              },
+              {
+                "surface": "much!",
+                "reading": null,
+                "baseForm": "much",
+                "contextualMeaning": "muito (thank you so much = muito obrigada)"
+              },
+              {
+                "surface": "I",
+                "reading": null,
+                "baseForm": "I",
+                "contextualMeaning": "eu"
+              },
+              {
+                "surface": "was",
+                "reading": null,
+                "baseForm": "be",
+                "contextualMeaning": "estava"
+              },
+              {
+                "surface": "looking",
+                "reading": null,
+                "baseForm": "look",
+                "contextualMeaning": "procurando (looking for)"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "por"
+              },
+              {
+                "surface": "my",
+                "reading": null,
+                "baseForm": "my",
+                "contextualMeaning": "minha"
+              },
+              {
+                "surface": "grandmother's",
+                "reading": null,
+                "baseForm": "grandmother",
+                "contextualMeaning": "da avó (posse com 's)"
+              },
+              {
+                "surface": "recipe",
+                "reading": null,
+                "baseForm": "recipe",
+                "contextualMeaning": "de receitas"
+              },
+              {
+                "surface": "book",
+                "reading": null,
+                "baseForm": "book",
+                "contextualMeaning": "livro"
+              },
+              {
+                "surface": "all",
+                "reading": null,
+                "baseForm": "all",
+                "contextualMeaning": "toda"
+              },
+              {
+                "surface": "morning!\"",
+                "reading": null,
+                "baseForm": "morning",
+                "contextualMeaning": "a manhã"
+              },
+              {
+                "surface": "she",
+                "reading": null,
+                "baseForm": "she",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "says.",
+                "reading": null,
+                "baseForm": "say",
+                "contextualMeaning": "diz"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Mrs. Miller gives Helena a beautiful bouquet of yellow roses and says: \"Please take these flowers for your family.\"",
+            "englishTranslation": "A Sra. Miller dá a Helena um lindo buquê de rosas amarelas e diz: — Por favor, leve estas flores para a sua família.",
+            "romanisation": null,
+            "grammarNote": "\"These\" é o plural de \"this\": usamos \"this flower\" (esta flor, singular) e \"these flowers\" (estas flores, plural).",
+            "tokens": [
+              {
+                "surface": "Mrs.",
+                "reading": null,
+                "baseForm": "Mrs.",
+                "contextualMeaning": "Sra."
+              },
+              {
+                "surface": "Miller",
+                "reading": null,
+                "baseForm": "Miller",
+                "contextualMeaning": "Miller"
+              },
+              {
+                "surface": "gives",
+                "reading": null,
+                "baseForm": "give",
+                "contextualMeaning": "dá / entrega"
+              },
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "a Helena"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "um"
+              },
+              {
+                "surface": "beautiful",
+                "reading": null,
+                "baseForm": "beautiful",
+                "contextualMeaning": "lindo"
+              },
+              {
+                "surface": "bouquet",
+                "reading": null,
+                "baseForm": "bouquet",
+                "contextualMeaning": "buquê"
+              },
+              {
+                "surface": "of",
+                "reading": null,
+                "baseForm": "of",
+                "contextualMeaning": "de"
+              },
+              {
+                "surface": "yellow",
+                "reading": null,
+                "baseForm": "yellow",
+                "contextualMeaning": "amarelas"
+              },
+              {
+                "surface": "roses",
+                "reading": null,
+                "baseForm": "rose",
+                "contextualMeaning": "rosas"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "says:",
+                "reading": null,
+                "baseForm": "say",
+                "contextualMeaning": "diz"
+              },
+              {
+                "surface": "\"Please",
+                "reading": null,
+                "baseForm": "please",
+                "contextualMeaning": "por favor"
+              },
+              {
+                "surface": "take",
+                "reading": null,
+                "baseForm": "take",
+                "contextualMeaning": "leve / pegue"
+              },
+              {
+                "surface": "these",
+                "reading": null,
+                "baseForm": "these",
+                "contextualMeaning": "estas (plural)"
+              },
+              {
+                "surface": "flowers",
+                "reading": null,
+                "baseForm": "flower",
+                "contextualMeaning": "flores"
+              },
+              {
+                "surface": "for",
+                "reading": null,
+                "baseForm": "for",
+                "contextualMeaning": "para"
+              },
+              {
+                "surface": "your",
+                "reading": null,
+                "baseForm": "your",
+                "contextualMeaning": "sua"
+              },
+              {
+                "surface": "family.\"",
+                "reading": null,
+                "baseForm": "family",
+                "contextualMeaning": "família"
+              }
+            ]
+          },
+          {
+            "fullSentence": "Helena smiles proudly because she spoke English all morning and made a wonderful new friend in London.",
+            "englishTranslation": "Helena sorri com orgulho porque ela falou inglês a manhã toda e fez uma nova amiga maravilhosa em Londres.",
+            "romanisation": null,
+            "grammarNote": "\"Spoke\" (falou) é o passado de \"speak\" (falar), e \"made\" (fez) é o passado de \"make\" (fazer). Em inglês dizemos \"make a friend\" (fazer um amigo).",
+            "tokens": [
+              {
+                "surface": "Helena",
+                "reading": null,
+                "baseForm": "Helena",
+                "contextualMeaning": "Helena"
+              },
+              {
+                "surface": "smiles",
+                "reading": null,
+                "baseForm": "smile",
+                "contextualMeaning": "sorri"
+              },
+              {
+                "surface": "proudly",
+                "reading": null,
+                "baseForm": "proudly",
+                "contextualMeaning": "com orgulho / orgulhosamente"
+              },
+              {
+                "surface": "because",
+                "reading": null,
+                "baseForm": "because",
+                "contextualMeaning": "porque"
+              },
+              {
+                "surface": "she",
+                "reading": null,
+                "baseForm": "she",
+                "contextualMeaning": "ela"
+              },
+              {
+                "surface": "spoke",
+                "reading": null,
+                "baseForm": "speak",
+                "contextualMeaning": "falou"
+              },
+              {
+                "surface": "English",
+                "reading": null,
+                "baseForm": "English",
+                "contextualMeaning": "inglês"
+              },
+              {
+                "surface": "all",
+                "reading": null,
+                "baseForm": "all",
+                "contextualMeaning": "toda"
+              },
+              {
+                "surface": "morning",
+                "reading": null,
+                "baseForm": "morning",
+                "contextualMeaning": "a manhã"
+              },
+              {
+                "surface": "and",
+                "reading": null,
+                "baseForm": "and",
+                "contextualMeaning": "e"
+              },
+              {
+                "surface": "made",
+                "reading": null,
+                "baseForm": "make",
+                "contextualMeaning": "fez"
+              },
+              {
+                "surface": "a",
+                "reading": null,
+                "baseForm": "a",
+                "contextualMeaning": "uma"
+              },
+              {
+                "surface": "wonderful",
+                "reading": null,
+                "baseForm": "wonderful",
+                "contextualMeaning": "maravilhosa"
+              },
+              {
+                "surface": "new",
+                "reading": null,
+                "baseForm": "new",
+                "contextualMeaning": "nova"
+              },
+              {
+                "surface": "friend",
+                "reading": null,
+                "baseForm": "friend",
+                "contextualMeaning": "amiga"
+              },
+              {
+                "surface": "in",
+                "reading": null,
+                "baseForm": "in",
+                "contextualMeaning": "em"
+              },
+              {
+                "surface": "London.",
+                "reading": null,
+                "baseForm": "London",
+                "contextualMeaning": "Londres"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 };

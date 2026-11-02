@@ -217,13 +217,66 @@ function speakUtteranceSafely(text, bcp47 = 'fr-FR', rate = 0.95, callbacks = {}
 
 const WORD_PHRASE_AUDIO_CACHE = new Map();
 
+let currentGlobalPlaybackRate = 1.0;
+
+export function setGlobalPlaybackRate(rate) {
+  const num = Number(rate);
+  if (Number.isFinite(num) && num >= 0.35 && num <= 2.0) {
+    currentGlobalPlaybackRate = num;
+    if (sharedSentenceAudioEl) {
+      try {
+        sharedSentenceAudioEl.playbackRate = num;
+      } catch {
+        // ignore
+      }
+    }
+    if (sharedWordAudioEl) {
+      try {
+        sharedWordAudioEl.playbackRate = num;
+      } catch {
+        // ignore
+      }
+    }
+  }
+}
+
+export function getGlobalPlaybackRate() {
+  return currentGlobalPlaybackRate;
+}
+
+/**
+ * Computes which token index (0..T-1) is being spoken at `progressRatio` (0..1)
+ * within a sentence's `tokens` array, weighted by each token's spoken character length
+ * plus a slight pause weight for commas/colons/question marks.
+ */
+export function getTokenIndexAtProgress(tokens = [], progressRatio = 0) {
+  if (!Array.isArray(tokens) || tokens.length === 0) return null;
+  const clamped = Math.max(0, Math.min(0.9999, progressRatio));
+  const weights = tokens.map((tok) => {
+    const raw = (tok?.surface || '').trim();
+    const alphaLen = raw.replace(/[.,!?;:«»"“”'’()[\]{}—–-]/g, '').length;
+    const hasMidPause = /[,;:—–?!]/.test(raw) ? 1.8 : 0;
+    return Math.max(1.5, alphaLen + hasMidPause);
+  });
+  const totalWeight = weights.reduce((a, b) => a + b, 0) || 1;
+  let cumulative = 0;
+  for (let i = 0; i < weights.length; i += 1) {
+    cumulative += weights[i] / totalWeight;
+    if (clamped < cumulative || i === weights.length - 1) {
+      return i;
+    }
+  }
+  return weights.length - 1;
+}
+
 /**
  * Instant word or phrase pronunciation on tap/click.
  * Automatically uses ElevenLabs Neural Voice when an ElevenLabs API key is saved in settings
  * (caching the Blob URL in memory for 0ms replay), falling back to `/api/tts` or Web Speech if no key is set.
  */
-export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = 0.95) {
+export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = null) {
   if (typeof window === 'undefined') return;
+  const effectiveRate = rate !== null && Number.isFinite(Number(rate)) ? Number(rate) : currentGlobalPlaybackRate;
 
   const cleaned = (wordText || '')
     .replace(/[«»"“”「」『』]/g, '')
@@ -255,7 +308,7 @@ export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = 0.95) {
       try {
         el.pause();
         el.loop = false;
-        el.playbackRate = rate;
+        el.playbackRate = effectiveRate;
         el.src = cachedBlobUrl;
         await el.play();
         return;
@@ -288,7 +341,7 @@ export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = 0.95) {
           WORD_PHRASE_AUDIO_CACHE.set(cacheKey, blobUrl);
           el.pause();
           el.loop = false;
-          el.playbackRate = rate;
+          el.playbackRate = effectiveRate;
           el.src = blobUrl;
           await el.play();
           return;
@@ -303,12 +356,12 @@ export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = 0.95) {
     try {
       const tl = (bcp47 || 'fr-FR').split('-')[0].toLowerCase();
       el.pause();
-      el.playbackRate = rate;
+      el.playbackRate = effectiveRate;
       el.src = `/api/tts?tl=${encodeURIComponent(tl)}&q=${encodeURIComponent(cleaned)}`;
       const playPromise = el.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
-          speakUtteranceSafely(cleaned, bcp47, rate);
+          speakUtteranceSafely(cleaned, bcp47, effectiveRate);
         });
       }
       return;
@@ -317,7 +370,7 @@ export async function speakSingleWord(wordText, bcp47 = 'fr-FR', rate = 0.95) {
     }
   }
 
-  speakUtteranceSafely(cleaned, bcp47, rate);
+  speakUtteranceSafely(cleaned, bcp47, effectiveRate);
 }
 
 let sharedSentenceAudioEl = null;
@@ -354,6 +407,7 @@ export function stopSentenceAudio() {
   const el = getSharedSentenceAudioElement();
   if (el) {
     try {
+      el.ontimeupdate = null;
       el.pause();
       el.currentTime = 0;
     } catch {
@@ -361,7 +415,7 @@ export function stopSentenceAudio() {
     }
   }
   if (activeSentenceStateCallback && activeSentenceKey) {
-    activeSentenceStateCallback({ sentenceKey: activeSentenceKey, status: 'idle' });
+    activeSentenceStateCallback({ sentenceKey: activeSentenceKey, status: 'idle', tokenIndex: null });
   }
   activeSentenceKey = null;
   activeSentenceStateCallback = null;
@@ -370,16 +424,19 @@ export function stopSentenceAudio() {
 /**
  * Plays, pauses, or resumes a specific sentence using the user's ElevenLabs Neural Voice.
  * When `forceRestart` is true, immediately restarts the sentence from 0:00.
+ * Also reports live `tokenIndex` during playback so each word highlights as it is read!
  */
 export async function controlSentenceAudio({
   sentenceKey,
   sentenceText,
+  tokens = [],
   bcp47 = 'fr-FR',
-  rate = 1.0,
+  rate = null,
   forceRestart = false,
   onStateChange,
 }) {
   if (typeof window === 'undefined') return;
+  const effectiveRate = rate !== null && Number.isFinite(Number(rate)) ? Number(rate) : currentGlobalPlaybackRate;
   const cleaned = (sentenceText || '')
     .replace(/[«»"“”「」『』]/g, '')
     .trim();
@@ -389,20 +446,34 @@ export async function controlSentenceAudio({
   const el = getSharedSentenceAudioElement();
   if (!el) return;
 
-  const notify = (status) => {
-    onStateChange?.({ sentenceKey, status });
+  const notify = (status, tokenIndex = null) => {
+    onStateChange?.({ sentenceKey, status, tokenIndex });
+  };
+
+  const attachWordTracking = () => {
+    el.ontimeupdate = () => {
+      if (activeSentenceKey !== sentenceKey || el.paused || el.ended) return;
+      const d = el.duration;
+      const t = el.currentTime;
+      if (Number.isFinite(d) && d > 0.15 && Array.isArray(tokens) && tokens.length > 0) {
+        const ratio = Math.max(0, Math.min(0.999, t / d));
+        const tokIdx = getTokenIndexAtProgress(tokens, ratio);
+        notify('playing', tokIdx);
+      }
+    };
   };
 
   // If clicking Play/Pause or Restart on the already-active sentence:
   if (activeSentenceKey === sentenceKey && el.src && !el.src.startsWith('blob:null')) {
     activeSentenceStateCallback = onStateChange;
+    attachWordTracking();
     if (forceRestart) {
       try {
         el.pause();
         el.currentTime = 0;
-        el.playbackRate = rate;
+        el.playbackRate = effectiveRate;
         await el.play();
-        notify('playing');
+        notify('playing', 0);
         return;
       } catch {
         // fall through to reload if needed
@@ -411,14 +482,24 @@ export async function controlSentenceAudio({
       // Toggle Play / Pause
       if (!el.paused && !el.ended) {
         el.pause();
-        notify('paused');
+        const d = el.duration;
+        const currentTok =
+          Number.isFinite(d) && d > 0.15 && tokens.length > 0
+            ? getTokenIndexAtProgress(tokens, el.currentTime / d)
+            : null;
+        notify('paused', currentTok);
         return;
       }
       if (el.paused && !el.ended && el.currentTime > 0) {
         try {
-          el.playbackRate = rate;
+          el.playbackRate = effectiveRate;
           await el.play();
-          notify('playing');
+          const d = el.duration;
+          const currentTok =
+            Number.isFinite(d) && d > 0.15 && tokens.length > 0
+              ? getTokenIndexAtProgress(tokens, el.currentTime / d)
+              : 0;
+          notify('playing', currentTok);
           return;
         } catch {
           // fall through to reload
@@ -429,20 +510,21 @@ export async function controlSentenceAudio({
 
   // Switching to a different sentence: notify previous sentence is now idle
   if (activeSentenceKey && activeSentenceKey !== sentenceKey && activeSentenceStateCallback) {
-    activeSentenceStateCallback({ sentenceKey: activeSentenceKey, status: 'idle' });
+    activeSentenceStateCallback({ sentenceKey: activeSentenceKey, status: 'idle', tokenIndex: null });
   }
 
   activeSentenceKey = sentenceKey;
   activeSentenceStateCallback = onStateChange;
+  attachWordTracking();
 
   el.onended = () => {
     if (activeSentenceKey === sentenceKey) {
-      notify('idle');
+      notify('idle', null);
     }
   };
   el.onerror = () => {
     if (activeSentenceKey === sentenceKey) {
-      notify('idle');
+      notify('idle', null);
     }
   };
 
@@ -457,16 +539,16 @@ export async function controlSentenceAudio({
         el.loop = false;
         el.src = cachedBlobUrl;
         el.currentTime = 0;
-        el.playbackRate = rate;
+        el.playbackRate = effectiveRate;
         await el.play();
-        notify('playing');
+        notify('playing', 0);
         return;
       } catch {
         // regenerate if revoked
       }
     }
 
-    notify('loading');
+    notify('loading', null);
 
     // Unlock <audio> synchronously inside user gesture
     try {
@@ -495,9 +577,9 @@ export async function controlSentenceAudio({
           el.loop = false;
           el.src = blobUrl;
           el.currentTime = 0;
-          el.playbackRate = rate;
+          el.playbackRate = effectiveRate;
           await el.play();
-          notify('playing');
+          notify('playing', 0);
           return;
         }
       }
@@ -513,11 +595,11 @@ export async function controlSentenceAudio({
     el.loop = false;
     el.src = `/api/tts?tl=${encodeURIComponent(tl)}&q=${encodeURIComponent(cleaned)}`;
     el.currentTime = 0;
-    el.playbackRate = rate;
+    el.playbackRate = effectiveRate;
     await el.play();
-    notify('playing');
+    notify('playing', 0);
   } catch {
-    notify('idle');
+    notify('idle', null);
   }
 }
 
