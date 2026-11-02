@@ -502,8 +502,8 @@ export default function AudioPlayerBar({
                 <RotateCcw className="h-3 w-3" />
                 <span>
                   {isPtBr
-                    ? `Repetir F${currentSentenceIdx + 1}`
-                    : `Replay S${currentSentenceIdx + 1}`}
+                    ? `Repetir Frase ${currentSentenceIdx + 1}`
+                    : `Replay Sentence ${currentSentenceIdx + 1}`}
                 </span>
               </button>
 

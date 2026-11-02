@@ -302,7 +302,7 @@ export default function InteractiveReader({
                     onClick={() => onSelectChapterIndex(idx)}
                     className="px-3 py-1.5 cursor-pointer focus:outline-none"
                   >
-                    {isPtBr ? `Cap. ${idx + 1}` : `Ch. ${idx + 1}`}
+                    {isPtBr ? `Capítulo ${idx + 1}` : `Chapter ${idx + 1}`}
                   </button>
                   {!readerOnlyMode && totalChapters > 1 && onDeleteChapter && idx >= 3 && (
                     <button
@@ -347,15 +347,15 @@ export default function InteractiveReader({
                     <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
                     <span className="text-[#EA580C]">
                       {isPtBr
-                        ? `Gerando Cap. ${totalChapters + 1}...`
-                        : `Generating Ch. ${totalChapters + 1}...`}
+                        ? `Gerando Capítulo ${totalChapters + 1}...`
+                        : `Generating Chapter ${totalChapters + 1}...`}
                     </span>
                   </>
                 ) : (
                   <>
                     <Plus className="h-3.5 w-3.5" />
                     <span>
-                      {isPtBr ? `Cap. ${totalChapters + 1}` : `Ch. ${totalChapters + 1}`}
+                      {isPtBr ? `Capítulo ${totalChapters + 1}` : `Chapter ${totalChapters + 1}`}
                     </span>
                   </>
                 )}
