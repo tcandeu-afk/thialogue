@@ -10479,11 +10479,11 @@ export const INITIAL_PROFILES = {
     "name": "English (para Brasileiros)",
     "nativeName": "English",
     "cefrLevel": "A1 Beginner",
-    "bcp47": "en-US",
+    "bcp47": "en-GB",
     "translateCode": "en",
     "translationTargetCode": "pt",
     "translationShortCode": "PT",
-    "flag": "🇺🇸🇧🇷",
+    "flag": "🇬🇧🇧🇷",
     "isCJK": false,
     "hasFurigana": false,
     "noWordSpaces": false,
@@ -11917,10 +11917,10 @@ export const INITIAL_PROFILES = {
             ]
           },
           {
-            "fullSentence": "\"Hi, Mom! Are you ready to visit the market this morning?\" Julia asks happily.",
+            "fullSentence": "\"Hi, Mum! Are you ready to visit the market this morning?\" Julia asks happily.",
             "englishTranslation": "— Oi, mãe! Você está pronta para visitar o mercado esta manhã? — Julia pergunta alegremente.",
             "romanisation": null,
-            "grammarNote": "Para fazer perguntas com o verbo \"to be\" (ser/estar), invertemos a ordem: em vez de \"You are ready\" (Você está pronta), dizemos \"Are you ready...?\" (Está você pronta...?).",
+            "grammarNote": "Para fazer perguntas com o verbo \"to be\" (ser/estar), invertemos a ordem: em vez de \"You are ready\" (Você está pronta), dizemos \"Are you ready...?\" (Está você pronta...?). No inglês britânico, \"mãe\" de forma carinhosa é \"Mum\".",
             "tokens": [
               {
                 "surface": "\"Hi,",
@@ -11929,9 +11929,9 @@ export const INITIAL_PROFILES = {
                 "contextualMeaning": "oi"
               },
               {
-                "surface": "Mom!",
+                "surface": "Mum!",
                 "reading": null,
-                "baseForm": "mom",
+                "baseForm": "mum",
                 "contextualMeaning": "mãe"
               },
               {
@@ -12107,7 +12107,7 @@ export const INITIAL_PROFILES = {
             ]
           },
           {
-            "fullSentence": "They walk together past the colorful houses and turn left at the busy corner.",
+            "fullSentence": "They walk together past the colourful houses and turn left at the busy corner.",
             "englishTranslation": "Elas caminham juntas passando pelas casas coloridas e viram à esquerda na esquina movimentada.",
             "romanisation": null,
             "grammarNote": "Com \"They\" (eles/elas), o verbo no presente simples não leva \"-s\": \"They walk\" (Elas caminham) e \"turn left\" (viram à esquerda).",
@@ -12143,9 +12143,9 @@ export const INITIAL_PROFILES = {
                 "contextualMeaning": "as"
               },
               {
-                "surface": "colorful",
+                "surface": "colourful",
                 "reading": null,
-                "baseForm": "colorful",
+                "baseForm": "colourful",
                 "contextualMeaning": "coloridas"
               },
               {

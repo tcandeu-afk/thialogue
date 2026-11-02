@@ -5111,7 +5111,7 @@ const COURSE_RECAP_BANK = {
         {
           "word": "next to (ao lado de)",
           "storyContext": "When she puts her bag on the chair next to her, she sees a small blue notebook.",
-          "newPhrase": "The pharmacy is right next to the supermarket on the main street.",
+          "newPhrase": "The chemist's is right next to the supermarket on the high street.",
           "english": "A farmácia fica bem ao lado do supermercado na rua principal."
         },
         {
@@ -5295,7 +5295,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Belongs to » expressa posse ('pertence a')."
           },
           {
-            "speakerA": "Daughter: \"Mom, how is the weather outside in London right now?\"",
+            "speakerA": "Daughter: \"Mum, how is the weather outside in London right now?\"",
             "speakerAEnglish": "Filha: \"Mãe, como está o tempo lá fora em Londres agora?\"",
             "promptEnglish": "Diga que está uma manhã fria, mas o café está quentinho:",
             "correctAnswer": "It is a cold morning outside, but the café is nice and warm.",
@@ -5345,7 +5345,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Inside the small blue notebook, there is a family photo and a white card. »"
           },
           {
-            "audioSentence": "The traveler sits near the window and looks at the red buses on the street.",
+            "audioSentence": "The traveller sits near the window and looks at the red buses on the street.",
             "correctAnswer": "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
             "options": [
               "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
@@ -5353,7 +5353,7 @@ const COURSE_RECAP_BANK = {
               "A viajante pega o ônibus vermelho e desce perto do mercado de flores.",
               "A cliente coloca a bolsa na cadeira e pede um pedaço de bolo quente."
             ],
-            "explanation": "« The traveler sits near the window and looks at the red buses on the street. »"
+            "explanation": "« The traveller sits near the window and looks at the red buses on the street. »"
           },
           {
             "audioSentence": "Excuse me, someone left this phone on the chair next to the door.",
@@ -5539,7 +5539,7 @@ const COURSE_RECAP_BANK = {
         {
           "word": "looking for (procurando)",
           "storyContext": "\"First we are looking for the flower shop.\"",
-          "newPhrase": "We are looking for a pharmacy because my mother needs some medicine.",
+          "newPhrase": "We are looking for a chemist's because my mother needs some medicine.",
           "english": "Nós estamos procurando uma farmácia porque minha mãe precisa de um remédio."
         }
       ],
@@ -5678,12 +5678,12 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa os blocos de direção do capítulo: « It is very close! Walk straight ahead... and turn left at the corner »."
           },
           {
-            "speakerA": "Daughter: \"Hi, Mom! Are you ready to visit the park this morning?\"",
+            "speakerA": "Daughter: \"Hi, Mum! Are you ready to visit the park this morning?\"",
             "speakerAEnglish": "Filha: \"Oi, mãe! Você está pronta para visitar o parque esta manhã?\"",
             "promptEnglish": "Responda que sim, mas primeiro vocês estão procurando a floricultura da rua principal:",
-            "correctAnswer": "Yes, my dear, but first we are looking for the flower shop on the main street.",
+            "correctAnswer": "Yes, my dear, but first we are looking for the flower shop on the high street.",
             "options": [
-              "Yes, my dear, but first we are looking for the flower shop on the main street.",
+              "Yes, my dear, but first we are looking for the flower shop on the high street.",
               "No, it is raining hard and the buses are not running today.",
               "Excuse me, waiter, how much do I pay for the hot milk?",
               "They walk together past the museum every Sunday afternoon."
@@ -5730,17 +5730,17 @@ const COURSE_RECAP_BANK = {
             "explanation": "« How can I get to [Lugar] from here? » é a pergunta curinga para pedir direções."
           },
           {
-            "speakerA": "Traveler: \"Should we take a taxi to the market, or can we walk?\"",
+            "speakerA": "Traveller: \"Should we take a taxi to the market, or can we walk?\"",
             "speakerAEnglish": "Viajante: \"Devemos pegar um táxi até o mercado, ou podemos ir andando?\"",
             "promptEnglish": "Diga que é bem pertinho e vocês podem caminhar juntas passando pelas casas coloridas:",
-            "correctAnswer": "It is very close! We can walk together past the colorful houses.",
+            "correctAnswer": "It is very close! We can walk together past the colourful houses.",
             "options": [
-              "It is very close! We can walk together past the colorful houses.",
+              "It is very close! We can walk together past the colourful houses.",
               "Someone left a white card inside the small blue notebook.",
               "He is waiting for the train at the central station.",
               "I would like a cup of coffee without sugar, please."
             ],
-            "explanation": "Usa « It is very close! » e « walk together past the colorful houses »."
+            "explanation": "Usa « It is very close! » e « walk together past the colourful houses »."
           }
         ],
         "audio_comprehension": [
@@ -5789,7 +5789,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Are you ready to visit the museum this morning, or do you want more coffee? »"
           },
           {
-            "audioSentence": "We are looking for the little bakery near the colorful houses.",
+            "audioSentence": "We are looking for the little bakery near the colourful houses.",
             "correctAnswer": "Nós estamos procurando a pequena padaria perto das casas coloridas.",
             "options": [
               "Nós estamos procurando a pequena padaria perto das casas coloridas.",
@@ -5797,7 +5797,7 @@ const COURSE_RECAP_BANK = {
               "Elas estão esperando pelo padeiro na esquina da rua ensolarada.",
               "Eu estou voltando da padaria com pão quente para o café da manhã."
             ],
-            "explanation": "« We are looking for the little bakery near the colorful houses. »"
+            "explanation": "« We are looking for the little bakery near the colourful houses. »"
           },
           {
             "audioSentence": "She pays for her breakfast, thanks the waiter, and steps out onto the sunny street.",
@@ -5936,9 +5936,9 @@ const COURSE_RECAP_BANK = {
               "They walk",
               "together",
               "past",
-              "the colorful houses."
+              "the colourful houses."
             ],
-            "explanation": "Sujeito e verbo (« They walk ») + Modo (« together ») + Preposição de movimento (« past ») + Lugar (« the colorful houses. »)."
+            "explanation": "Sujeito e verbo (« They walk ») + Modo (« together ») + Preposição de movimento (« past ») + Lugar (« the colourful houses. »)."
           }
         ]
       }
@@ -6126,7 +6126,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa o imperativo educado « Please take... » com o plural « these yellow flowers »."
           },
           {
-            "speakerA": "Daughter: \"Mom, you look so happy! How was your morning in London?\"",
+            "speakerA": "Daughter: \"Mum, you look so happy! How was your morning in London?\"",
             "speakerAEnglish": "Filha: \"Mãe, você parece tão feliz! Como foi a sua manhã em Londres?\"",
             "promptEnglish": "Diga que você está feliz porque falou inglês a manhã toda e fez uma nova amiga:",
             "correctAnswer": "I am happy because I spoke English all morning and made a wonderful new friend!",
@@ -6152,13 +6152,13 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa « lovely shop full of yellow roses » ('linda loja cheia de rosas amarelas')."
           },
           {
-            "speakerA": "Customer: \"Excuse me, where is the cashier? I would like to pay for this bouquet.\"",
+            "speakerA": "Customer: \"Excuse me, where is the till? I would like to pay for this bouquet.\"",
             "speakerAEnglish": "Cliente: \"Com licença, onde está o caixa? Eu gostaria de pagar por este buquê.\"",
             "promptEnglish": "Diga que a mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira:",
             "correctAnswer": "The kind woman with silver hair is standing behind the wooden counter.",
             "options": [
               "The kind woman with silver hair is standing behind the wooden counter.",
-              "We are walking together past the colorful houses on the street.",
+              "We are walking together past the colourful houses on the street.",
               "She took the notebook out of her bag and gave it to me.",
               "What would you like to drink with your cake this afternoon?"
             ],

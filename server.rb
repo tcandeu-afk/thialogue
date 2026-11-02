@@ -197,7 +197,7 @@ VOICE_MAP = {
   'ko' => 'Yuna',
   'ja' => 'Kyoko',
   'th' => 'Kanya',
-  'en' => 'Samantha'
+  'en' => 'Daniel'
 }.freeze
 
 server.mount_proc '/api/tts' do |req, res|

@@ -36,8 +36,8 @@ export function loadProfiles() {
         ...merged[langId].vocabBank.filter((v) => !existingBases.has(v.baseForm)),
       ];
 
-      // If loading from v4, preserve user's chapters and active progress.
-      // If migrating from v1/v2/v3, load the new expanded v4 (8-9 sentence) character-and-dialogue fiction chapters!
+      // If loading from v4, preserve user's chapters and active progress,
+      // while keeping starter chapter sentences & titles synced with latest fixes (e.g. UK English).
       const starterChapters = merged[langId].chapters;
       const savedChapters = Array.isArray(savedProf.chapters) ? savedProf.chapters : [];
 
@@ -53,6 +53,7 @@ export function loadProfiles() {
                       chapterTitle: starterCh.chapterTitle,
                       difficultyLabel: starterCh.difficultyLabel,
                       updatedArcSummary: starterCh.updatedArcSummary,
+                      sentences: starterCh.sentences,
                     }
                   : {}),
               };
@@ -62,6 +63,10 @@ export function loadProfiles() {
       merged[langId] = {
         ...merged[langId],
         ...(isCurrentVersion ? savedProf : {}),
+        name: merged[langId].name,
+        nativeName: merged[langId].nativeName,
+        bcp47: merged[langId].bcp47,
+        flag: merged[langId].flag,
         storyTitle: merged[langId].storyTitle,
         storyArcSummary: merged[langId].storyArcSummary,
         difficultyModifier: merged[langId].difficultyModifier,

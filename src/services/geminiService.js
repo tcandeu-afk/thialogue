@@ -738,14 +738,14 @@ You MUST naturally weave as many of these target words as fit the plot into the 
 
   const translationLanguageRules =
     profile.id === 'en'
-      ? `BRAZILIAN PORTUGUESE TRANSLATION & GRAMMAR NOTE RULES (CRITICAL FOR ENGLISH COURSE FOR BRAZILIANS):
-- The target story sentences ("fullSentence") MUST be written in natural A1 Beginner English.
+      ? `BRITISH ENGLISH (UK) & BRAZILIAN PORTUGUESE TRANSLATION RULES (CRITICAL FOR ENGLISH COURSE FOR BRAZILIANS):
+- The target story sentences ("fullSentence") MUST be written in natural A1 Beginner BRITISH ENGLISH (UK spelling, vocabulary, and usage: e.g. "colourful", "practises" as verb, "mum", "favourite", "neighbour", "centre", "chemist's", "autumn", "holiday", "underground", "shop"). NEVER use American spellings or Americanisms!
 - Every token's "contextualMeaning" MUST be written in clear Brazilian Portuguese (Português do Brasil).
 - Every sentence's "englishTranslation" field MUST contain the natural BRAZILIAN PORTUGUESE translation of the English sentence (so a Brazilian Portuguese speaker can read the translation in Portuguese).
 - Every sentence's "grammarNote" MUST be written in friendly, plain-language BRAZILIAN PORTUGUESE explaining the English sentence pattern for a Brazilian beginner.
-- In "recapModule", write "subtitle", "construction.patternName", "construction.explanation", and all "english" translation fields in BRAZILIAN PORTUGUESE while keeping target sentences/phrases in English.`
+- In "recapModule", write "subtitle", "construction.patternName", "construction.explanation", and all "english" translation fields in BRAZILIAN PORTUGUESE while keeping target sentences/phrases in British English.`
       : `ENGLISH TRANSLATION & GRAMMAR NOTE RULES:
-- Every sentence MUST include "englishTranslation" with a clear, natural English translation of the full sentence.
+- Every sentence MUST include "englishTranslation" with a clear, natural British English translation of the full sentence.
 - Every sentence MUST include a "grammarNote" consisting of a single, plain-English sentence explaining the core recurring sentence pattern used in that sentence, avoiding dense academic jargon.`;
 
   const systemPrompt = `You are a bestselling fiction author and master graded-reader creator trained in Stephen Krashen's Comprehensible Input (i+1) hypothesis and Olly Richards' StoryLearning method.
@@ -1039,10 +1039,10 @@ const CHALLENGE_EXTENSION_BANK = {
   ],
   en: [
     {
-      fullSentence: 'While they walk through the market, Helena practices her English with every friendly shopkeeper she meets.',
+      fullSentence: 'While they walk through the market, Helena practises her English with every friendly shopkeeper she meets.',
       englishTranslation: 'Enquanto elas caminham pelo mercado, Helena pratica seu inglês com cada lojista simpático que ela conhece.',
       romanisation: null,
-      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo.',
+      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo. No inglês britânico, o verbo "praticar" escreve-se com "s": "practises".',
       tokens: [
         { surface: 'While', reading: null, baseForm: 'while', contextualMeaning: 'enquanto' },
         { surface: 'they', reading: null, baseForm: 'they', contextualMeaning: 'elas' },
@@ -1051,7 +1051,7 @@ const CHALLENGE_EXTENSION_BANK = {
         { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
         { surface: 'market,', reading: null, baseForm: 'market', contextualMeaning: 'mercado' },
         { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
-        { surface: 'practices', reading: null, baseForm: 'practice', contextualMeaning: 'pratica' },
+        { surface: 'practises', reading: null, baseForm: 'practise', contextualMeaning: 'pratica' },
         { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
         { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'inglês' },
         { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
@@ -1063,10 +1063,10 @@ const CHALLENGE_EXTENSION_BANK = {
       ],
     },
     {
-      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions right away.',
+      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions straight away.',
       englishTranslation: 'Como ela fala devagar e educadamente, todos entendem suas perguntas imediatamente.',
       romanisation: null,
-      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem).',
+      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem). No inglês britânico, "straight away" significa "imediatamente".',
       tokens: [
         { surface: 'Because', reading: null, baseForm: 'because', contextualMeaning: 'porque / como' },
         { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
@@ -1078,8 +1078,8 @@ const CHALLENGE_EXTENSION_BANK = {
         { surface: 'understands', reading: null, baseForm: 'understand', contextualMeaning: 'entendem (verbo no singular)' },
         { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'suas / dela' },
         { surface: 'questions', reading: null, baseForm: 'question', contextualMeaning: 'perguntas' },
-        { surface: 'right', reading: null, baseForm: 'right', contextualMeaning: 'imediatamente (right away)' },
-        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (right away)' },
+        { surface: 'straight', reading: null, baseForm: 'straight', contextualMeaning: 'imediatamente (straight away)' },
+        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (straight away)' },
       ],
     },
   ],
@@ -1188,7 +1188,7 @@ Rewrite and expand the exact fiction story of this chapter into a LONGER, RICHER
 
   const translationInstructions =
     profile.id === 'en'
-      ? `Every sentence MUST be in English, with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
+      ? `Every sentence MUST be in natural BRITISH ENGLISH (UK spelling and vocabulary), with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
       : `Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
 
   const prompt = `You are an expert language teacher adapting Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).

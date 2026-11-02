@@ -183,12 +183,12 @@ const LANGUAGE_METADATA = [
     name: 'English (para Brasileiros)',
     nativeName: 'English → Português (BR)',
     cefrLevel: 'A1 Beginner',
-    bcp47: 'en-US',
+    bcp47: 'en-GB',
     translateCode: 'en',
     translationTargetCode: 'pt',
     translationTargetLabel: 'Português (BR)',
     translationShortCode: 'PT',
-    flag: '🇺🇸🇧🇷',
+    flag: '🇬🇧🇧🇷',
     isCJK: false,
     hasFurigana: false,
     noWordSpaces: false,
@@ -10810,11 +10810,11 @@ const INITIAL_PROFILES = {
     "name": "English (para Brasileiros)",
     "nativeName": "English",
     "cefrLevel": "A1 Beginner",
-    "bcp47": "en-US",
+    "bcp47": "en-GB",
     "translateCode": "en",
     "translationTargetCode": "pt",
     "translationShortCode": "PT",
-    "flag": "🇺🇸🇧🇷",
+    "flag": "🇬🇧🇧🇷",
     "isCJK": false,
     "hasFurigana": false,
     "noWordSpaces": false,
@@ -12248,10 +12248,10 @@ const INITIAL_PROFILES = {
             ]
           },
           {
-            "fullSentence": "\"Hi, Mom! Are you ready to visit the market this morning?\" Julia asks happily.",
+            "fullSentence": "\"Hi, Mum! Are you ready to visit the market this morning?\" Julia asks happily.",
             "englishTranslation": "— Oi, mãe! Você está pronta para visitar o mercado esta manhã? — Julia pergunta alegremente.",
             "romanisation": null,
-            "grammarNote": "Para fazer perguntas com o verbo \"to be\" (ser/estar), invertemos a ordem: em vez de \"You are ready\" (Você está pronta), dizemos \"Are you ready...?\" (Está você pronta...?).",
+            "grammarNote": "Para fazer perguntas com o verbo \"to be\" (ser/estar), invertemos a ordem: em vez de \"You are ready\" (Você está pronta), dizemos \"Are you ready...?\" (Está você pronta...?). No inglês britânico, \"mãe\" de forma carinhosa é \"Mum\".",
             "tokens": [
               {
                 "surface": "\"Hi,",
@@ -12260,9 +12260,9 @@ const INITIAL_PROFILES = {
                 "contextualMeaning": "oi"
               },
               {
-                "surface": "Mom!",
+                "surface": "Mum!",
                 "reading": null,
-                "baseForm": "mom",
+                "baseForm": "mum",
                 "contextualMeaning": "mãe"
               },
               {
@@ -12438,7 +12438,7 @@ const INITIAL_PROFILES = {
             ]
           },
           {
-            "fullSentence": "They walk together past the colorful houses and turn left at the busy corner.",
+            "fullSentence": "They walk together past the colourful houses and turn left at the busy corner.",
             "englishTranslation": "Elas caminham juntas passando pelas casas coloridas e viram à esquerda na esquina movimentada.",
             "romanisation": null,
             "grammarNote": "Com \"They\" (eles/elas), o verbo no presente simples não leva \"-s\": \"They walk\" (Elas caminham) e \"turn left\" (viram à esquerda).",
@@ -12474,9 +12474,9 @@ const INITIAL_PROFILES = {
                 "contextualMeaning": "as"
               },
               {
-                "surface": "colorful",
+                "surface": "colourful",
                 "reading": null,
-                "baseForm": "colorful",
+                "baseForm": "colourful",
                 "contextualMeaning": "coloridas"
               },
               {
@@ -13387,8 +13387,8 @@ function loadProfiles() {
         ...merged[langId].vocabBank.filter((v) => !existingBases.has(v.baseForm)),
       ];
 
-      // If loading from v4, preserve user's chapters and active progress.
-      // If migrating from v1/v2/v3, load the new expanded v4 (8-9 sentence) character-and-dialogue fiction chapters!
+      // If loading from v4, preserve user's chapters and active progress,
+      // while keeping starter chapter sentences & titles synced with latest fixes (e.g. UK English).
       const starterChapters = merged[langId].chapters;
       const savedChapters = Array.isArray(savedProf.chapters) ? savedProf.chapters : [];
 
@@ -13404,6 +13404,7 @@ function loadProfiles() {
                       chapterTitle: starterCh.chapterTitle,
                       difficultyLabel: starterCh.difficultyLabel,
                       updatedArcSummary: starterCh.updatedArcSummary,
+                      sentences: starterCh.sentences,
                     }
                   : {}),
               };
@@ -13413,6 +13414,10 @@ function loadProfiles() {
       merged[langId] = {
         ...merged[langId],
         ...(isCurrentVersion ? savedProf : {}),
+        name: merged[langId].name,
+        nativeName: merged[langId].nativeName,
+        bcp47: merged[langId].bcp47,
+        flag: merged[langId].flag,
         storyTitle: merged[langId].storyTitle,
         storyArcSummary: merged[langId].storyArcSummary,
         difficultyModifier: merged[langId].difficultyModifier,
@@ -15427,14 +15432,14 @@ You MUST naturally weave as many of these target words as fit the plot into the 
 
   const translationLanguageRules =
     profile.id === 'en'
-      ? `BRAZILIAN PORTUGUESE TRANSLATION & GRAMMAR NOTE RULES (CRITICAL FOR ENGLISH COURSE FOR BRAZILIANS):
-- The target story sentences ("fullSentence") MUST be written in natural A1 Beginner English.
+      ? `BRITISH ENGLISH (UK) & BRAZILIAN PORTUGUESE TRANSLATION RULES (CRITICAL FOR ENGLISH COURSE FOR BRAZILIANS):
+- The target story sentences ("fullSentence") MUST be written in natural A1 Beginner BRITISH ENGLISH (UK spelling, vocabulary, and usage: e.g. "colourful", "practises" as verb, "mum", "favourite", "neighbour", "centre", "chemist's", "autumn", "holiday", "underground", "shop"). NEVER use American spellings or Americanisms!
 - Every token's "contextualMeaning" MUST be written in clear Brazilian Portuguese (Português do Brasil).
 - Every sentence's "englishTranslation" field MUST contain the natural BRAZILIAN PORTUGUESE translation of the English sentence (so a Brazilian Portuguese speaker can read the translation in Portuguese).
 - Every sentence's "grammarNote" MUST be written in friendly, plain-language BRAZILIAN PORTUGUESE explaining the English sentence pattern for a Brazilian beginner.
-- In "recapModule", write "subtitle", "construction.patternName", "construction.explanation", and all "english" translation fields in BRAZILIAN PORTUGUESE while keeping target sentences/phrases in English.`
+- In "recapModule", write "subtitle", "construction.patternName", "construction.explanation", and all "english" translation fields in BRAZILIAN PORTUGUESE while keeping target sentences/phrases in British English.`
       : `ENGLISH TRANSLATION & GRAMMAR NOTE RULES:
-- Every sentence MUST include "englishTranslation" with a clear, natural English translation of the full sentence.
+- Every sentence MUST include "englishTranslation" with a clear, natural British English translation of the full sentence.
 - Every sentence MUST include a "grammarNote" consisting of a single, plain-English sentence explaining the core recurring sentence pattern used in that sentence, avoiding dense academic jargon.`;
 
   const systemPrompt = `You are a bestselling fiction author and master graded-reader creator trained in Stephen Krashen's Comprehensible Input (i+1) hypothesis and Olly Richards' StoryLearning method.
@@ -15728,10 +15733,10 @@ const CHALLENGE_EXTENSION_BANK = {
   ],
   en: [
     {
-      fullSentence: 'While they walk through the market, Helena practices her English with every friendly shopkeeper she meets.',
+      fullSentence: 'While they walk through the market, Helena practises her English with every friendly shopkeeper she meets.',
       englishTranslation: 'Enquanto elas caminham pelo mercado, Helena pratica seu inglês com cada lojista simpático que ela conhece.',
       romanisation: null,
-      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo.',
+      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo. No inglês britânico, o verbo "praticar" escreve-se com "s": "practises".',
       tokens: [
         { surface: 'While', reading: null, baseForm: 'while', contextualMeaning: 'enquanto' },
         { surface: 'they', reading: null, baseForm: 'they', contextualMeaning: 'elas' },
@@ -15740,7 +15745,7 @@ const CHALLENGE_EXTENSION_BANK = {
         { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
         { surface: 'market,', reading: null, baseForm: 'market', contextualMeaning: 'mercado' },
         { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
-        { surface: 'practices', reading: null, baseForm: 'practice', contextualMeaning: 'pratica' },
+        { surface: 'practises', reading: null, baseForm: 'practise', contextualMeaning: 'pratica' },
         { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
         { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'inglês' },
         { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
@@ -15752,10 +15757,10 @@ const CHALLENGE_EXTENSION_BANK = {
       ],
     },
     {
-      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions right away.',
+      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions straight away.',
       englishTranslation: 'Como ela fala devagar e educadamente, todos entendem suas perguntas imediatamente.',
       romanisation: null,
-      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem).',
+      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem). No inglês britânico, "straight away" significa "imediatamente".',
       tokens: [
         { surface: 'Because', reading: null, baseForm: 'because', contextualMeaning: 'porque / como' },
         { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
@@ -15767,8 +15772,8 @@ const CHALLENGE_EXTENSION_BANK = {
         { surface: 'understands', reading: null, baseForm: 'understand', contextualMeaning: 'entendem (verbo no singular)' },
         { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'suas / dela' },
         { surface: 'questions', reading: null, baseForm: 'question', contextualMeaning: 'perguntas' },
-        { surface: 'right', reading: null, baseForm: 'right', contextualMeaning: 'imediatamente (right away)' },
-        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (right away)' },
+        { surface: 'straight', reading: null, baseForm: 'straight', contextualMeaning: 'imediatamente (straight away)' },
+        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (straight away)' },
       ],
     },
   ],
@@ -15877,7 +15882,7 @@ Rewrite and expand the exact fiction story of this chapter into a LONGER, RICHER
 
   const translationInstructions =
     profile.id === 'en'
-      ? `Every sentence MUST be in English, with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
+      ? `Every sentence MUST be in natural BRITISH ENGLISH (UK spelling and vocabulary), with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
       : `Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
 
   const prompt = `You are an expert language teacher adapting Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).
@@ -16070,9 +16075,11 @@ function TopReaderBar({
               </span>
             )}
 
-            {/* Direct Top-Bar Translation Toggle Button (EN ON/OFF or PT ON/OFF) */}
+            {/* Direct Top-Bar Translation Toggle Switch (EN ON/OFF or PT ON/OFF) */}
             <button
               type="button"
+              role="switch"
+              aria-checked={Boolean(showEnglishTranslation && !strictMode)}
               onClick={onToggleEnglishTranslation}
               disabled={strictMode}
               title={
@@ -16089,23 +16096,36 @@ function TopReaderBar({
                   : `Show ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
               }
               aria-label="Toggle Sentence Translation"
-              className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+              className={`group flex shrink-0 items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                 strictMode
                   ? 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400'
                   : showEnglishTranslation
-                  ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-2xs'
-                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#181D1B] hover:bg-[#EEF2F0]'
+                  ? 'border-[#2D5A46] bg-[#EFF6F2] text-[#1E3F30] shadow-2xs'
+                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#4A5550] hover:bg-[#EEF2F0]'
               }`}
             >
-              <Subtitles className="h-3.5 w-3.5" />
+              <Subtitles className="h-3.5 w-3.5 shrink-0" />
               <span>
                 {isPtBr
-                  ? showEnglishTranslation && !strictMode
-                    ? 'Tradução PT: SIM'
-                    : 'Tradução PT: NÃO'
-                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'} ${
-                      showEnglishTranslation && !strictMode ? 'ON' : 'OFF'
-                    }`}
+                  ? 'Tradução PT'
+                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'}`}
+              </span>
+              <span
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ${
+                  strictMode
+                    ? 'bg-stone-300'
+                    : showEnglishTranslation
+                    ? 'bg-[#2D5A46]'
+                    : 'bg-[#CBD5D0]'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                    showEnglishTranslation && !strictMode
+                      ? 'translate-x-4'
+                      : 'translate-x-0'
+                  }`}
+                />
               </span>
             </button>
 
@@ -22170,7 +22190,7 @@ const COURSE_RECAP_BANK = {
         {
           "word": "next to (ao lado de)",
           "storyContext": "When she puts her bag on the chair next to her, she sees a small blue notebook.",
-          "newPhrase": "The pharmacy is right next to the supermarket on the main street.",
+          "newPhrase": "The chemist's is right next to the supermarket on the high street.",
           "english": "A farmácia fica bem ao lado do supermercado na rua principal."
         },
         {
@@ -22354,7 +22374,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Belongs to » expressa posse ('pertence a')."
           },
           {
-            "speakerA": "Daughter: \"Mom, how is the weather outside in London right now?\"",
+            "speakerA": "Daughter: \"Mum, how is the weather outside in London right now?\"",
             "speakerAEnglish": "Filha: \"Mãe, como está o tempo lá fora em Londres agora?\"",
             "promptEnglish": "Diga que está uma manhã fria, mas o café está quentinho:",
             "correctAnswer": "It is a cold morning outside, but the café is nice and warm.",
@@ -22404,7 +22424,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Inside the small blue notebook, there is a family photo and a white card. »"
           },
           {
-            "audioSentence": "The traveler sits near the window and looks at the red buses on the street.",
+            "audioSentence": "The traveller sits near the window and looks at the red buses on the street.",
             "correctAnswer": "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
             "options": [
               "A viajante se senta perto da janela e olha para os ônibus vermelhos na rua.",
@@ -22412,7 +22432,7 @@ const COURSE_RECAP_BANK = {
               "A viajante pega o ônibus vermelho e desce perto do mercado de flores.",
               "A cliente coloca a bolsa na cadeira e pede um pedaço de bolo quente."
             ],
-            "explanation": "« The traveler sits near the window and looks at the red buses on the street. »"
+            "explanation": "« The traveller sits near the window and looks at the red buses on the street. »"
           },
           {
             "audioSentence": "Excuse me, someone left this phone on the chair next to the door.",
@@ -22598,7 +22618,7 @@ const COURSE_RECAP_BANK = {
         {
           "word": "looking for (procurando)",
           "storyContext": "\"First we are looking for the flower shop.\"",
-          "newPhrase": "We are looking for a pharmacy because my mother needs some medicine.",
+          "newPhrase": "We are looking for a chemist's because my mother needs some medicine.",
           "english": "Nós estamos procurando uma farmácia porque minha mãe precisa de um remédio."
         }
       ],
@@ -22737,12 +22757,12 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa os blocos de direção do capítulo: « It is very close! Walk straight ahead... and turn left at the corner »."
           },
           {
-            "speakerA": "Daughter: \"Hi, Mom! Are you ready to visit the park this morning?\"",
+            "speakerA": "Daughter: \"Hi, Mum! Are you ready to visit the park this morning?\"",
             "speakerAEnglish": "Filha: \"Oi, mãe! Você está pronta para visitar o parque esta manhã?\"",
             "promptEnglish": "Responda que sim, mas primeiro vocês estão procurando a floricultura da rua principal:",
-            "correctAnswer": "Yes, my dear, but first we are looking for the flower shop on the main street.",
+            "correctAnswer": "Yes, my dear, but first we are looking for the flower shop on the high street.",
             "options": [
-              "Yes, my dear, but first we are looking for the flower shop on the main street.",
+              "Yes, my dear, but first we are looking for the flower shop on the high street.",
               "No, it is raining hard and the buses are not running today.",
               "Excuse me, waiter, how much do I pay for the hot milk?",
               "They walk together past the museum every Sunday afternoon."
@@ -22789,17 +22809,17 @@ const COURSE_RECAP_BANK = {
             "explanation": "« How can I get to [Lugar] from here? » é a pergunta curinga para pedir direções."
           },
           {
-            "speakerA": "Traveler: \"Should we take a taxi to the market, or can we walk?\"",
+            "speakerA": "Traveller: \"Should we take a taxi to the market, or can we walk?\"",
             "speakerAEnglish": "Viajante: \"Devemos pegar um táxi até o mercado, ou podemos ir andando?\"",
             "promptEnglish": "Diga que é bem pertinho e vocês podem caminhar juntas passando pelas casas coloridas:",
-            "correctAnswer": "It is very close! We can walk together past the colorful houses.",
+            "correctAnswer": "It is very close! We can walk together past the colourful houses.",
             "options": [
-              "It is very close! We can walk together past the colorful houses.",
+              "It is very close! We can walk together past the colourful houses.",
               "Someone left a white card inside the small blue notebook.",
               "He is waiting for the train at the central station.",
               "I would like a cup of coffee without sugar, please."
             ],
-            "explanation": "Usa « It is very close! » e « walk together past the colorful houses »."
+            "explanation": "Usa « It is very close! » e « walk together past the colourful houses »."
           }
         ],
         "audio_comprehension": [
@@ -22848,7 +22868,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "« Are you ready to visit the museum this morning, or do you want more coffee? »"
           },
           {
-            "audioSentence": "We are looking for the little bakery near the colorful houses.",
+            "audioSentence": "We are looking for the little bakery near the colourful houses.",
             "correctAnswer": "Nós estamos procurando a pequena padaria perto das casas coloridas.",
             "options": [
               "Nós estamos procurando a pequena padaria perto das casas coloridas.",
@@ -22856,7 +22876,7 @@ const COURSE_RECAP_BANK = {
               "Elas estão esperando pelo padeiro na esquina da rua ensolarada.",
               "Eu estou voltando da padaria com pão quente para o café da manhã."
             ],
-            "explanation": "« We are looking for the little bakery near the colorful houses. »"
+            "explanation": "« We are looking for the little bakery near the colourful houses. »"
           },
           {
             "audioSentence": "She pays for her breakfast, thanks the waiter, and steps out onto the sunny street.",
@@ -22995,9 +23015,9 @@ const COURSE_RECAP_BANK = {
               "They walk",
               "together",
               "past",
-              "the colorful houses."
+              "the colourful houses."
             ],
-            "explanation": "Sujeito e verbo (« They walk ») + Modo (« together ») + Preposição de movimento (« past ») + Lugar (« the colorful houses. »)."
+            "explanation": "Sujeito e verbo (« They walk ») + Modo (« together ») + Preposição de movimento (« past ») + Lugar (« the colourful houses. »)."
           }
         ]
       }
@@ -23185,7 +23205,7 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa o imperativo educado « Please take... » com o plural « these yellow flowers »."
           },
           {
-            "speakerA": "Daughter: \"Mom, you look so happy! How was your morning in London?\"",
+            "speakerA": "Daughter: \"Mum, you look so happy! How was your morning in London?\"",
             "speakerAEnglish": "Filha: \"Mãe, você parece tão feliz! Como foi a sua manhã em Londres?\"",
             "promptEnglish": "Diga que você está feliz porque falou inglês a manhã toda e fez uma nova amiga:",
             "correctAnswer": "I am happy because I spoke English all morning and made a wonderful new friend!",
@@ -23211,13 +23231,13 @@ const COURSE_RECAP_BANK = {
             "explanation": "Usa « lovely shop full of yellow roses » ('linda loja cheia de rosas amarelas')."
           },
           {
-            "speakerA": "Customer: \"Excuse me, where is the cashier? I would like to pay for this bouquet.\"",
+            "speakerA": "Customer: \"Excuse me, where is the till? I would like to pay for this bouquet.\"",
             "speakerAEnglish": "Cliente: \"Com licença, onde está o caixa? Eu gostaria de pagar por este buquê.\"",
             "promptEnglish": "Diga que a mulher gentil de cabelos grisalhos está em pé atrás do balcão de madeira:",
             "correctAnswer": "The kind woman with silver hair is standing behind the wooden counter.",
             "options": [
               "The kind woman with silver hair is standing behind the wooden counter.",
-              "We are walking together past the colorful houses on the street.",
+              "We are walking together past the colourful houses on the street.",
               "She took the notebook out of her bag and gave it to me.",
               "What would you like to drink with your cake this afternoon?"
             ],

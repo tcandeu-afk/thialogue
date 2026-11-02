@@ -122,9 +122,11 @@ export default function TopReaderBar({
               </span>
             )}
 
-            {/* Direct Top-Bar Translation Toggle Button (EN ON/OFF or PT ON/OFF) */}
+            {/* Direct Top-Bar Translation Toggle Switch (EN ON/OFF or PT ON/OFF) */}
             <button
               type="button"
+              role="switch"
+              aria-checked={Boolean(showEnglishTranslation && !strictMode)}
               onClick={onToggleEnglishTranslation}
               disabled={strictMode}
               title={
@@ -141,23 +143,36 @@ export default function TopReaderBar({
                   : `Show ${activeProfile?.id === 'en' ? 'Portuguese (BR)' : 'English'} sentence translations`
               }
               aria-label="Toggle Sentence Translation"
-              className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+              className={`group flex shrink-0 items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                 strictMode
                   ? 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400'
                   : showEnglishTranslation
-                  ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-2xs'
-                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#181D1B] hover:bg-[#EEF2F0]'
+                  ? 'border-[#2D5A46] bg-[#EFF6F2] text-[#1E3F30] shadow-2xs'
+                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#4A5550] hover:bg-[#EEF2F0]'
               }`}
             >
-              <Subtitles className="h-3.5 w-3.5" />
+              <Subtitles className="h-3.5 w-3.5 shrink-0" />
               <span>
                 {isPtBr
-                  ? showEnglishTranslation && !strictMode
-                    ? 'Tradução PT: SIM'
-                    : 'Tradução PT: NÃO'
-                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'} ${
-                      showEnglishTranslation && !strictMode ? 'ON' : 'OFF'
-                    }`}
+                  ? 'Tradução PT'
+                  : `${activeProfile?.id === 'en' ? 'PT' : 'EN'}`}
+              </span>
+              <span
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ${
+                  strictMode
+                    ? 'bg-stone-300'
+                    : showEnglishTranslation
+                    ? 'bg-[#2D5A46]'
+                    : 'bg-[#CBD5D0]'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                    showEnglishTranslation && !strictMode
+                      ? 'translate-x-4'
+                      : 'translate-x-0'
+                  }`}
+                />
               </span>
             </button>
 
