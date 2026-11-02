@@ -16136,9 +16136,11 @@ function TopReaderBar({
               </span>
             </button>
 
-            {/* Safari Reader-Inspired "Text & Sound Only" Quick Toggle (AA Reader) */}
+            {/* Safari Reader-Inspired "Text & Sound Only" Quick Toggle Switch (AA Reader) */}
             <button
               type="button"
+              role="switch"
+              aria-checked={Boolean(readerOnlyMode)}
               onClick={onToggleReaderOnlyMode}
               title={
                 readerOnlyMode
@@ -16150,23 +16152,28 @@ function TopReaderBar({
                   : 'Reader View: Simplified Text & Sound Only (Safari Reader style)'
               }
               aria-label="Toggle Simplified Text and Sound Only Reader View"
-              className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+              className={`group flex shrink-0 items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                 readerOnlyMode
-                  ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-2xs'
-                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#181D1B] hover:bg-[#EEF2F0]'
+                  ? 'border-[#2D5A46] bg-[#EFF6F2] text-[#1E3F30] shadow-2xs'
+                  : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#4A5550] hover:bg-[#EEF2F0]'
               }`}
             >
               <span className="font-serif text-[13px] font-bold leading-none tracking-tight">
                 AA
               </span>
               <span className="hidden xs:inline sm:inline">
-                {readerOnlyMode
-                  ? isPtBr
-                    ? 'Leitura ATIVA'
-                    : 'Reader ON'
-                  : isPtBr
-                  ? 'Modo Leitura'
-                  : 'Reader'}
+                {isPtBr ? 'Modo Leitura' : 'Reader'}
+              </span>
+              <span
+                className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ${
+                  readerOnlyMode ? 'bg-[#2D5A46]' : 'bg-[#CBD5D0]'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                    readerOnlyMode ? 'translate-x-4' : 'translate-x-0'
+                  }`}
+                />
               </span>
             </button>
 
