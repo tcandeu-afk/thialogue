@@ -23908,7 +23908,7 @@ function ChapterRecapSection({
     if (typeof window === 'undefined') return;
     const doScroll = () => {
       try {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
         if (document.documentElement) document.documentElement.scrollTop = 0;
         if (document.body) document.body.scrollTop = 0;
         const storyBox = document.querySelector('.story-scroll-box');
@@ -23919,7 +23919,8 @@ function ChapterRecapSection({
     };
     doScroll();
     requestAnimationFrame(doScroll);
-    setTimeout(doScroll, 80);
+    setTimeout(doScroll, 50);
+    setTimeout(doScroll, 150);
   };
 
   const onNextChapter =
@@ -25116,7 +25117,12 @@ function InteractiveReader({
     setSentenceAudioState({ sentenceKey: null, status: 'idle', tokenIndex: null });
     lastScrolledSentenceRef.current = null;
     if (storyScrollContainerRef.current) {
-      storyScrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      storyScrollContainerRef.current.scrollTop = 0;
+    }
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
     }
   }, [strictMode, chapter?.id, profile?.id]);
 
@@ -25579,7 +25585,7 @@ function InteractiveReader({
       {/* Main Pre-Tokenised Story Body (Independent Auto-Scroll Container with Visible Right-Edge Scrollbar) */}
       <div
         ref={storyScrollContainerRef}
-        className="story-scroll-box max-h-[58vh] overflow-y-scroll pr-3 space-y-5 scroll-smooth rounded-xl border border-[#E6ECE9] bg-[#F9FBF9]/60 p-3"
+        className="story-scroll-box max-h-[58vh] overflow-y-scroll pr-3 space-y-5 rounded-xl border border-[#E6ECE9] bg-[#F9FBF9]/60 p-3"
       >
         {(chapter.sentences || []).map((sentence, sIdx) => {
           const isGrammarOpen = Boolean(openGrammarNotes[sIdx]);
@@ -27227,18 +27233,25 @@ function App() {
     if (typeof window === 'undefined') return;
     const doScroll = () => {
       try {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-        if (document.documentElement) document.documentElement.scrollTop = 0;
-        if (document.body) document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
+        if (document.documentElement) {
+          document.documentElement.scrollTop = 0;
+        }
+        if (document.body) {
+          document.body.scrollTop = 0;
+        }
         const storyBox = document.querySelector('.story-scroll-box');
-        if (storyBox) storyBox.scrollTop = 0;
+        if (storyBox) {
+          storyBox.scrollTop = 0;
+        }
       } catch {
         // ignore
       }
     };
     doScroll();
     requestAnimationFrame(doScroll);
-    setTimeout(doScroll, 80);
+    setTimeout(doScroll, 50);
+    setTimeout(doScroll, 150);
   };
 
   const handleSelectChapterIndex = (nextIdx) => {

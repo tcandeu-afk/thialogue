@@ -6814,7 +6814,7 @@ export default function ChapterRecapSection({
     if (typeof window === 'undefined') return;
     const doScroll = () => {
       try {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
         if (document.documentElement) document.documentElement.scrollTop = 0;
         if (document.body) document.body.scrollTop = 0;
         const storyBox = document.querySelector('.story-scroll-box');
@@ -6825,7 +6825,8 @@ export default function ChapterRecapSection({
     };
     doScroll();
     requestAnimationFrame(doScroll);
-    setTimeout(doScroll, 80);
+    setTimeout(doScroll, 50);
+    setTimeout(doScroll, 150);
   };
 
   const onNextChapter =
