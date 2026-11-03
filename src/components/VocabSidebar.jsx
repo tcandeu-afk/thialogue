@@ -13,6 +13,8 @@ import {
   ArrowLeftRight,
   Loader2,
   X,
+  Lightbulb,
+  Check,
 } from 'lucide-react';
 import { speakSingleWord } from '../services/audioService';
 import {
@@ -20,7 +22,10 @@ import {
   normalizeLexeme,
   isProperNounOrNonLexicalToken,
 } from '../services/storageService';
-import { lookupDictionaryWordOrPhrase } from '../services/translateService';
+import {
+  lookupDictionaryWordOrPhrase,
+  getCuratedWordUsageData,
+} from '../services/translateService';
 import { ACQUISITION_EXPOSURE_THRESHOLD } from '../types/schema';
 
 export default function VocabSidebar({
@@ -38,6 +43,12 @@ export default function VocabSidebar({
   const [isLookingUp, setIsLookingUp] = useState(false);
   const [dictError, setDictError] = useState(null);
   const [justAddedToBank, setJustAddedToBank] = useState(false);
+
+  // Popup modal state for inspecting a word from the Chapter Word Table
+  const [inspectedWord, setInspectedWord] = useState(null);
+  const [inspectedDictData, setInspectedDictData] = useState(null);
+  const [isInspectingDict, setIsInspectingDict] = useState(false);
+  const [inspectedSaved, setInspectedSaved] = useState(false);
 
   const vocabBank = (profile?.vocabBank || []).filter(
     (w) => !isProperNounOrNonLexicalToken(w)
@@ -132,6 +143,33 @@ export default function VocabSidebar({
   const helperLangLabel = profile?.id === 'en' ? 'Português (BR)' : 'English';
   const isPtBr = profile?.id === 'en';
   const targetLangShort = isPtBr ? 'Inglês' : profile.name.split(' ')[0];
+
+  const handleInspectChapterWord = async (wordItem) => {
+    const usageData = getCuratedWordUsageData(wordItem, chapter, profile);
+    setInspectedWord({
+      ...wordItem,
+      ...usageData,
+    });
+    setInspectedDictData(null);
+    setInspectedSaved(false);
+    setIsInspectingDict(true);
+
+    speakSingleWord(wordItem.surface, profile.bcp47);
+
+    const helperCode = isPtBr ? 'pt' : 'en';
+    try {
+      const res = await lookupDictionaryWordOrPhrase({
+        query: wordItem.baseForm || wordItem.surface,
+        sourceLang: profile.translateCode,
+        targetLang: helperCode,
+      });
+      setInspectedDictData(res);
+    } catch {
+      // Keep curated + chapter usage even if offline
+    } finally {
+      setIsInspectingDict(false);
+    }
+  };
 
   return (
     <aside className="space-y-4">
@@ -363,15 +401,22 @@ export default function VocabSidebar({
       {/* 3. Chapter Word Vocab Table (Full Alphabetical Reference Table without inner scrollbar) */}
       <div className="rounded-2xl border border-[#D5E1E8] bg-[#FFFFFF] p-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-[#E8ECEA] pb-2.5">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
-            <BookOpen className="h-4 w-4 text-[#234E68]" />
-            <span>
+          <div>
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
+              <BookOpen className="h-4 w-4 text-[#234E68]" />
+              <span>
+                {isPtBr
+                  ? `Palavras do Capítulo ${chapter?.chapterNumber || 1} (A–Z)`
+                  : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table (A–Z)`}
+              </span>
+            </div>
+            <p className="mt-0.5 text-[11px] text-[#5C6661]">
               {isPtBr
-                ? `Palavras do Capítulo ${chapter?.chapterNumber || 1} (A–Z)`
-                : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table (A–Z)`}
-            </span>
+                ? 'Clique em qualquer palavra para ver exemplos de uso no dia a dia e variações.'
+                : 'Click any word to open everyday examples, nuances, and variations.'}
+            </p>
           </div>
-          <span className="rounded-full border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54]">
+          <span className="shrink-0 rounded-full border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54]">
             {isPtBr
               ? `${uniqueChapterWords.length} Palavras`
               : `${uniqueChapterWords.length} Words`}
@@ -397,23 +442,24 @@ export default function VocabSidebar({
               {uniqueChapterWords.map((item, idx) => (
                 <tr
                   key={`${item.baseForm}-${idx}`}
-                  className="transition hover:bg-[#F4F8FA]"
+                  onClick={() => handleInspectChapterWord(item)}
+                  className="group cursor-pointer transition hover:bg-[#EDF5FA]"
                 >
                   <td className="py-2 pr-2 align-top">
                     <button
                       type="button"
-                      onClick={() => {
-                        speakSingleWord(item.surface, profile.bcp47);
-                        onAddCustomVocabWord?.(item);
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleInspectChapterWord(item);
                       }}
-                      className="text-left font-serif text-sm font-bold text-[#181D1B] hover:text-[#234E68] cursor-pointer"
+                      className="inline-flex items-center gap-1 text-left font-serif text-sm font-bold text-[#181D1B] underline decoration-[#B5C9D6] decoration-dotted underline-offset-4 group-hover:text-[#234E68] group-hover:decoration-[#234E68] cursor-pointer"
                       title={
                         isPtBr
-                          ? 'Clique para ouvir a pronúncia e salvar no Banco de Vocabulário'
-                          : 'Click to pronounce and save to Vocab Bank'
+                          ? 'Clique para ver exemplos do dia a dia e variações desta palavra'
+                          : 'Click to see everyday examples and variations for this word'
                       }
                     >
-                      {item.surface}
+                      <span>{item.surface}</span>
                     </button>
                     {item.reading && (
                       <span className="ml-1 text-[10px] font-medium text-[#525A78]">
@@ -433,7 +479,10 @@ export default function VocabSidebar({
                   <td className="py-2 pl-1 align-top text-right">
                     <button
                       type="button"
-                      onClick={() => speakSingleWord(item.surface, profile.bcp47)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speakSingleWord(item.surface, profile.bcp47);
+                      }}
                       className="inline-flex items-center justify-center rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6] cursor-pointer"
                       title={
                         isPtBr
@@ -450,6 +499,246 @@ export default function VocabSidebar({
           </table>
         </div>
       </div>
+
+      {/* Everyday Usage & Variations Popup Modal when clicking any word in the Chapter Table */}
+      {inspectedWord && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-xs"
+          onClick={() => setInspectedWord(null)}
+        >
+          <div
+            className="relative max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-[#C9DCE8] bg-[#FFFFFF] p-5 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between gap-3 border-b border-[#E6ECE9] pb-3.5">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-serif text-2xl font-bold text-[#181D1B]">
+                    {inspectedWord.surface}
+                  </span>
+                  {inspectedWord.reading && (
+                    <span className="rounded-md border border-[#D5D9E8] bg-[#F4F6FB] px-2 py-0.5 text-xs font-medium text-[#3E4563]">
+                      {inspectedWord.reading}
+                    </span>
+                  )}
+                  {inspectedWord.baseForm &&
+                    normalizeLexeme(inspectedWord.baseForm) !==
+                      normalizeLexeme(inspectedWord.surface) && (
+                      <span className="rounded-md bg-[#F1F5F3] px-2 py-0.5 text-xs italic text-[#5C6661]">
+                        base: {inspectedWord.baseForm}
+                      </span>
+                    )}
+                </div>
+                <p className="mt-1 text-sm font-semibold text-[#234E68]">
+                  {isPtBr ? 'No capítulo:' : 'In this chapter:'}{' '}
+                  <span className="text-[#181D1B]">
+                    {inspectedWord.contextualMeaning}
+                  </span>
+                </p>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => speakSingleWord(inspectedWord.surface, profile.bcp47)}
+                  className="inline-flex items-center gap-1 rounded-xl border border-[#C9DCE8] bg-[#F1F6FA] px-2.5 py-1.5 text-xs font-semibold text-[#234E68] hover:bg-[#E2EEF6] cursor-pointer"
+                  title={isPtBr ? 'Ouvir pronúncia' : 'Listen to pronunciation'}
+                >
+                  <Volume2 className="h-4 w-4" />
+                  <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onAddCustomVocabWord?.(inspectedWord);
+                    setInspectedSaved(true);
+                  }}
+                  className={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
+                    inspectedSaved
+                      ? 'bg-[#2D5A46] text-white'
+                      : 'bg-[#234E68] text-white hover:bg-[#1B3E54]'
+                  }`}
+                >
+                  {inspectedSaved ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" />
+                      <span>{isPtBr ? 'Salva' : 'Saved'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>{isPtBr ? 'Salvar no Banco' : 'Save to Bank'}</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setInspectedWord(null)}
+                  className="rounded-xl p-1.5 text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B] cursor-pointer"
+                  aria-label="Close"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-4">
+              {/* 1. Nuance / False-Friend / Preposition Note */}
+              {inspectedWord.nuanceNote && (
+                <div className="rounded-xl border border-[#E6D5B8] bg-[#FDF9F1] p-3.5">
+                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#8A5A19]">
+                    <Lightbulb className="h-4 w-4 text-[#C68628]" />
+                    <span>
+                      {isPtBr
+                        ? 'Dica de Uso e Nuances no Dia a Dia'
+                        : 'Everyday Usage & Nuance Tip'}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#2C3531]">
+                    {inspectedWord.nuanceNote}
+                  </p>
+                </div>
+              )}
+
+              {/* 2. Common Variations & Expressions */}
+              {Array.isArray(inspectedWord.variations) &&
+                inspectedWord.variations.length > 0 && (
+                  <div className="rounded-xl border border-[#D5E4EE] bg-[#F4F9FC] p-3.5">
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#234E68]">
+                      {isPtBr
+                        ? 'Variações e Expressões Comuns'
+                        : 'Common Variations & Expressions'}
+                    </div>
+                    <ul className="mt-2 space-y-1.5">
+                      {inspectedWord.variations.map((v, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-xs font-medium text-[#181D1B]"
+                        >
+                          <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#234E68]" />
+                          <span>{v}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+              {/* 3. Live Dictionary Meanings & Alternatives (from Google Dictionary endpoint) */}
+              {isInspectingDict && (
+                <div className="flex items-center gap-2 text-xs text-[#5C6661]">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#234E68]" />
+                  <span>
+                    {isPtBr
+                      ? 'Buscando outros significados no dicionário...'
+                      : 'Loading additional dictionary meanings...'}
+                  </span>
+                </div>
+              )}
+
+              {inspectedDictData &&
+                Array.isArray(inspectedDictData.dictionaryEntries) &&
+                inspectedDictData.dictionaryEntries.length > 0 && (
+                  <div className="rounded-xl border border-[#E2E8E5] bg-[#F9FBF9] p-3.5">
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#2F4F42]">
+                      {isPtBr
+                        ? 'Outros Significados e Categorias'
+                        : 'Other Meanings & Parts of Speech'}
+                    </div>
+                    <div className="mt-2 space-y-1.5">
+                      {inspectedDictData.dictionaryEntries.map((entry, idx) => (
+                        <div key={idx} className="text-xs">
+                          <span className="font-semibold italic text-[#234E68]">
+                            {entry.partOfSpeech}:{' '}
+                          </span>
+                          <span className="text-[#181D1B]">
+                            {entry.terms.join(', ')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* 4. Practical Everyday Examples */}
+              {Array.isArray(inspectedWord.examples) &&
+                inspectedWord.examples.length > 0 && (
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#234E68]">
+                      {isPtBr
+                        ? 'Exemplos Práticos no Dia a Dia'
+                        : 'Practical Everyday Examples'}
+                    </div>
+                    <div className="mt-2 space-y-2">
+                      {inspectedWord.examples.map((ex, i) => (
+                        <div
+                          key={i}
+                          className="flex items-start justify-between gap-2 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] p-3"
+                        >
+                          <div>
+                            <p className="font-serif text-sm font-bold text-[#181D1B]">
+                              {ex.target}
+                            </p>
+                            <p className="mt-0.5 text-xs text-[#5C6661]">
+                              {ex.translation}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => speakSingleWord(ex.target, profile.bcp47)}
+                            className="shrink-0 rounded-lg border border-[#DCE2DF] bg-white p-1.5 text-[#234E68] hover:bg-[#E4EFF6] cursor-pointer"
+                            title={isPtBr ? 'Ouvir frase' : 'Listen to example'}
+                          >
+                            <Volume2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* 5. How it appears in this chapter */}
+              {Array.isArray(inspectedWord.chapterMatches) &&
+                inspectedWord.chapterMatches.length > 0 && (
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#5C6661]">
+                      {isPtBr
+                        ? 'Como Aparece Neste Capítulo'
+                        : 'How It Appears in This Chapter'}
+                    </div>
+                    <div className="mt-2 space-y-2">
+                      {inspectedWord.chapterMatches.map((m, i) => (
+                        <div
+                          key={i}
+                          className="flex items-start justify-between gap-2 rounded-xl border border-[#E8ECEA] bg-[#FFFFFF] p-3"
+                        >
+                          <div>
+                            <p className="font-serif text-sm font-medium text-[#181D1B]">
+                              {m.target}
+                            </p>
+                            <p className="mt-0.5 text-xs text-[#5C6661]">
+                              {m.translation}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => speakSingleWord(m.target, profile.bcp47)}
+                            className="shrink-0 rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6] cursor-pointer"
+                            title={isPtBr ? 'Ouvir frase da história' : 'Listen to story sentence'}
+                          >
+                            <Volume2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
