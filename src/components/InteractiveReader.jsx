@@ -258,193 +258,223 @@ export default function InteractiveReader({
   ];
 
   return (
-    <article
-      className={`relative rounded-2xl border border-[#E2E7E4] bg-[#FFFFFF] shadow-2xs ${
-        readerOnlyMode ? 'p-5 sm:p-11' : 'p-4 sm:p-9'
-      }`}
-    >
-      {/* Streamlined Editorial Story Header */}
-      <div className="mb-6 border-b border-[#E8ECEA] pb-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#234E68]">
-              <span>{profile.storyTitle}</span>
-              <span className="text-[#87928D]">•</span>
-              <span className="rounded-md border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[#1E3F54]">
-                {chapter.difficultyLabel || profile.cefrLevel}
+    <div className="space-y-6">
+      <article
+        className={`relative rounded-2xl border border-[#DCE2DF] bg-[#FFFFFF] shadow-sm ${
+          readerOnlyMode ? 'p-5 sm:p-11' : 'p-4 sm:p-8'
+        }`}
+      >
+        {/* Streamlined Editorial Story Header */}
+        <div className="mb-6 border-b border-[#E8ECEA] pb-5">
+          {!readerOnlyMode && (
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#234E68] text-xs font-bold text-white shadow-2xs">
+                1
               </span>
-              {readerOnlyMode && (
-                <span className="rounded-md border border-[#CDE0D6] bg-[#EFF6F2] px-2 py-0.5 text-[#285943]">
-                  {isPtBr ? 'Modo Leitura' : 'Reader View'}
-                </span>
-              )}
+              <span className="text-xs font-bold uppercase tracking-wider text-[#234E68]">
+                {isPtBr
+                  ? 'Etapa 1 • Leitura e Escuta da História'
+                  : 'Step 1 • Read & Listen to the Story'}
+              </span>
             </div>
-            <h2 className="font-serif text-2xl font-bold tracking-tight text-[#181D1B] sm:text-3xl">
-              {chapter.chapterTitle}
-            </h2>
-          </div>
+          )}
 
-          {/* Unified Chapter Pill Switcher */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            {chapters.map((ch, idx) => {
-              const isActive = idx === chapterIndex;
-              return (
-                <div
-                  key={ch.id || idx}
-                  className={`inline-flex items-center rounded-xl border text-xs font-semibold transition ${
-                    isActive
-                      ? 'border-[#234E68] bg-[#234E68] text-white shadow-sm'
-                      : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => onSelectChapterIndex(idx)}
-                    className="px-3 py-1.5 cursor-pointer focus:outline-none"
-                  >
-                    {isPtBr ? `Capítulo ${idx + 1}` : `Chapter ${idx + 1}`}
-                  </button>
-                  {!readerOnlyMode && totalChapters > 1 && onDeleteChapter && idx >= 3 && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteChapter(idx);
-                      }}
-                      title={
-                        isPtBr
-                          ? `Excluir Capítulo ${idx + 1}`
-                          : `Delete Chapter ${idx + 1}`
-                      }
-                      aria-label={
-                        isPtBr
-                          ? `Excluir Capítulo ${idx + 1}`
-                          : `Delete Chapter ${idx + 1}`
-                      }
-                      className={`mr-1 flex h-4 w-4 items-center justify-center rounded-full transition ${
-                        isActive
-                          ? 'text-[#C6D8E4] hover:bg-white/20 hover:text-white'
-                          : 'text-[#87928D] hover:bg-[#DCE2DF] hover:text-[#181D1B]'
-                      }`}
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-
-            {!readerOnlyMode && (
-              <button
-                type="button"
-                disabled={isGeneratingChapter}
-                onClick={() => onGenerateNextChapter('maintain')}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-70 cursor-pointer"
-                title={isPtBr ? 'Gerar próximo capítulo' : 'Generate next chapter'}
-              >
-                {isGeneratingChapter ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
-                    <span className="text-[#EA580C]">
-                      {isPtBr
-                        ? `Gerando Capítulo ${totalChapters + 1}...`
-                        : `Generating Chapter ${totalChapters + 1}...`}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-3.5 w-3.5" />
-                    <span>
-                      {isPtBr ? `Capítulo ${totalChapters + 1}` : `Chapter ${totalChapters + 1}`}
-                    </span>
-                  </>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#234E68]">
+                <span>{profile.storyTitle}</span>
+                <span className="text-[#87928D]">•</span>
+                <span className="rounded-md border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[#1E3F54]">
+                  {chapter.difficultyLabel || profile.cefrLevel}
+                </span>
+                {readerOnlyMode && (
+                  <span className="rounded-md border border-[#CDE0D6] bg-[#EFF6F2] px-2 py-0.5 text-[#285943]">
+                    {isPtBr ? 'Modo Leitura' : 'Reader View'}
+                  </span>
                 )}
-              </button>
-            )}
+              </div>
+              <h2 className="font-serif text-2xl font-bold tracking-tight text-[#181D1B] sm:text-3xl">
+                {chapter.chapterTitle}
+              </h2>
+            </div>
 
-            {readerOnlyMode && onToggleReaderOnlyMode && (
-              <button
-                type="button"
-                onClick={onToggleReaderOnlyMode}
-                className="inline-flex items-center gap-1 rounded-xl border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#4A5550] transition hover:bg-[#EEF2F0] hover:text-[#181D1B]"
-                title={isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader View'}
-              >
-                <span>{isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader'}</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Single Compact Sub-Toolbar: Difficulty Level + Reading Legend (Hidden in Reader View) */}
-        {!readerOnlyMode && (
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2">
+            {/* Unified Chapter Pill Switcher */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
-                {isPtBr ? 'Nível:' : 'Level:'}
-              </span>
-              {difficultyOptions.map((opt) => {
-                const isSelected = activeDifficulty === opt.id;
+              {chapters.map((ch, idx) => {
+                const isActive = idx === chapterIndex;
                 return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    disabled={isGeneratingChapter}
-                    onClick={() => onSelectDifficultyLevel?.(opt.id)}
-                    className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition cursor-pointer disabled:opacity-50 ${
-                      isSelected
-                        ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-sm'
-                        : 'border-[#DCE2DF] bg-[#FFFFFF] text-[#4A5550] hover:border-[#2D5A46] hover:text-[#181D1B]'
+                  <div
+                    key={ch.id || idx}
+                    className={`inline-flex items-center rounded-xl border text-xs font-semibold transition ${
+                      isActive
+                        ? 'border-[#234E68] bg-[#234E68] text-white shadow-sm'
+                        : 'border-[#DCE2DF] bg-[#F7F9F8] text-[#5C6661] hover:bg-[#EEF2F0] hover:text-[#181D1B]'
                     }`}
                   >
-                    {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
-                    <span>
-                      {opt.id === 'simplify'
-                        ? isPtBr
-                          ? 'Mais Simples'
-                          : 'Simpler'
-                        : opt.id === 'maintain'
-                        ? isPtBr
-                          ? 'Padrão'
-                          : 'Standard'
-                        : isPtBr
-                        ? 'Mais Complexo'
-                        : 'More Complex'}
-                    </span>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => onSelectChapterIndex(idx)}
+                      className="px-3 py-1.5 cursor-pointer focus:outline-none"
+                    >
+                      {isPtBr ? `Capítulo ${idx + 1}` : `Chapter ${idx + 1}`}
+                    </button>
+                    {!readerOnlyMode && totalChapters > 1 && onDeleteChapter && idx >= 3 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteChapter(idx);
+                        }}
+                        title={
+                          isPtBr
+                            ? `Excluir Capítulo ${idx + 1}`
+                            : `Delete Chapter ${idx + 1}`
+                        }
+                        aria-label={
+                          isPtBr
+                            ? `Excluir Capítulo ${idx + 1}`
+                            : `Delete Chapter ${idx + 1}`
+                        }
+                        className={`mr-1 flex h-4 w-4 items-center justify-center rounded-full transition ${
+                          isActive
+                            ? 'text-[#C6D8E4] hover:bg-white/20 hover:text-white'
+                            : 'text-[#87928D] hover:bg-[#DCE2DF] hover:text-[#181D1B]'
+                        }`}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
                 );
               })}
-            </div>
 
-            {strictMode ? (
-              <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#7A3E33]">
-                <EyeOff className="h-3.5 w-3.5 shrink-0 text-[#8C4A3E]" />
-                <span>
-                  {isPtBr
-                    ? 'Modo Sem Dicas ATIVO (Leitura direta)'
-                    : 'Strict Mode ON (Uninterrupted reading)'}
-                </span>
-              </div>
-            ) : (
-              <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#5C6661]">
-                <span>
-                  {isPtBr
-                    ? 'Toque em qualquer palavra para ver a tradução e ouvir a pronúncia'
-                    : 'Tap any word for instant meaning & audio'}
-                </span>
-                <span className="hidden sm:inline text-[#C5CECA]">•</span>
-                <span className="inline-flex items-center gap-1 font-medium text-[#7C581E]">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#C9963E]" />
-                  {isPtBr ? 'Aprendendo' : 'Learning'}
-                </span>
-                <span className="inline-flex items-center gap-1 font-medium text-[#285943]">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#3B7A57]" />
-                  {isPtBr ? 'Aprendida' : 'Acquired'}
-                </span>
-              </div>
-            )}
+              {!readerOnlyMode && (
+                <button
+                  type="button"
+                  disabled={isGeneratingChapter}
+                  onClick={() => onGenerateNextChapter('maintain')}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-[#8AAEC4] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#234E68] transition hover:bg-[#E4EFF6] disabled:opacity-70 cursor-pointer"
+                  title={isPtBr ? 'Gerar próximo capítulo' : 'Generate next chapter'}
+                >
+                  {isGeneratingChapter ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA580C]" />
+                      <span className="text-[#EA580C]">
+                        {isPtBr
+                          ? `Gerando Capítulo ${totalChapters + 1}...`
+                          : `Generating Chapter ${totalChapters + 1}...`}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>
+                        {isPtBr ? `Capítulo ${totalChapters + 1}` : `Chapter ${totalChapters + 1}`}
+                      </span>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {readerOnlyMode && onToggleReaderOnlyMode && (
+                <button
+                  type="button"
+                  onClick={onToggleReaderOnlyMode}
+                  className="inline-flex items-center gap-1 rounded-xl border border-[#DCE2DF] bg-[#F7F9F8] px-2.5 py-1.5 text-xs font-semibold text-[#4A5550] transition hover:bg-[#EEF2F0] hover:text-[#181D1B]"
+                  title={isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader View'}
+                >
+                  <span>{isPtBr ? 'Sair do Modo Leitura' : 'Exit Reader'}</span>
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+
+          {/* Single Compact Sub-Toolbar: Difficulty Level + New Story Variant + Reading Hint */}
+          {!readerOnlyMode && (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2.5">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
+                  {isPtBr ? 'Nível:' : 'Level:'}
+                </span>
+                {difficultyOptions.map((opt) => {
+                  const isSelected = activeDifficulty === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      disabled={isGeneratingChapter}
+                      onClick={() => onSelectDifficultyLevel?.(opt.id)}
+                      className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition cursor-pointer disabled:opacity-50 ${
+                        isSelected
+                          ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-sm'
+                          : 'border-[#DCE2DF] bg-[#FFFFFF] text-[#4A5550] hover:border-[#2D5A46] hover:text-[#181D1B]'
+                      }`}
+                    >
+                      {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
+                      <span>
+                        {opt.id === 'simplify'
+                          ? isPtBr
+                            ? 'Mais Simples'
+                            : 'Simpler'
+                          : opt.id === 'maintain'
+                          ? isPtBr
+                            ? 'Padrão'
+                            : 'Standard'
+                          : isPtBr
+                          ? 'Mais Complexo'
+                          : 'More Complex'}
+                      </span>
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  disabled={isGeneratingChapter}
+                  onClick={onRegenerateCurrentChapter}
+                  className="ml-1 inline-flex items-center gap-1 rounded-lg border border-[#94B8CE] bg-[#F1F6FA] px-2.5 py-1 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E3EEF5] cursor-pointer disabled:opacity-50"
+                  title={
+                    isPtBr
+                      ? 'Gerar uma nova variação desta história para praticar mais'
+                      : 'Generate a fresh story with new vocabulary for this chapter'
+                  }
+                >
+                  {isGeneratingChapter ? (
+                    <Loader2 className="h-3 w-3 animate-spin text-[#234E68]" />
+                  ) : (
+                    <RefreshCw className="h-3 w-3 text-[#234E68]" />
+                  )}
+                  <span>{isPtBr ? 'Nova Variação' : 'New Variant'}</span>
+                </button>
+              </div>
+
+              {strictMode ? (
+                <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#7A3E33]">
+                  <EyeOff className="h-3.5 w-3.5 shrink-0 text-[#8C4A3E]" />
+                  <span>
+                    {isPtBr
+                      ? 'Modo Sem Dicas ATIVO (Leitura direta)'
+                      : 'Strict Mode ON (Uninterrupted reading)'}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#5C6661]">
+                  <span>
+                    {isPtBr
+                      ? 'Dica: Toque em qualquer palavra para ver a tradução e ouvir a pronúncia'
+                      : 'Tip: Tap any word for instant meaning & audio'}
+                  </span>
+                </div>
+              )}
+
+              {generationError && (
+                <div className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-900">
+                  {generationError}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
       {/* Floating Zero-Latency Word Meaning & Pronunciation Box (Always visible in viewport without scrolling!) */}
       {!strictMode && selectedTokenInfo && (
@@ -783,85 +813,31 @@ export default function InteractiveReader({
         })}
       </div>
 
-      {/* Recycled Target Vocabulary Pill Summary (Hidden in Reader View) */}
-      {!readerOnlyMode &&
-        Array.isArray(chapter.recycledWordsUsed) &&
-        chapter.recycledWordsUsed.length > 0 && (
-          <div className="mt-8 border-t border-[#E8ECEA] pt-4">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#5C6661]">
-              <span className="font-semibold text-[#181D1B]">
-                {isPtBr
-                  ? 'Palavras-Alvo Praticadas Neste Capítulo:'
-                  : 'Target Words Woven Into This Chapter:'}
-              </span>
-              {chapter.recycledWordsUsed.map((word, idx) => (
-                <span
-                  key={idx}
-                  className="rounded-md border border-[#E8D7B4] bg-[#FDF8EE] px-2 py-0.5 font-medium text-[#7C581E]"
-                >
-                  {word}
+        {/* Recycled Target Vocabulary Pill Summary (Hidden in Reader View) */}
+        {!readerOnlyMode &&
+          Array.isArray(chapter.recycledWordsUsed) &&
+          chapter.recycledWordsUsed.length > 0 && (
+            <div className="mt-5 border-t border-[#E8ECEA] pt-3.5">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#5C6661]">
+                <span className="font-semibold text-[#181D1B]">
+                  {isPtBr
+                    ? 'Palavras Praticadas Neste Capítulo:'
+                    : 'Target Words Woven Into This Chapter:'}
                 </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-      {/* Compact Story Adaptation Bar right below the story text (Hidden in Reader View) */}
-      {!readerOnlyMode && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E2E7E4] bg-[#F8FAF9] px-4 py-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-semibold text-[#4A5550]">
-              {isPtBr ? 'Nível da História:' : 'Story Level:'}
-            </span>
-            {difficultyOptions.map((opt) => {
-              const isSelected = activeDifficulty === opt.id;
-              return (
-                <button
-                  key={opt.id}
-                  type="button"
-                  disabled={isGeneratingChapter}
-                  onClick={() => onSelectDifficultyLevel?.(opt.id)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold transition cursor-pointer disabled:opacity-50 ${
-                    isSelected
-                      ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-sm'
-                      : 'border-[#DCE2DF] bg-[#FFFFFF] text-[#4A5550] hover:border-[#2D5A46] hover:text-[#181D1B]'
-                  }`}
-                >
-                  {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
-                  <span>{opt.shortLabel}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <button
-            type="button"
-            disabled={isGeneratingChapter}
-            onClick={onRegenerateCurrentChapter}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#94B8CE] bg-[#F1F6FA] px-3 py-1.5 text-xs font-semibold text-[#1E3F54] transition hover:bg-[#E3EEF5] cursor-pointer disabled:opacity-50"
-            title={
-              isPtBr
-                ? 'Gerar uma nova variação desta história para praticar mais'
-                : 'Generate a fresh story with new vocabulary for this chapter'
-            }
-          >
-            {isGeneratingChapter ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#234E68]" />
-            ) : (
-              <RefreshCw className="h-3.5 w-3.5 text-[#234E68]" />
-            )}
-            <span>{isPtBr ? 'Nova Variação da História' : 'New Story Variant'}</span>
-          </button>
-
-          {generationError && (
-            <div className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-900">
-              {generationError}
+                {chapter.recycledWordsUsed.map((word, idx) => (
+                  <span
+                    key={idx}
+                    className="rounded-md border border-[#E8D7B4] bg-[#FDF8EE] px-2 py-0.5 font-medium text-[#7C581E]"
+                  >
+                    {word}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
-        </div>
-      )}
+      </article>
 
-      {/* End-of-Chapter Learning Consolidation & Active-Recall Recap (Hidden in Reader View) */}
+      {/* Steps 2 & 3: End-of-Chapter Learning Consolidation & Active-Recall Recap (Hidden in Reader View) */}
       {!readerOnlyMode && (
         <ChapterRecapSection
           profile={profile}
@@ -873,6 +849,6 @@ export default function InteractiveReader({
           isGeneratingChapter={isGeneratingChapter}
         />
       )}
-    </article>
+    </div>
   );
 }

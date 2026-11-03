@@ -7001,350 +7001,239 @@ export default function ChapterRecapSection({
       : activeExercises;
 
   return (
-    <section
-      className="mt-10 pt-8 border-t border-[#E2E7E4]"
-      aria-label="Chapter Consolidation & Active Recall"
-    >
-      {/* Streamlined Header Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-[#FDF8F3] via-[#FAF6F0] to-[#F5F7F6] border border-[#E8D7C3] p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-orange-800 text-[11px] font-bold tracking-wider uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-orange-600 shrink-0" />
-              <span>
+    <div className="space-y-6" aria-label="Chapter Consolidation & Active Recall">
+      {/* ===================================================================== */}
+      {/* SECTION 2: EXPRESSIONS & SENTENCE STRUCTURE FROM THE CHAPTER          */}
+      {/* ===================================================================== */}
+      {(vocabReuses.length > 0 || construction) && (
+        <section className="rounded-2xl border border-[#DCE2DF] bg-[#FFFFFF] p-5 sm:p-8 shadow-sm">
+          {/* Clean Section 2 Header */}
+          <div className="border-b border-[#E8ECEA] pb-5">
+            <div className="mb-2 flex items-center gap-2.5">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-600 text-xs font-bold text-white shadow-2xs">
+                2
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-orange-700">
                 {isPtBr
-                  ? `Laboratório de Fixação e Prática — Capítulo ${chapterNum}`
-                  : `Chapter ${chapterNum} Consolidation & Transfer Lab`}
+                  ? 'Etapa 2 • Expressões e Estrutura da Frase'
+                  : 'Step 2 • Key Expressions & Sentence Structure'}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#181D1B] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#181D1B] tracking-tight">
               {isPtBr
-                ? 'Além da História: Pratique e Domine o Inglês'
-                : 'Beyond the Story: Recombine & Master'}
-            </h2>
-            <p className="text-xs sm:text-sm text-[#4A5550] leading-relaxed">
-              <span className="font-semibold text-[#181D1B]">
-                {isPtBr ? 'Foco de Gramática e Vocabulário:' : 'Grammar & Lexical Focus:'}
-              </span>{' '}
+                ? 'Como Usar as Palavras da História no Dia a Dia'
+                : 'How to Use the Story’s Expressions in Everyday Life'}
+            </h3>
+            <p className="mt-1 text-xs sm:text-sm text-[#5C6661]">
               {subtitle}
             </p>
           </div>
 
-          {/* Score Pill */}
-          <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-xl border border-[#DCE2DF] shadow-sm shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 font-bold text-sm">
-              {correctCount}/{totalQuestions}
-            </div>
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                {isPtBr ? 'Seu Progresso' : 'Recall Progress'}
+          {/* Part 2A: Vocabulary in Fresh Contexts */}
+          {vocabReuses.length > 0 && (
+            <div className="mt-6">
+              <div className="mb-3 flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-orange-600 shrink-0" />
+                <h4 className="text-sm sm:text-base font-bold text-[#181D1B]">
+                  {isPtBr
+                    ? 'Expressões da História em Novas Situações'
+                    : 'Vocabulary in Fresh Everyday Contexts'}
+                </h4>
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-[#181D1B]">
-                {allCompleted
-                  ? correctCount === totalQuestions
-                    ? isPtBr
-                      ? 'Domínio Perfeito!'
-                      : 'Perfect Mastery!'
-                    : isPtBr
-                    ? 'Prática Concluída!'
-                    : 'Checkpoint Complete!'
-                  : isPtBr
-                  ? `${answeredCount} de ${totalQuestions} concluídos`
-                  : `${answeredCount} of ${totalQuestions} completed`}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Compact Expandable SLA Methodology Note */}
-        <div className="mt-4 pt-3 border-t border-[#E8D7C3]/70">
-          <button
-            type="button"
-            onClick={() => setShowMethodologyInfo((v) => !v)}
-            className="flex items-center justify-between w-full text-left text-xs font-semibold text-[#4A5550] hover:text-orange-700 transition-colors cursor-pointer"
-          >
-            <span className="inline-flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-orange-600 shrink-0" />
-              <span>
-                {isPtBr
-                  ? 'Como funciona este método: Por que praticamos com situações novas e áudio?'
-                  : 'Adult SLA Methodology: Why these exercises use fresh contexts & blind audio'}
-              </span>
-            </span>
-            {showMethodologyInfo ? (
-              <ChevronUp className="w-4 h-4 text-stone-500 shrink-0" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-stone-500 shrink-0" />
-            )}
-          </button>
+              <div className="space-y-3">
+                {vocabReuses.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-xl border border-[#E6ECE9] bg-[#FCFDFC] p-4"
+                  >
+                    {/* Top Row: Expression Badge + Audio Button */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[#FDF8EE] border border-[#E8D7B4] text-[#7C581E] font-semibold text-xs">
+                        {item.word}
+                      </span>
+                      {onPlaySentenceAudio && (
+                        <button
+                          type="button"
+                          onClick={() => onPlaySentenceAudio(item.newPhrase, 1.0)}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F1F6FA] hover:bg-[#E3EEF5] border border-[#C9DCE8] text-[#1E3F54] text-xs font-semibold transition-colors cursor-pointer"
+                          title={
+                            isPtBr
+                              ? 'Ouvir esta nova frase em inglês'
+                              : 'Listen to the new everyday sentence'
+                          }
+                        >
+                          <Volume2 className="w-3.5 h-3.5 text-[#234E68]" />
+                          <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
+                        </button>
+                      )}
+                    </div>
 
-          {showMethodologyInfo && (
-            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-600 bg-white rounded-xl p-4 border border-[#E8D7C3]">
-              <div className="space-y-1">
-                <div className="font-bold text-stone-800">
-                  {isPtBr
-                    ? '1. Palavras em Situações do Dia a Dia'
-                    : '1. Chunk Recombination (Conti’s EPI)'}
-                </div>
-                <p className="leading-relaxed">
-                  {isPtBr
-                    ? 'Em vez de apenas repetir as frases da história, os exercícios usam as mesmas palavras em situações novas do cotidiano para você aprender a falar de verdade.'
-                    : 'Instead of repeating the same story lines, all 30 drills transplant the chapter’s vocabulary into fresh everyday scenarios so you build flexible mental schemas.'}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <div className="font-bold text-stone-800">
-                  {isPtBr
-                    ? '2. Aprendizado Real (Sem Adivinhação)'
-                    : '2. Anti-Shortcut Design (VanPatten’s IP)'}
-                </div>
-                <p className="leading-relaxed">
-                  {isPtBr
-                    ? 'Os nomes dos personagens são retirados dos exercícios para que você preste atenção no significado real das palavras em inglês.'
-                    : 'Character names are stripped from all exercises and options share the same grammatical subject so you can never guess by matching names.'}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <div className="font-bold text-stone-800">
-                  {isPtBr
-                    ? '3. Treino de Ouvido Primeiro'
-                    : '3. Blind Audio Decoding First'}
-                </div>
-                <p className="leading-relaxed">
-                  {isPtBr
-                    ? 'Nos exercícios de áudio, a frase escrita fica oculta até você responder — treinando seu ouvido a entender o inglês falado na velocidade normal, lenta ou muito lenta.'
-                    : 'In Listening exercises, the written transcript stays hidden until you answer—training your ear to decode spoken streams at 1.0x or 0.8x speed.'}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <div className="font-bold text-stone-800">
-                  {isPtBr
-                    ? '4. Cinco Formas de Praticar'
-                    : '4. Multi-Modal Retrieval (Nation & Bjork)'}
-                </div>
-                <p className="leading-relaxed">
-                  {isPtBr
-                    ? 'Combina Completar Frases, Mini-Diálogos, Compreensão pelo Ouvido, Checagem de Estrutura e Montagem de Frases.'
-                    : 'Cycles through Context Cloze, Pragmatic Mini-Dialogues, Blind Audio, Pattern Checks, and Interactive Sentence Assembly.'}
-                </p>
+                    {/* 2-Column Comparison: Story vs. New Everyday Context */}
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
+                      <div className="sm:col-span-5 rounded-lg bg-[#F4F7F5] border border-[#E2E8E5] p-3 flex flex-col justify-center">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6661] mb-1">
+                          {isPtBr ? 'Na História' : 'In the Story'}
+                        </span>
+                        <p className="text-xs sm:text-sm text-[#4A5550] italic font-serif leading-relaxed">
+                          {item.storyContext}
+                        </p>
+                      </div>
+
+                      <div className="sm:col-span-7 rounded-lg bg-[#FFFDF9] border border-[#F2E3C9] p-3 flex flex-col justify-center">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-orange-700 mb-1">
+                          {isPtBr ? 'Novo Exemplo do Dia a Dia' : 'New Everyday Example'}
+                        </span>
+                        <p className="text-sm sm:text-base font-serif font-semibold text-[#181D1B] leading-snug">
+                          {item.newPhrase}
+                        </p>
+                        <p className="text-xs text-[#5C6661] mt-1 leading-relaxed">
+                          {item.english}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
-        </div>
-      </div>
 
-      {/* ===================================================================== */}
-      {/* STEP 1: VOCABULARY IN FRESH CONTEXTS (CLEAN 2-COLUMN COMPARISON ROWS) */}
-      {/* ===================================================================== */}
-      {vocabReuses.length > 0 && (
-        <div className="mt-8">
-          <div className="flex items-center gap-2.5 mb-3.5">
-            <span className="w-6 h-6 rounded-lg bg-orange-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-              1
-            </span>
-            <div>
-              <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                {isPtBr
-                  ? 'Vocabulário em Novos Contextos'
-                  : 'Vocabulary in Fresh Contexts'}
-              </h3>
-              <p className="text-xs text-[#5C6661]">
-                {isPtBr
-                  ? 'Veja como usar as principais expressões da história em outras situações do dia a dia'
-                  : 'See how key expressions from the story transfer into everyday life'}
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {vocabReuses.map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-[#DCE2DF] p-4 shadow-sm"
-              >
-                {/* Top Row: Expression Badge + Audio Button */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[#FDF8EE] border border-[#E8D7B4] text-[#7C581E] font-semibold text-xs">
-                    {item.word}
-                  </span>
-                  {onPlaySentenceAudio && (
-                    <button
-                      type="button"
-                      onClick={() => onPlaySentenceAudio(item.newPhrase, 1.0)}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F1F6FA] hover:bg-[#E3EEF5] border border-[#C9DCE8] text-[#1E3F54] text-xs font-semibold transition-colors cursor-pointer"
-                      title={
-                        isPtBr
-                          ? 'Ouvir esta nova frase em inglês'
-                          : 'Listen to the new everyday sentence'
-                      }
-                    >
-                      <Volume2 className="w-3.5 h-3.5 text-[#234E68]" />
-                      <span>{isPtBr ? 'Ouvir' : 'Listen'}</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* 2-Column Comparison: Story vs. New Everyday Context */}
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
-                  <div className="sm:col-span-5 rounded-lg bg-[#F8FAF9] border border-[#E6ECE9] p-3 flex flex-col justify-center">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#737F79] mb-1">
-                      {isPtBr ? 'Na História' : 'In the Story'}
-                    </span>
-                    <p className="text-xs sm:text-sm text-[#4A5550] italic font-serif leading-relaxed">
-                      {item.storyContext}
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-7 rounded-lg bg-[#FFFDF9] border border-[#F2E3C9] p-3 flex flex-col justify-center">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-orange-700 mb-1">
-                      {isPtBr ? 'Novo Contexto do Dia a Dia' : 'New Everyday Context'}
-                    </span>
-                    <p className="text-sm sm:text-base font-serif font-semibold text-[#181D1B] leading-snug">
-                      {item.newPhrase}
-                    </p>
-                    <p className="text-xs text-[#5C6661] mt-1 leading-relaxed">
-                      {item.english}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ===================================================================== */}
-      {/* STEP 2: SENTENCE BLUEPRINT & PATTERN NOTICING (FULL-WIDTH READABILITY)*/}
-      {/* ===================================================================== */}
-      {construction && (
-        <div className="mt-9">
-          <div className="flex items-center gap-2.5 mb-3.5">
-            <span className="w-6 h-6 rounded-lg bg-orange-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-              2
-            </span>
-            <div>
-              <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
-                {isPtBr
-                  ? 'Estrutura da Frase e Padrão do Inglês'
-                  : 'Sentence Blueprint & Pattern Noticing'}
-              </h3>
-              <p className="text-xs text-[#5C6661]">
-                {isPtBr
-                  ? 'Domine um bloco de construção importante deste capítulo para montar suas próprias frases'
-                  : 'Master one reusable grammatical building block from this chapter'}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl border border-[#DCE2DF] p-5 sm:p-6 shadow-sm">
-            {/* Full-Width Stacked Pattern Title + Explanation + Formula Bar (Never squeezed side-by-side!) */}
-            <div className="space-y-3 pb-5 border-b border-[#E8ECEA]">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-orange-700">
-                <Lightbulb className="w-4 h-4 shrink-0 text-orange-600" />
-                <span>{construction.patternName}</span>
+          {/* Part 2B: Sentence Blueprint & Pattern Noticing */}
+          {construction && (
+            <div className={vocabReuses.length > 0 ? 'mt-7 pt-6 border-t border-[#E8ECEA]' : 'mt-6'}>
+              <div className="mb-3 flex items-center gap-2">
+                <Lightbulb className="h-4 w-4 text-orange-600 shrink-0" />
+                <h4 className="text-sm sm:text-base font-bold text-[#181D1B]">
+                  {isPtBr
+                    ? 'Padrão de Frase para Montar Suas Próprias Frases'
+                    : 'Sentence Pattern Blueprint'}
+                </h4>
               </div>
 
-              <p className="text-sm sm:text-[15px] text-[#333D38] leading-relaxed">
-                {construction.explanation}
-              </p>
+              <div className="rounded-xl border border-[#E6ECE9] bg-[#FCFDFC] p-4 sm:p-5">
+                <div className="space-y-3 pb-4 border-b border-[#E8ECEA]">
+                  <div className="text-xs sm:text-sm font-bold text-orange-700">
+                    {construction.patternName}
+                  </div>
 
-              {/* Dedicated Full-Width Formula Blueprint Bar */}
-              <div className="pt-1">
-                <div className="inline-flex flex-wrap items-center gap-2 bg-[#F8FAF9] px-3.5 py-2.5 rounded-xl border border-[#DCE2DF]">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6661] mr-1">
-                    {isPtBr ? 'Fórmula:' : 'Formula:'}
-                  </span>
-                  {construction.formula.map((part, idx) => (
-                    <React.Fragment key={idx}>
-                      <span className="px-2.5 py-1 rounded-lg bg-white border border-[#D0D9D4] text-xs font-mono font-semibold text-[#181D1B] shadow-sm">
-                        {part}
+                  <p className="text-sm sm:text-[15px] text-[#333D38] leading-relaxed">
+                    {construction.explanation}
+                  </p>
+
+                  {/* Formula Blueprint Bar */}
+                  <div className="pt-1">
+                    <div className="inline-flex flex-wrap items-center gap-2 bg-[#F4F7F5] px-3.5 py-2 rounded-xl border border-[#DCE2DF]">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6661] mr-1">
+                        {isPtBr ? 'Fórmula:' : 'Formula:'}
                       </span>
-                      {idx < construction.formula.length - 1 && (
-                        <ArrowRight className="w-3.5 h-3.5 text-[#737F79] shrink-0" />
-                      )}
-                    </React.Fragment>
-                  ))}
+                      {construction.formula.map((part, idx) => (
+                        <React.Fragment key={idx}>
+                          <span className="px-2.5 py-1 rounded-lg bg-white border border-[#D0D9D4] text-xs font-mono font-semibold text-[#181D1B] shadow-2xs">
+                            {part}
+                          </span>
+                          {idx < construction.formula.length - 1 && (
+                            <ArrowRight className="w-3.5 h-3.5 text-[#737F79] shrink-0" />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3 Variations */}
+                <div className="mt-3 divide-y divide-[#E8ECEA]">
+                  {construction.examples.map((ex, idx) => {
+                    const parts = ex.highlight ? ex.target.split(ex.highlight) : [ex.target];
+                    return (
+                      <div
+                        key={idx}
+                        className="py-3 first:pt-1 last:pb-0 flex items-start justify-between gap-4"
+                      >
+                        <div className="space-y-0.5">
+                          <p className="text-base sm:text-lg font-serif font-medium text-[#181D1B] leading-snug">
+                            {parts.length > 1 ? (
+                              <>
+                                {parts[0]}
+                                <span className="underline decoration-orange-500 decoration-2 underline-offset-4 font-bold text-orange-950 bg-orange-100/75 px-1 rounded">
+                                  {ex.highlight}
+                                </span>
+                                {parts.slice(1).join(ex.highlight)}
+                              </>
+                            ) : (
+                              ex.target
+                            )}
+                          </p>
+                          <p className="text-xs sm:text-sm text-[#5C6661]">
+                            {ex.english}
+                          </p>
+                        </div>
+
+                        {onPlaySentenceAudio && (
+                          <button
+                            type="button"
+                            onClick={() => onPlaySentenceAudio(ex.target, 1.0)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#E5EFF6] border border-[#DCE2DF] text-xs font-semibold text-[#234E68] transition-colors shrink-0 cursor-pointer"
+                            title={isPtBr ? 'Ouvir exemplo' : 'Listen to example'}
+                          >
+                            <Volume2 className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">{isPtBr ? 'Ouvir' : 'Listen'}</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
-
-            {/* 3 Variations Rendered as Clean Full-Width Rows for Effortless Reading */}
-            <div className="mt-4 divide-y divide-[#E8ECEA]">
-              {construction.examples.map((ex, idx) => {
-                const parts = ex.highlight ? ex.target.split(ex.highlight) : [ex.target];
-                return (
-                  <div
-                    key={idx}
-                    className="py-3.5 first:pt-1 last:pb-0 flex items-start justify-between gap-4"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F2F4F3] text-[#5C6661]">
-                          {isPtBr ? `Exemplo ${idx + 1}` : `Example ${idx + 1}`}
-                        </span>
-                      </div>
-                      <p className="text-base sm:text-lg font-serif font-medium text-[#181D1B] leading-snug pt-0.5">
-                        {parts.length > 1 ? (
-                          <>
-                            {parts[0]}
-                            <span className="underline decoration-orange-500 decoration-2 underline-offset-4 font-bold text-orange-950 bg-orange-100/75 px-1 rounded">
-                              {ex.highlight}
-                            </span>
-                            {parts.slice(1).join(ex.highlight)}
-                          </>
-                        ) : (
-                          ex.target
-                        )}
-                      </p>
-                      <p className="text-xs sm:text-sm text-[#5C6661]">
-                        {ex.english}
-                      </p>
-                    </div>
-
-                    {onPlaySentenceAudio && (
-                      <button
-                        type="button"
-                        onClick={() => onPlaySentenceAudio(ex.target, 1.0)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F8FAF9] hover:bg-[#E5EFF6] border border-[#DCE2DF] text-xs font-semibold text-[#234E68] transition-colors shrink-0 cursor-pointer mt-1"
-                        title={isPtBr ? 'Ouvir exemplo' : 'Listen to example'}
-                      >
-                        <Volume2 className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">{isPtBr ? 'Ouvir' : 'Listen'}</span>
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+          )}
+        </section>
       )}
 
       {/* ===================================================================== */}
-      {/* STEP 3: ACTIVE-RECALL TRANSFER CHECKPOINT (FOCUSED DECK + LIST TOGGLE)*/}
+      {/* SECTION 3: INTERACTIVE PRACTICE EXERCISES                             */}
       {/* ===================================================================== */}
-      <div className="mt-9">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-          <div className="flex items-center gap-2.5">
-            <span className="w-6 h-6 rounded-lg bg-orange-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-              3
-            </span>
-            <div>
-              <h3 className="text-base sm:text-lg font-serif font-bold text-[#181D1B]">
+      <section className="rounded-2xl border border-[#DCE2DF] bg-[#FFFFFF] p-5 sm:p-8 shadow-sm">
+        <div className="border-b border-[#E8ECEA] pb-5 mb-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="mb-2 flex items-center gap-2.5">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#2D5A46] text-xs font-bold text-white shadow-2xs">
+                3
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#2D5A46]">
                 {isPtBr
-                  ? `Exercícios Práticos de Fixação (${totalQuestions} Exercícios)`
-                  : `Active-Recall Transfer Checkpoint (${totalQuestions} Exercises)`}
-              </h3>
-              <p className="text-xs text-[#5C6661]">
-                {isPtBr
-                  ? '5 tipos de exercícios interativos • Frases do dia a dia com áudio e explicação'
-                  : '5 cognitive modalities • Zero repeated story lines • Zero character-name shortcuts'}
-              </p>
+                  ? 'Etapa 3 • Exercícios Práticos'
+                  : 'Step 3 • Interactive Practice'}
+              </span>
             </div>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#181D1B] tracking-tight">
+              {isPtBr
+                ? `Pratique o Que Você Aprendeu (${totalQuestions} Exercícios)`
+                : `Practice What You Learned (${totalQuestions} Exercises)`}
+            </h3>
+            <p className="mt-1 text-xs sm:text-sm text-[#5C6661]">
+              {isPtBr
+                ? 'Responda no seu ritmo para fixar o vocabulário e o ouvido'
+                : 'Step through the interactive exercises at your own pace'}
+            </p>
           </div>
 
-          {/* Controls: 15 vs 30 Toggle + Focused vs List View + Reset */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* Score Pill + Controls */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex items-center gap-2.5 bg-[#F8FAF9] px-3.5 py-2 rounded-xl border border-[#DCE2DF]">
+              <div className="px-2.5 py-1 rounded-lg bg-[#2D5A46] text-white font-bold text-xs">
+                {correctCount}/{totalQuestions}
+              </div>
+              <div className="text-xs font-semibold text-[#181D1B]">
+                {allCompleted
+                  ? isPtBr
+                    ? 'Concluído!'
+                    : 'Completed!'
+                  : isPtBr
+                  ? `${answeredCount} respondidos`
+                  : `${answeredCount} answered`}
+              </div>
+            </div>
+
             {/* 15 vs 30 Questions */}
             <div className="inline-flex items-center bg-[#EEF2F0] p-1 rounded-xl border border-[#DCE2DF]">
               <button
@@ -7356,7 +7245,7 @@ export default function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                {isPtBr ? '15 Padrão' : '15 Standard'}
+                {isPtBr ? '15 Exercícios' : '15 Standard'}
               </button>
               <button
                 type="button"
@@ -7368,7 +7257,7 @@ export default function ChapterRecapSection({
                 }`}
               >
                 <Shuffle className="w-3 h-3" />
-                <span>{isPtBr ? '30 Completo' : '30 Deep'}</span>
+                <span>{isPtBr ? '30 Exercícios' : '30 Deep'}</span>
               </button>
             </div>
 
@@ -7394,7 +7283,7 @@ export default function ChapterRecapSection({
                     : 'text-[#5C6661] hover:text-[#181D1B]'
                 }`}
               >
-                {isPtBr ? `Todos (${activeExercises.length})` : `All (${activeExercises.length})`}
+                {isPtBr ? `Ver Todos (${activeExercises.length})` : `All (${activeExercises.length})`}
               </button>
             </div>
 
@@ -7899,74 +7788,74 @@ export default function ChapterRecapSection({
             );
           })}
         </div>
-      </div>
 
-      {/* ===================================================================== */}
-      {/* CHAPTER COMPLETION / NEXT CHAPTER CTA                                 */}
-      {/* ===================================================================== */}
-      <div className="mt-8 rounded-2xl bg-[#181D1B] text-white p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-        <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center text-orange-400 shrink-0">
-            <Award className="w-5 h-5" />
+        {/* ===================================================================== */}
+        {/* CHAPTER COMPLETION / NEXT CHAPTER CTA                                 */}
+        {/* ===================================================================== */}
+        <div className="mt-7 rounded-2xl bg-[#181D1B] text-white p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center text-orange-400 shrink-0">
+              <Award className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-base font-serif font-bold text-white">
+                {allCompleted
+                  ? isPtBr
+                    ? `Parabéns por concluir a prática do Capítulo ${chapterNum}!`
+                    : `Great job completing Chapter ${chapterNum}'s practice!`
+                  : isPtBr
+                  ? 'Pronta para a próxima parte da história?'
+                  : `Ready for the next part of the story?`}
+              </h4>
+              <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
+                {allCompleted
+                  ? isPtBr
+                    ? `Você acertou ${correctCount} de ${totalQuestions} exercícios práticos.`
+                    : `You scored ${correctCount} out of ${totalQuestions} exercises.`
+                  : exerciseCountMode === 15
+                  ? isPtBr
+                    ? 'Pratique com os 15 exercícios acima ou clique em "30 Exercícios" para mais 15 exercícios.'
+                    : `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
+                  : isPtBr
+                  ? 'Conclua os 30 exercícios acima para fixar bem o vocabulário deste capítulo.'
+                  : `Complete all 30 exercises above to lock in this chapter's patterns.`}
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-base font-serif font-bold text-white">
-              {allCompleted
-                ? isPtBr
-                  ? `Parabéns por concluir o Laboratório de Prática do Capítulo ${chapterNum}!`
-                  : `Great job completing Chapter ${chapterNum}'s Transfer Lab!`
-                : isPtBr
-                ? 'Pronta para a próxima parte da história?'
-                : `Ready for the next part of the story?`}
-            </h4>
-            <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
-              {allCompleted
-                ? isPtBr
-                  ? `Você acertou ${correctCount} de ${totalQuestions} exercícios práticos de fixação.`
-                  : `You scored ${correctCount} out of ${totalQuestions} across all 5 active-recall modalities.`
-                : exerciseCountMode === 15
-                ? isPtBr
-                  ? 'Pratique com os 15 exercícios acima ou clique em "30 Completo" para mais 15 exercícios.'
-                  : `Step through the 15 exercises above or toggle "30 Deep" for 15 extra transfer drills.`
-                : isPtBr
-                ? 'Conclua os 30 exercícios acima para fixar bem o vocabulário deste capítulo.'
-                : `Complete all 30 multi-style transfer exercises above to lock in this chapter's patterns.`}
-            </p>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto justify-end shrink-0">
-          {hasNextChapter ? (
-            <button
-              type="button"
-              onClick={onNextChapter}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
-            >
-              <span>
-                {isPtBr
-                  ? `Continuar para o Capítulo ${chapterNum + 1}`
-                  : `Continue to Chapter ${chapterNum + 1}`}
-              </span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          ) : (
-            onGenerateChapter && (
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end shrink-0">
+            {hasNextChapter ? (
               <button
                 type="button"
-                onClick={onGenerateChapter}
+                onClick={onNextChapter}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
               >
-                <Sparkles className="w-4 h-4" />
                 <span>
                   {isPtBr
-                    ? `Gerar Capítulo ${chapterNum + 1}`
-                    : `Generate Chapter ${chapterNum + 1} with AI`}
+                    ? `Continuar para o Capítulo ${chapterNum + 1}`
+                    : `Continue to Chapter ${chapterNum + 1}`}
                 </span>
+                <ArrowRight className="w-4 h-4" />
               </button>
-            )
-          )}
+            ) : (
+              onGenerateChapter && (
+                <button
+                  type="button"
+                  onClick={onGenerateChapter}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>
+                    {isPtBr
+                      ? `Gerar Capítulo ${chapterNum + 1}`
+                      : `Generate Chapter ${chapterNum + 1} with AI`}
+                  </span>
+                </button>
+              )
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
