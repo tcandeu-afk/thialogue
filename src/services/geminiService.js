@@ -2,7 +2,7 @@ import { GEMINI_CHAPTER_RESPONSE_SCHEMA } from '../types/schema';
 import { getPriorityLearningWords } from './storageService';
 
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 const DIFFICULTY_INSTRUCTIONS = {
   maintain: {
@@ -1540,126 +1540,14 @@ export function createOfflineDifficultyVariant(baseChapter, level, profile) {
 /**
  * Generates or adapts the Longer Text ('challenge') or Standard ('maintain') version
  * of the CURRENT chapter (`baseChapter`) while keeping the same CEFR difficulty level.
+ * Uses the built-in curated extension bank so switching between Standard and Longer Text
+ * is 100% instantaneous (0ms) and reliable across all courses.
  */
 export async function generateChapterDifficultyVariant({
   profile,
   baseChapter,
   level = 'maintain',
-  apiKey,
 }) {
-  if (level === 'maintain') {
-    return createOfflineDifficultyVariant(baseChapter, 'maintain', profile);
-  }
-
-  if (!apiKey || !apiKey.trim()) {
-    return createOfflineDifficultyVariant(baseChapter, level, profile);
-  }
-
-  const baseId = (baseChapter.id || `${profile.id}-ch-${baseChapter.chapterNumber}`).replace(
-    /__(simplify|maintain|challenge)$/,
-    ''
-  );
-
-  const baseCount = (baseChapter.sentences || []).length;
-  const targetMinSentences = Math.max(14, baseCount + 6);
-
-  const originalSentencesText = (baseChapter.sentences || [])
-    .map((s, i) => `${i + 1}. ${s.fullSentence} (${s.englishTranslation || ''})`)
-    .join('\n');
-
-  const rewriteDirective = `TASK — EXPAND THIS CHAPTER INTO A LONGER TEXT (SAME DIFFICULTY LEVEL):
-Rewrite and expand the exact fiction story of this chapter into a MUCH LONGER version (${targetMinSentences} to ${targetMinSentences + 2} sentences total — at least 6 sentences longer than the original ${baseCount} sentences).
-- IMPORTANT: Keep the EXACT SAME ${profile.cefrLevel} difficulty level. Do NOT make the grammar or vocabulary harder or overly academic.
-- Instead, make the story longer so the learner goes deeper into the vocabulary, everyday expressions, dialogue, and situations of this chapter.
-- Keep all the original events and characters, and weave in additional natural dialogue exchanges, everyday actions, and repetitions of the chapter's key words in fresh sentences.`;
-
-  const scriptSpecificRules =
-    profile.id === 'ja'
-      ? `JAPANESE RULES: Split into natural morphological word/particle tokens. Provide Hiragana "reading" ONLY for tokens containing Kanji (null for pure Hiragana/Katakana). Provide Hepburn Romaji in "romanisation".`
-      : `LATIN SCRIPT RULES: Split into individual clickable word tokens. "reading" and "romanisation" MUST be null.`;
-
-  const translationInstructions =
-    profile.id === 'en'
-      ? `Every sentence MUST be in natural BRITISH ENGLISH (UK spelling and vocabulary), with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
-      : `Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
-
-  const prompt = `You are an expert language teacher expanding Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).
-
-ORIGINAL STANDARD CHAPTER SENTENCES (${baseCount} sentences):
-${originalSentencesText}
-
-${rewriteDirective}
-
-${scriptSpecificRules}
-
-${translationInstructions}`;
-
-  try {
-    const response = await fetch(
-      `${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseMimeType: 'application/json',
-            responseSchema: GEMINI_CHAPTER_RESPONSE_SCHEMA,
-            temperature: 0.65,
-          },
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      return createOfflineDifficultyVariant(baseChapter, level, profile);
-    }
-
-    const data = await response.json();
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    const parsed = JSON.parse(rawText);
-
-    if (!Array.isArray(parsed?.sentences) || parsed.sentences.length === 0) {
-      return createOfflineDifficultyVariant(baseChapter, level, profile);
-    }
-
-    let mappedSentences = parsed.sentences.map((s) => ({
-      fullSentence: s.fullSentence || '',
-      englishTranslation: s.englishTranslation || '',
-      romanisation: profile.isCJK ? s.romanisation || null : null,
-      grammarNote:
-        s.grammarNote ||
-        'Notice how the words group together to express a complete thought.',
-      tokens: (s.tokens || []).map((t) => ({
-        surface: t.surface || '',
-        reading: profile.hasFurigana ? t.reading || null : null,
-        baseForm: t.baseForm || t.surface || '',
-        contextualMeaning: t.contextualMeaning || '',
-      })),
-    }));
-
-    // Guarantee that the Longer Text version is ALWAYS at least 5 sentences longer than the Standard text
-    if (mappedSentences.length < baseCount + 5) {
-      const extras = CHALLENGE_EXTENSION_BANK[profile.id] || CHALLENGE_EXTENSION_BANK.fr;
-      mappedSentences = [...(baseChapter.sentences || []), ...structuredClone(extras)];
-    }
-
-    return {
-      ...baseChapter,
-      id: `${baseId}__${level}`,
-      activeDifficulty: level,
-      difficultyLabel:
-        profile.id === 'en'
-          ? 'A1 Iniciante • Texto Mais Longo'
-          : `${profile.cefrLevel} • Longer Text`,
-      chapterTitle: baseChapter.chapterTitle,
-      recycledWordsUsed: Array.isArray(parsed.recycledWordsUsed)
-        ? parsed.recycledWordsUsed
-        : baseChapter.recycledWordsUsed || [],
-      sentences: mappedSentences,
-    };
-  } catch {
-    return createOfflineDifficultyVariant(baseChapter, level, profile);
-  }
+  return createOfflineDifficultyVariant(baseChapter, level, profile);
 }
 

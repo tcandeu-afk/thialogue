@@ -20,7 +20,7 @@ import {
 } from './services/storageService';
 import {
   generateNextChapter,
-  generateChapterDifficultyVariant,
+  createOfflineDifficultyVariant,
 } from './services/geminiService';
 import { INITIAL_PROFILES } from './data/initialProfiles';
 import { ACQUISITION_EXPOSURE_THRESHOLD } from './types/schema';
@@ -313,7 +313,7 @@ export default function App() {
    * FOR THE CURRENT CHAPTER IN-PLACE so the user can flick back and forth between
    * Simpler, Just Right, and More Complex versions of the same chapter, and scrolls to top!
    */
-  const handleSelectDifficultyLevel = async (level = 'maintain') => {
+  const handleSelectDifficultyLevel = (level = 'maintain') => {
     if (!currentChapter) return;
     setGenerationError(null);
 
@@ -325,78 +325,47 @@ export default function App() {
     };
     const baseSentenceCount = (baseMaintainChapter.sentences || []).length;
 
-    // If this version is cached AND (for 'challenge') genuinely longer than the standard text, switch immediately
+    // Use cached variant if already generated and (for 'challenge') genuinely longer than standard
+    let targetVariant = existingVariants[level];
     if (
-      existingVariants[level] &&
-      (level !== 'challenge' ||
-        (existingVariants[level].sentences || []).length >= baseSentenceCount + 5)
+      !targetVariant ||
+      (level === 'challenge' &&
+        (targetVariant.sentences || []).length < baseSentenceCount + 5)
     ) {
-      const cachedVariant = existingVariants[level];
-      setProfiles((prev) => {
-        const latestProfile = prev[activeLang];
-        const nextChapters = [...(latestProfile.chapters || [])];
-        nextChapters[currentChapterIndex] = {
-          ...cachedVariant,
-          chapterNumber: currentChapterIndex + 1,
-          activeDifficulty: level,
-          variants: {
-            ...existingVariants,
-            maintain: baseMaintainChapter,
-          },
-        };
-        return {
-          ...prev,
-          [activeLang]: {
-            ...latestProfile,
-            chapters: nextChapters,
-          },
-        };
-      });
-      scrollToReaderTop();
-      return;
+      targetVariant = createOfflineDifficultyVariant(
+        baseMaintainChapter,
+        level,
+        activeProfile
+      );
     }
 
-    setIsGeneratingChapter(true);
-    try {
-      const generatedVariant = await generateChapterDifficultyVariant({
-        profile: activeProfile,
-        baseChapter: baseMaintainChapter,
-        level,
-        apiKey: settings.geminiApiKey,
-      });
+    const nextVariants = {
+      ...existingVariants,
+      maintain: baseMaintainChapter,
+      [level]: {
+        ...structuredClone(targetVariant),
+        variants: undefined,
+      },
+    };
 
-      const nextVariants = {
-        ...existingVariants,
-        maintain: baseMaintainChapter,
-        [level]: {
-          ...structuredClone(generatedVariant),
-          variants: undefined,
+    setProfiles((prev) => {
+      const latestProfile = prev[activeLang];
+      const nextChapters = [...(latestProfile.chapters || [])];
+      nextChapters[currentChapterIndex] = {
+        ...targetVariant,
+        chapterNumber: currentChapterIndex + 1,
+        activeDifficulty: level,
+        variants: nextVariants,
+      };
+      return {
+        ...prev,
+        [activeLang]: {
+          ...latestProfile,
+          chapters: nextChapters,
         },
       };
-
-      setProfiles((prev) => {
-        const latestProfile = prev[activeLang];
-        const nextChapters = [...(latestProfile.chapters || [])];
-        nextChapters[currentChapterIndex] = {
-          ...generatedVariant,
-          chapterNumber: currentChapterIndex + 1,
-          activeDifficulty: level,
-          variants: nextVariants,
-        };
-        return {
-          ...prev,
-          [activeLang]: {
-            ...latestProfile,
-            chapters: nextChapters,
-          },
-        };
-      });
-      scrollToReaderTop();
-    } catch (err) {
-      setGenerationError(err.message || 'Failed to adapt chapter difficulty.');
-    } finally {
-      setIsGeneratingChapter(false);
-    }
+    });
+    scrollToReaderTop();
   };
 
   /**
