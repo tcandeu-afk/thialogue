@@ -668,12 +668,13 @@ export async function synthesizeChapterWithElevenLabs({
   elevenLabsApiKey,
   voiceId = DEFAULT_ELEVENLABS_VOICE_ID,
 }) {
-  const cleanKey = sanitizeApiKey(elevenLabsApiKey);
+  const fallbackSaved = getSavedElevenLabsCredentials();
+  const cleanKey = sanitizeApiKey(elevenLabsApiKey) || fallbackSaved.elKey;
   if (!cleanKey) {
     throw new Error('No ElevenLabs API key configured.');
   }
 
-  const resolvedVoiceId = resolveVoiceId(voiceId);
+  const resolvedVoiceId = resolveVoiceId(voiceId || fallbackSaved.elVoice);
   const fullChapterText = (chapter?.sentences || [])
     .map((s) => s.fullSentence)
     .join(' ')

@@ -82,8 +82,11 @@ export default function App() {
       // ignore invalid sync param
     }
 
-    // Sync with local server /api/settings so Mac and Phone automatically share API keys
-    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    // Sync with local server /api/settings only when running on localhost/LAN (skip on GitHub Pages)
+    if (
+      (window.location.protocol === 'http:' || window.location.protocol === 'https:') &&
+      !/github\.io$/i.test(window.location.hostname)
+    ) {
       const current = loadSettings();
       if (current.elevenLabsApiKey?.trim() || current.geminiApiKey?.trim()) {
         fetch('/api/settings', {

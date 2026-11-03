@@ -153,21 +153,30 @@ function decodeBuiltin(b64) {
   }
 }
 
-export function loadSettings() {
-  const defaults = {
+export function getBuiltinDefaultSettings() {
+  return {
     geminiApiKey: decodeBuiltin(BUILTIN_ENCODED_DEFAULTS.g),
     elevenLabsApiKey: decodeBuiltin(BUILTIN_ENCODED_DEFAULTS.e),
     elevenLabsVoiceId: BUILTIN_ENCODED_DEFAULTS.v,
   };
+}
+
+export function loadSettings() {
+  const defaults = getBuiltinDefaultSettings();
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    if (!raw) return defaults;
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(defaults));
+      return defaults;
+    }
     const parsed = JSON.parse(raw);
-    return {
+    const merged = {
       geminiApiKey: (parsed.geminiApiKey || '').trim() || defaults.geminiApiKey,
       elevenLabsApiKey: (parsed.elevenLabsApiKey || '').trim() || defaults.elevenLabsApiKey,
       elevenLabsVoiceId: (parsed.elevenLabsVoiceId || defaults.elevenLabsVoiceId).trim(),
     };
+    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(merged));
+    return merged;
   } catch (err) {
     console.error('Failed to load settings:', err);
     return defaults;
@@ -175,12 +184,13 @@ export function loadSettings() {
 }
 
 export function saveSettings(settings) {
+  const defaults = getBuiltinDefaultSettings();
   try {
     localStorage.setItem(
       STORAGE_KEYS.SETTINGS,
       JSON.stringify({
-        geminiApiKey: (settings.geminiApiKey || '').trim(),
-        elevenLabsApiKey: (settings.elevenLabsApiKey || '').trim(),
+        geminiApiKey: (settings.geminiApiKey || '').trim() || defaults.geminiApiKey,
+        elevenLabsApiKey: (settings.elevenLabsApiKey || '').trim() || defaults.elevenLabsApiKey,
         elevenLabsVoiceId: (settings.elevenLabsVoiceId || DEFAULT_ELEVENLABS_VOICE_ID).trim(),
       })
     );

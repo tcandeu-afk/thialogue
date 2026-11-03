@@ -13509,21 +13509,30 @@ function decodeBuiltin(b64) {
   }
 }
 
-function loadSettings() {
-  const defaults = {
+function getBuiltinDefaultSettings() {
+  return {
     geminiApiKey: decodeBuiltin(BUILTIN_ENCODED_DEFAULTS.g),
     elevenLabsApiKey: decodeBuiltin(BUILTIN_ENCODED_DEFAULTS.e),
     elevenLabsVoiceId: BUILTIN_ENCODED_DEFAULTS.v,
   };
+}
+
+function loadSettings() {
+  const defaults = getBuiltinDefaultSettings();
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    if (!raw) return defaults;
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(defaults));
+      return defaults;
+    }
     const parsed = JSON.parse(raw);
-    return {
+    const merged = {
       geminiApiKey: (parsed.geminiApiKey || '').trim() || defaults.geminiApiKey,
       elevenLabsApiKey: (parsed.elevenLabsApiKey || '').trim() || defaults.elevenLabsApiKey,
       elevenLabsVoiceId: (parsed.elevenLabsVoiceId || defaults.elevenLabsVoiceId).trim(),
     };
+    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(merged));
+    return merged;
   } catch (err) {
     console.error('Failed to load settings:', err);
     return defaults;
@@ -13531,12 +13540,13 @@ function loadSettings() {
 }
 
 function saveSettings(settings) {
+  const defaults = getBuiltinDefaultSettings();
   try {
     localStorage.setItem(
       STORAGE_KEYS.SETTINGS,
       JSON.stringify({
-        geminiApiKey: (settings.geminiApiKey || '').trim(),
-        elevenLabsApiKey: (settings.elevenLabsApiKey || '').trim(),
+        geminiApiKey: (settings.geminiApiKey || '').trim() || defaults.geminiApiKey,
+        elevenLabsApiKey: (settings.elevenLabsApiKey || '').trim() || defaults.elevenLabsApiKey,
         elevenLabsVoiceId: (settings.elevenLabsVoiceId || DEFAULT_ELEVENLABS_VOICE_ID).trim(),
       })
     );
@@ -14460,12 +14470,13 @@ async function synthesizeChapterWithElevenLabs({
   elevenLabsApiKey,
   voiceId = DEFAULT_ELEVENLABS_VOICE_ID,
 }) {
-  const cleanKey = sanitizeApiKey(elevenLabsApiKey);
+  const fallbackSaved = getSavedElevenLabsCredentials();
+  const cleanKey = sanitizeApiKey(elevenLabsApiKey) || fallbackSaved.elKey;
   if (!cleanKey) {
     throw new Error('No ElevenLabs API key configured.');
   }
 
-  const resolvedVoiceId = resolveVoiceId(voiceId);
+  const resolvedVoiceId = resolveVoiceId(voiceId || fallbackSaved.elVoice);
   const fullChapterText = (chapter?.sentences || [])
     .map((s) => s.fullSentence)
     .join(' ')
@@ -15985,8 +15996,14 @@ async function generateNextChapter({
   const nextChapterNumber =
     targetChapterNumber || (profile.chapters?.length || 0) + 1;
 
-  // If user has no Gemini key yet, provide an instant pre-tokenised chapter for this chapter number
-  if (!apiKey || !apiKey.trim()) {
+  const effectiveApiKey =
+    (apiKey || '').trim() ||
+    (typeof atob === 'function'
+      ? atob('QVEuQWI4Uk42THEtbUM5VGtyRGV2V0NOS0x3Sk1nNHJvclpYakxhVlo4eXVhM2Z0WEFuLVE=')
+      : '');
+
+  // If no Gemini key is available, provide an instant pre-tokenised chapter for this chapter number
+  if (!effectiveApiKey) {
     return generateOfflineBonusChapter(
       profile,
       adjustment,
@@ -16084,7 +16101,7 @@ CHAPTER LENGTH & LEARNING MODULE:
 
   let response;
   try {
-    response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey.trim())}`, {
+    response = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(effectiveApiKey)}`, {
       method: 'POST',
       signal: controller.signal,
       headers: { 'Content-Type': 'application/json' },
@@ -28014,8 +28031,11 @@ function App() {
       // ignore invalid sync param
     }
 
-    // Sync with local server /api/settings so Mac and Phone automatically share API keys
-    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    // Sync with local server /api/settings only when running on localhost/LAN (skip on GitHub Pages)
+    if (
+      (window.location.protocol === 'http:' || window.location.protocol === 'https:') &&
+      !/github\.io$/i.test(window.location.hostname)
+    ) {
       const current = loadSettings();
       if (current.elevenLabsApiKey?.trim() || current.geminiApiKey?.trim()) {
         fetch('/api/settings', {
