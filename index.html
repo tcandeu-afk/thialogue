@@ -13401,17 +13401,41 @@ function loadProfiles() {
         isCurrentVersion && savedChapters.length > 0
           ? savedChapters.map((ch, idx) => {
               const starterCh = starterChapters[idx];
+              const isChallengeActive = ch.activeDifficulty === 'challenge';
+              const cachedChallenge = ch.variants?.challenge;
+              const starterSentenceCount = starterCh?.sentences?.length || 0;
+              const hasValidLongChallenge =
+                cachedChallenge &&
+                Array.isArray(cachedChallenge.sentences) &&
+                cachedChallenge.sentences.length >= starterSentenceCount + 5;
+
+              if (starterCh) {
+                return {
+                  ...ch,
+                  chapterNumber: idx + 1,
+                  chapterTitle: starterCh.chapterTitle,
+                  updatedArcSummary: starterCh.updatedArcSummary,
+                  activeDifficulty:
+                    isChallengeActive && hasValidLongChallenge ? 'challenge' : 'maintain',
+                  difficultyLabel:
+                    isChallengeActive && hasValidLongChallenge
+                      ? cachedChallenge.difficultyLabel
+                      : starterCh.difficultyLabel,
+                  sentences:
+                    isChallengeActive && hasValidLongChallenge
+                      ? cachedChallenge.sentences
+                      : starterCh.sentences,
+                  variants: {
+                    maintain: structuredClone(starterCh),
+                    ...(hasValidLongChallenge ? { challenge: cachedChallenge } : {}),
+                  },
+                };
+              }
+
               return {
                 ...ch,
                 chapterNumber: idx + 1,
-                ...(starterCh
-                  ? {
-                      chapterTitle: starterCh.chapterTitle,
-                      difficultyLabel: starterCh.difficultyLabel,
-                      updatedArcSummary: starterCh.updatedArcSummary,
-                      sentences: starterCh.sentences,
-                    }
-                  : {}),
+                activeDifficulty: ch.activeDifficulty === 'simplify' ? 'maintain' : ch.activeDifficulty,
               };
             })
           : starterChapters;
@@ -14711,20 +14735,15 @@ const GEMINI_ENDPOINT =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent';
 
 const DIFFICULTY_INSTRUCTIONS = {
-  simplify: {
-    label: 'Simplified (i-1 Scaffolding)',
-    promptDirective:
-      'The reader found the previous chapter TOO HARD. Simplify the syntax: use shorter, high-clarity sentences, use high-frequency core vocabulary, provide strong contextual clues around target words, and stick to foundational tense/aspect structures.',
-  },
   maintain: {
-    label: 'Comprehensible Input (i+1 Flow)',
+    label: 'Standard Text',
     promptDirective:
-      'The reader found the previous chapter JUST RIGHT. Maintain the current CEFR difficulty level following Stephen Krashen’s i+1 Comprehensible Input principle: 95% familiar structures with gentle, natural forward plot momentum.',
+      'Write a standard-length chapter (8 sentences) at the current CEFR level following Stephen Krashen’s Comprehensible Input principle: 95% familiar structures with gentle, natural forward plot momentum.',
   },
   challenge: {
-    label: 'Challenging (i+2 Stretch)',
+    label: 'Longer Text',
     promptDirective:
-      'The reader found the previous chapter TOO EASY. Increase linguistic richness slightly above baseline: introduce more natural connectors, subordinate clauses, vivid descriptive verbs, and deeper narrative intrigue while staying comprehensible.',
+      'Keep the EXACT same CEFR difficulty level (do NOT make the grammar harder), but write a LONGER, expanded text (14 to 16 sentences) so the learner goes deeper into the chapter’s vocabulary, dialogue, and everyday situations.',
   },
   regenerate: {
     label: 'Fresh Story & New Vocabulary',
@@ -15588,212 +15607,632 @@ CHAPTER LENGTH & LEARNING MODULE:
 }
 
 /**
- * Richer, slightly more complex extension sentences for each language so the "Too Easy" (Challenge)
- * version of a chapter is visibly longer and linguistically deeper even without a Gemini API key.
+ * Substantial, same-level extension sentences (6 sentences per course) so the "Longer Text"
+ * version of a chapter is always noticeably longer (~75% more text) while keeping the exact same
+ * accessible difficulty level and deepening the chapter's vocabulary and concepts.
  */
 const CHALLENGE_EXTENSION_BANK = {
   fr: [
     {
-      fullSentence: 'Bien que l’atmosphère semble paisible, chaque détail de cet endroit cache une histoire ancienne qu’elle souhaite comprendre.',
-      englishTranslation: 'Although the atmosphere seems peaceful, every detail of this place hides an ancient story that she wishes to understand.',
+      fullSentence: 'Clara ouvre son carnet et relit attentivement la petite note rouge près de la fenêtre.',
+      englishTranslation: 'Clara opens her notebook and carefully rereads the small red note near the window.',
       romanisation: null,
-      grammarNote: '"Bien que" ("although") introduces a concession clause and is followed by the subjunctive mood ("semble").',
+      grammarNote: 'Adding "re-" before a verb like "lire" (to read) forms "relire" (to reread / read again).',
       tokens: [
-        { surface: 'Bien', reading: null, baseForm: 'bien que', contextualMeaning: 'although (part 1)' },
-        { surface: 'que', reading: null, baseForm: 'bien que', contextualMeaning: 'although (part 2)' },
-        { surface: 'l’atmosphère', reading: null, baseForm: 'atmosphère', contextualMeaning: 'the atmosphere' },
-        { surface: 'semble', reading: null, baseForm: 'sembler', contextualMeaning: 'seems' },
-        { surface: 'paisible,', reading: null, baseForm: 'paisible', contextualMeaning: 'peaceful' },
-        { surface: 'chaque', reading: null, baseForm: 'chaque', contextualMeaning: 'each / every' },
-        { surface: 'détail', reading: null, baseForm: 'détail', contextualMeaning: 'detail' },
+        { surface: 'Clara', reading: null, baseForm: 'Clara', contextualMeaning: 'Clara' },
+        { surface: 'ouvre', reading: null, baseForm: 'ouvrir', contextualMeaning: 'opens' },
+        { surface: 'son', reading: null, baseForm: 'son', contextualMeaning: 'her' },
+        { surface: 'carnet', reading: null, baseForm: 'carnet', contextualMeaning: 'notebook' },
+        { surface: 'et', reading: null, baseForm: 'et', contextualMeaning: 'and' },
+        { surface: 'relit', reading: null, baseForm: 'relire', contextualMeaning: 'rereads' },
+        { surface: 'attentivement', reading: null, baseForm: 'attentivement', contextualMeaning: 'carefully' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'petite', reading: null, baseForm: 'petit', contextualMeaning: 'small' },
+        { surface: 'note', reading: null, baseForm: 'note', contextualMeaning: 'note' },
+        { surface: 'rouge', reading: null, baseForm: 'rouge', contextualMeaning: 'red' },
+        { surface: 'près', reading: null, baseForm: 'près de', contextualMeaning: 'near' },
         { surface: 'de', reading: null, baseForm: 'de', contextualMeaning: 'of' },
-        { surface: 'cet', reading: null, baseForm: 'ce', contextualMeaning: 'this' },
-        { surface: 'endroit', reading: null, baseForm: 'endroit', contextualMeaning: 'place' },
-        { surface: 'cache', reading: null, baseForm: 'cacher', contextualMeaning: 'hides' },
-        { surface: 'une', reading: null, baseForm: 'un', contextualMeaning: 'an' },
-        { surface: 'histoire', reading: null, baseForm: 'histoire', contextualMeaning: 'story / history' },
-        { surface: 'ancienne', reading: null, baseForm: 'ancien', contextualMeaning: 'ancient / old' },
-        { surface: 'qu’elle', reading: null, baseForm: 'que + elle', contextualMeaning: 'that she' },
-        { surface: 'souhaite', reading: null, baseForm: 'souhaiter', contextualMeaning: 'wishes / hopes' },
-        { surface: 'comprendre.', reading: null, baseForm: 'comprendre', contextualMeaning: 'to understand' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'fenêtre.', reading: null, baseForm: 'fenêtre', contextualMeaning: 'window' },
       ],
     },
     {
-      fullSentence: 'Sans hésiter davantage, elle note soigneusement ces indices dans son carnet avant de poursuivre ses recherches.',
-      englishTranslation: 'Without hesitating any further, she carefully writes down these clues in her notebook before continuing her search.',
+      fullSentence: '« Est-ce que tu connais déjà cette adresse dans le vieux quartier ? » demande-t-elle à Lucas.',
+      englishTranslation: '"Do you already know this address in the old neighbourhood?" she asks Lucas.',
       romanisation: null,
-      grammarNote: 'Prepositions like "sans" ("without") and "avant de" ("before") are followed directly by the infinitive verb ("hésiter", "poursuivre").',
+      grammarNote: 'Use "connaître" ("tu connais") when talking about being familiar with a place, street, or person.',
       tokens: [
-        { surface: 'Sans', reading: null, baseForm: 'sans', contextualMeaning: 'without' },
-        { surface: 'hésiter', reading: null, baseForm: 'hésiter', contextualMeaning: 'hesitating' },
-        { surface: 'davantage,', reading: null, baseForm: 'davantage', contextualMeaning: 'further / more' },
-        { surface: 'elle', reading: null, baseForm: 'elle', contextualMeaning: 'she' },
-        { surface: 'note', reading: null, baseForm: 'noter', contextualMeaning: 'notes / writes down' },
-        { surface: 'soigneusement', reading: null, baseForm: 'soigneusement', contextualMeaning: 'carefully' },
-        { surface: 'ces', reading: null, baseForm: 'ce', contextualMeaning: 'these' },
-        { surface: 'indices', reading: null, baseForm: 'indice', contextualMeaning: 'clues' },
+        { surface: '« Est-ce', reading: null, baseForm: 'est-ce que', contextualMeaning: 'do (question)' },
+        { surface: 'que', reading: null, baseForm: 'que', contextualMeaning: 'that' },
+        { surface: 'tu', reading: null, baseForm: 'tu', contextualMeaning: 'you' },
+        { surface: 'connais', reading: null, baseForm: 'connaître', contextualMeaning: 'know' },
+        { surface: 'déjà', reading: null, baseForm: 'déjà', contextualMeaning: 'already' },
+        { surface: 'cette', reading: null, baseForm: 'ce', contextualMeaning: 'this' },
+        { surface: 'adresse', reading: null, baseForm: 'adresse', contextualMeaning: 'address' },
         { surface: 'dans', reading: null, baseForm: 'dans', contextualMeaning: 'in' },
-        { surface: 'son', reading: null, baseForm: 'son', contextualMeaning: 'her' },
-        { surface: 'carnet', reading: null, baseForm: 'carnet', contextualMeaning: 'notebook' },
-        { surface: 'avant', reading: null, baseForm: 'avant de', contextualMeaning: 'before' },
-        { surface: 'de', reading: null, baseForm: 'de', contextualMeaning: 'of / to' },
-        { surface: 'poursuivre', reading: null, baseForm: 'poursuivre', contextualMeaning: 'continuing / pursuing' },
-        { surface: 'ses', reading: null, baseForm: 'son', contextualMeaning: 'her' },
-        { surface: 'recherches.', reading: null, baseForm: 'recherche', contextualMeaning: 'research / search' },
+        { surface: 'le', reading: null, baseForm: 'le', contextualMeaning: 'the' },
+        { surface: 'vieux', reading: null, baseForm: 'vieux', contextualMeaning: 'old' },
+        { surface: 'quartier ? »', reading: null, baseForm: 'quartier', contextualMeaning: 'neighbourhood' },
+        { surface: 'demande-t-elle', reading: null, baseForm: 'demander', contextualMeaning: 'she asks' },
+        { surface: 'à', reading: null, baseForm: 'à', contextualMeaning: 'to' },
+        { surface: 'Lucas.', reading: null, baseForm: 'Lucas', contextualMeaning: 'Lucas' },
+      ],
+    },
+    {
+      fullSentence: 'Lucas boit une gorgée de son café chaud et regarde sa montre avec calme.',
+      englishTranslation: 'Lucas drinks a sip of his hot coffee and looks at his watch calmly.',
+      romanisation: null,
+      grammarNote: '"Une gorgée de café" means "a sip of coffee" — quantity nouns are always followed by "de".',
+      tokens: [
+        { surface: 'Lucas', reading: null, baseForm: 'Lucas', contextualMeaning: 'Lucas' },
+        { surface: 'boit', reading: null, baseForm: 'boire', contextualMeaning: 'drinks' },
+        { surface: 'une', reading: null, baseForm: 'une', contextualMeaning: 'a' },
+        { surface: 'gorgée', reading: null, baseForm: 'gorgée', contextualMeaning: 'sip' },
+        { surface: 'de', reading: null, baseForm: 'de', contextualMeaning: 'of' },
+        { surface: 'son', reading: null, baseForm: 'son', contextualMeaning: 'his' },
+        { surface: 'café', reading: null, baseForm: 'café', contextualMeaning: 'coffee' },
+        { surface: 'chaud', reading: null, baseForm: 'chaud', contextualMeaning: 'hot' },
+        { surface: 'et', reading: null, baseForm: 'et', contextualMeaning: 'and' },
+        { surface: 'regarde', reading: null, baseForm: 'regarder', contextualMeaning: 'looks at' },
+        { surface: 'sa', reading: null, baseForm: 'son', contextualMeaning: 'his' },
+        { surface: 'montre', reading: null, baseForm: 'montre', contextualMeaning: 'watch' },
+        { surface: 'avec', reading: null, baseForm: 'avec', contextualMeaning: 'with' },
+        { surface: 'calme.', reading: null, baseForm: 'calme', contextualMeaning: 'calm' },
+      ],
+    },
+    {
+      fullSentence: '« Oui, c’est une petite rue tranquille derrière la place principale, à dix minutes d’ici, » répond-il.',
+      englishTranslation: '"Yes, it is a quiet little street behind the main square, ten minutes from here," he replies.',
+      romanisation: null,
+      grammarNote: '"À dix minutes d’ici" ("ten minutes from here") uses the preposition "à" to express distance in time or space.',
+      tokens: [
+        { surface: '« Oui,', reading: null, baseForm: 'oui', contextualMeaning: 'yes' },
+        { surface: 'c’est', reading: null, baseForm: 'ce + être', contextualMeaning: 'it is' },
+        { surface: 'une', reading: null, baseForm: 'une', contextualMeaning: 'a' },
+        { surface: 'petite', reading: null, baseForm: 'petit', contextualMeaning: 'small / little' },
+        { surface: 'rue', reading: null, baseForm: 'rue', contextualMeaning: 'street' },
+        { surface: 'tranquille', reading: null, baseForm: 'tranquille', contextualMeaning: 'quiet' },
+        { surface: 'derrière', reading: null, baseForm: 'derrière', contextualMeaning: 'behind' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'place', reading: null, baseForm: 'place', contextualMeaning: 'square' },
+        { surface: 'principale,', reading: null, baseForm: 'principal', contextualMeaning: 'main' },
+        { surface: 'à', reading: null, baseForm: 'à', contextualMeaning: 'at' },
+        { surface: 'dix', reading: null, baseForm: 'dix', contextualMeaning: 'ten' },
+        { surface: 'minutes', reading: null, baseForm: 'minute', contextualMeaning: 'minutes' },
+        { surface: 'd’ici, »', reading: null, baseForm: 'ici', contextualMeaning: 'from here' },
+        { surface: 'répond-il.', reading: null, baseForm: 'répondre', contextualMeaning: 'he replies' },
+      ],
+    },
+    {
+      fullSentence: 'Dehors, la pluie commence enfin à ralentir et quelques passants marchent sur le trottoir.',
+      englishTranslation: 'Outside, the rain finally begins to slow down and a few passersby walk on the pavement.',
+      romanisation: null,
+      grammarNote: '"Commencer à + infinitive" ("commence à ralentir") means "to begin to do something".',
+      tokens: [
+        { surface: 'Dehors,', reading: null, baseForm: 'dehors', contextualMeaning: 'outside' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'pluie', reading: null, baseForm: 'pluie', contextualMeaning: 'rain' },
+        { surface: 'commence', reading: null, baseForm: 'commencer', contextualMeaning: 'begins' },
+        { surface: 'enfin', reading: null, baseForm: 'enfin', contextualMeaning: 'finally' },
+        { surface: 'à', reading: null, baseForm: 'à', contextualMeaning: 'to' },
+        { surface: 'ralentir', reading: null, baseForm: 'ralentir', contextualMeaning: 'slow down' },
+        { surface: 'et', reading: null, baseForm: 'et', contextualMeaning: 'and' },
+        { surface: 'quelques', reading: null, baseForm: 'quelque', contextualMeaning: 'a few' },
+        { surface: 'passants', reading: null, baseForm: 'passant', contextualMeaning: 'passersby' },
+        { surface: 'marchent', reading: null, baseForm: 'marcher', contextualMeaning: 'walk' },
+        { surface: 'sur', reading: null, baseForm: 'sur', contextualMeaning: 'on' },
+        { surface: 'le', reading: null, baseForm: 'le', contextualMeaning: 'the' },
+        { surface: 'trottoir.', reading: null, baseForm: 'trottoir', contextualMeaning: 'pavement / sidewalk' },
+      ],
+    },
+    {
+      fullSentence: 'Clara garde précieusement la clé dans sa poche et se prépare à découvrir la suite du mystère.',
+      englishTranslation: 'Clara carefully keeps the key in her pocket and gets ready to discover the rest of the mystery.',
+      romanisation: null,
+      grammarNote: '"Se préparer à + infinitive" ("se prépare à découvrir") means "to get ready to do something".',
+      tokens: [
+        { surface: 'Clara', reading: null, baseForm: 'Clara', contextualMeaning: 'Clara' },
+        { surface: 'garde', reading: null, baseForm: 'garder', contextualMeaning: 'keeps' },
+        { surface: 'précieusement', reading: null, baseForm: 'précieusement', contextualMeaning: 'carefully / safely' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'clé', reading: null, baseForm: 'clé', contextualMeaning: 'key' },
+        { surface: 'dans', reading: null, baseForm: 'dans', contextualMeaning: 'in' },
+        { surface: 'sa', reading: null, baseForm: 'son', contextualMeaning: 'her' },
+        { surface: 'poche', reading: null, baseForm: 'poche', contextualMeaning: 'pocket' },
+        { surface: 'et', reading: null, baseForm: 'et', contextualMeaning: 'and' },
+        { surface: 'se', reading: null, baseForm: 'se', contextualMeaning: 'herself' },
+        { surface: 'prépare', reading: null, baseForm: 'préparer', contextualMeaning: 'gets ready' },
+        { surface: 'à', reading: null, baseForm: 'à', contextualMeaning: 'to' },
+        { surface: 'découvrir', reading: null, baseForm: 'découvrir', contextualMeaning: 'discover' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'suite', reading: null, baseForm: 'suite', contextualMeaning: 'continuation / rest' },
+        { surface: 'du', reading: null, baseForm: 'du', contextualMeaning: 'of the' },
+        { surface: 'mystère.', reading: null, baseForm: 'mystère', contextualMeaning: 'mystery' },
       ],
     },
   ],
   it: [
     {
-      fullSentence: 'Mentre osserva attentamente i passanti, Marco si rende conto che quel pomeriggio nasconde una sorpresa inaspettata.',
-      englishTranslation: 'While he carefully observes the passersby, Marco realises that that afternoon hides an unexpected surprise.',
+      fullSentence: 'Marco apre di nuovo la scatola di legno per guardare bene il piccolo biglietto antico.',
+      englishTranslation: 'Marco opens the wooden box again to look closely at the small antique note.',
       romanisation: null,
-      grammarNote: '"Rendersi conto che" ("to realise that") is a high-frequency reflexive idiom used to express sudden realisation.',
+      grammarNote: '"Di nuovo" means "again", and "per + infinitive" ("per guardare") expresses purpose ("in order to look").',
       tokens: [
-        { surface: 'Mentre', reading: null, baseForm: 'mentre', contextualMeaning: 'while' },
-        { surface: 'osserva', reading: null, baseForm: 'osservare', contextualMeaning: 'observes' },
-        { surface: 'attentamente', reading: null, baseForm: 'attentamente', contextualMeaning: 'carefully' },
-        { surface: 'i', reading: null, baseForm: 'il', contextualMeaning: 'the (plural)' },
-        { surface: 'passanti,', reading: null, baseForm: 'passante', contextualMeaning: 'passersby' },
         { surface: 'Marco', reading: null, baseForm: 'Marco', contextualMeaning: 'Marco' },
-        { surface: 'si', reading: null, baseForm: 'si', contextualMeaning: 'himself (reflexive)' },
-        { surface: 'rende', reading: null, baseForm: 'rendere', contextualMeaning: 'makes / realises' },
-        { surface: 'conto', reading: null, baseForm: 'conto', contextualMeaning: 'awareness' },
-        { surface: 'che', reading: null, baseForm: 'che', contextualMeaning: 'that' },
-        { surface: 'quel', reading: null, baseForm: 'quello', contextualMeaning: 'that' },
-        { surface: 'pomeriggio', reading: null, baseForm: 'pomeriggio', contextualMeaning: 'afternoon' },
-        { surface: 'nasconde', reading: null, baseForm: 'nascondere', contextualMeaning: 'hides' },
-        { surface: 'una', reading: null, baseForm: 'una', contextualMeaning: 'an' },
-        { surface: 'sorpresa', reading: null, baseForm: 'sorpresa', contextualMeaning: 'surprise' },
-        { surface: 'inaspettata.', reading: null, baseForm: 'inaspettato', contextualMeaning: 'unexpected' },
+        { surface: 'apre', reading: null, baseForm: 'aprire', contextualMeaning: 'opens' },
+        { surface: 'di', reading: null, baseForm: 'di nuovo', contextualMeaning: 'again (part 1)' },
+        { surface: 'nuovo', reading: null, baseForm: 'nuovo', contextualMeaning: 'again (part 2)' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'scatola', reading: null, baseForm: 'scatola', contextualMeaning: 'box' },
+        { surface: 'di', reading: null, baseForm: 'di', contextualMeaning: 'of' },
+        { surface: 'legno', reading: null, baseForm: 'legno', contextualMeaning: 'wood' },
+        { surface: 'per', reading: null, baseForm: 'per', contextualMeaning: 'to / in order to' },
+        { surface: 'guardare', reading: null, baseForm: 'guardare', contextualMeaning: 'look at' },
+        { surface: 'bene', reading: null, baseForm: 'bene', contextualMeaning: 'well / closely' },
+        { surface: 'il', reading: null, baseForm: 'il', contextualMeaning: 'the' },
+        { surface: 'piccolo', reading: null, baseForm: 'piccolo', contextualMeaning: 'small' },
+        { surface: 'biglietto', reading: null, baseForm: 'biglietto', contextualMeaning: 'note / ticket' },
+        { surface: 'antico.', reading: null, baseForm: 'antico', contextualMeaning: 'antique / old' },
       ],
     },
     {
-      fullSentence: 'Pertanto decide di approfondire la questione parlando direttamente con le persone del posto.',
-      englishTranslation: 'Therefore, he decides to look deeper into the matter by speaking directly with the locals.',
+      fullSentence: '« Conosci questa vecchia strada vicino alla stazione ? » chiede Marco alla sua amica Sofia.',
+      englishTranslation: '"Do you know this old street near the station?" Marco asks his friend Sofia.',
       romanisation: null,
-      grammarNote: 'The gerund "parlando" ("by speaking") expresses the means or manner by which an action is carried out.',
+      grammarNote: '"Chiedere a qualcuno" ("chiede alla sua amica") means "to ask someone".',
       tokens: [
-        { surface: 'Pertanto', reading: null, baseForm: 'pertanto', contextualMeaning: 'therefore' },
-        { surface: 'decide', reading: null, baseForm: 'decidere', contextualMeaning: 'he decides' },
-        { surface: 'di', reading: null, baseForm: 'di', contextualMeaning: 'to' },
-        { surface: 'approfondire', reading: null, baseForm: 'approfondire', contextualMeaning: 'deepen / investigate' },
-        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
-        { surface: 'questione', reading: null, baseForm: 'questione', contextualMeaning: 'matter / question' },
-        { surface: 'parlando', reading: null, baseForm: 'parlare', contextualMeaning: 'by speaking' },
-        { surface: 'direttamente', reading: null, baseForm: 'direttamente', contextualMeaning: 'directly' },
+        { surface: '« Conosci', reading: null, baseForm: 'conoscere', contextualMeaning: 'do you know' },
+        { surface: 'questa', reading: null, baseForm: 'questo', contextualMeaning: 'this' },
+        { surface: 'vecchia', reading: null, baseForm: 'vecchio', contextualMeaning: 'old' },
+        { surface: 'strada', reading: null, baseForm: 'strada', contextualMeaning: 'street' },
+        { surface: 'vicino', reading: null, baseForm: 'vicino a', contextualMeaning: 'near' },
+        { surface: 'alla', reading: null, baseForm: 'alla', contextualMeaning: 'the' },
+        { surface: 'stazione ? »', reading: null, baseForm: 'stazione', contextualMeaning: 'station' },
+        { surface: 'chiede', reading: null, baseForm: 'chiedere', contextualMeaning: 'asks' },
+        { surface: 'Marco', reading: null, baseForm: 'Marco', contextualMeaning: 'Marco' },
+        { surface: 'alla', reading: null, baseForm: 'alla', contextualMeaning: 'to the' },
+        { surface: 'sua', reading: null, baseForm: 'suo', contextualMeaning: 'his' },
+        { surface: 'amica', reading: null, baseForm: 'amica', contextualMeaning: 'friend' },
+        { surface: 'Sofia.', reading: null, baseForm: 'Sofia', contextualMeaning: 'Sofia' },
+      ],
+    },
+    {
+      fullSentence: 'Sofia sorride con calma e indica l’orologio grande sopra l’ingresso della piazza.',
+      englishTranslation: 'Sofia smiles calmly and points to the big clock above the entrance to the square.',
+      romanisation: null,
+      grammarNote: '"Sopra" means "above / over" and connects directly to the following noun.',
+      tokens: [
+        { surface: 'Sofia', reading: null, baseForm: 'Sofia', contextualMeaning: 'Sofia' },
+        { surface: 'sorride', reading: null, baseForm: 'sorridere', contextualMeaning: 'smiles' },
         { surface: 'con', reading: null, baseForm: 'con', contextualMeaning: 'with' },
-        { surface: 'le', reading: null, baseForm: 'la', contextualMeaning: 'the' },
-        { surface: 'persone', reading: null, baseForm: 'persona', contextualMeaning: 'people' },
+        { surface: 'calma', reading: null, baseForm: 'calma', contextualMeaning: 'calm' },
+        { surface: 'e', reading: null, baseForm: 'e', contextualMeaning: 'and' },
+        { surface: 'indica', reading: null, baseForm: 'indicare', contextualMeaning: 'points to' },
+        { surface: 'l’orologio', reading: null, baseForm: 'orologio', contextualMeaning: 'the clock' },
+        { surface: 'grande', reading: null, baseForm: 'grande', contextualMeaning: 'big' },
+        { surface: 'sopra', reading: null, baseForm: 'sopra', contextualMeaning: 'above' },
+        { surface: 'l’ingresso', reading: null, baseForm: 'ingresso', contextualMeaning: 'the entrance' },
+        { surface: 'della', reading: null, baseForm: 'della', contextualMeaning: 'of the' },
+        { surface: 'piazza.', reading: null, baseForm: 'piazza', contextualMeaning: 'square' },
+      ],
+    },
+    {
+      fullSentence: '« Sì, ci passo ogni settimana quando vado a comprare i libri nuovi, » risponde Sofia.',
+      englishTranslation: '"Yes, I pass by there every week when I go to buy new books," Sofia replies.',
+      romanisation: null,
+      grammarNote: 'The little pronoun "ci" means "there" ("ci passo" = I pass by there).',
+      tokens: [
+        { surface: '« Sì,', reading: null, baseForm: 'sì', contextualMeaning: 'yes' },
+        { surface: 'ci', reading: null, baseForm: 'ci', contextualMeaning: 'there' },
+        { surface: 'passo', reading: null, baseForm: 'passare', contextualMeaning: 'I pass by' },
+        { surface: 'ogni', reading: null, baseForm: 'ogni', contextualMeaning: 'every' },
+        { surface: 'settimana', reading: null, baseForm: 'settimana', contextualMeaning: 'week' },
+        { surface: 'quando', reading: null, baseForm: 'quando', contextualMeaning: 'when' },
+        { surface: 'vado', reading: null, baseForm: 'andare', contextualMeaning: 'I go' },
+        { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'to' },
+        { surface: 'comprare', reading: null, baseForm: 'comprare', contextualMeaning: 'buy' },
+        { surface: 'i', reading: null, baseForm: 'il', contextualMeaning: 'the' },
+        { surface: 'libri', reading: null, baseForm: 'libro', contextualMeaning: 'books' },
+        { surface: 'nuovi, »', reading: null, baseForm: 'nuovo', contextualMeaning: 'new' },
+        { surface: 'risponde', reading: null, baseForm: 'rispondere', contextualMeaning: 'replies' },
+        { surface: 'Sofia.', reading: null, baseForm: 'Sofia', contextualMeaning: 'Sofia' },
+      ],
+    },
+    {
+      fullSentence: 'Intanto il profumo del caffè caldo arriva dal piccolo bar all’angolo della piazza.',
+      englishTranslation: 'Meanwhile, the aroma of hot coffee drifts over from the small café at the corner of the square.',
+      romanisation: null,
+      grammarNote: '"Dal" is the contraction of "da + il" ("from the"), and "all’angolo" means "at the corner".',
+      tokens: [
+        { surface: 'Intanto', reading: null, baseForm: 'intanto', contextualMeaning: 'meanwhile' },
+        { surface: 'il', reading: null, baseForm: 'il', contextualMeaning: 'the' },
+        { surface: 'profumo', reading: null, baseForm: 'profumo', contextualMeaning: 'aroma / scent' },
         { surface: 'del', reading: null, baseForm: 'del', contextualMeaning: 'of the' },
-        { surface: 'posto.', reading: null, baseForm: 'posto', contextualMeaning: 'local place' },
+        { surface: 'caffè', reading: null, baseForm: 'caffè', contextualMeaning: 'coffee' },
+        { surface: 'caldo', reading: null, baseForm: 'caldo', contextualMeaning: 'hot' },
+        { surface: 'arriva', reading: null, baseForm: 'arrivare', contextualMeaning: 'arrives / comes' },
+        { surface: 'dal', reading: null, baseForm: 'dal', contextualMeaning: 'from the' },
+        { surface: 'piccolo', reading: null, baseForm: 'piccolo', contextualMeaning: 'small' },
+        { surface: 'bar', reading: null, baseForm: 'bar', contextualMeaning: 'café' },
+        { surface: 'all’angolo', reading: null, baseForm: 'angolo', contextualMeaning: 'at the corner' },
+        { surface: 'della', reading: null, baseForm: 'della', contextualMeaning: 'of the' },
+        { surface: 'piazza.', reading: null, baseForm: 'piazza', contextualMeaning: 'square' },
+      ],
+    },
+    {
+      fullSentence: 'Insieme mettono la scatola nella borsa e camminano con entusiasmo verso la prossima tappa.',
+      englishTranslation: 'Together they put the box into the bag and walk with enthusiasm toward the next stop.',
+      romanisation: null,
+      grammarNote: '"Verso" means "toward" and is used for both physical directions and time.',
+      tokens: [
+        { surface: 'Insieme', reading: null, baseForm: 'insieme', contextualMeaning: 'together' },
+        { surface: 'mettono', reading: null, baseForm: 'mettere', contextualMeaning: 'they put' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'scatola', reading: null, baseForm: 'scatola', contextualMeaning: 'box' },
+        { surface: 'nella', reading: null, baseForm: 'nella', contextualMeaning: 'in the' },
+        { surface: 'borsa', reading: null, baseForm: 'borsa', contextualMeaning: 'bag' },
+        { surface: 'e', reading: null, baseForm: 'e', contextualMeaning: 'and' },
+        { surface: 'camminano', reading: null, baseForm: 'camminare', contextualMeaning: 'they walk' },
+        { surface: 'con', reading: null, baseForm: 'con', contextualMeaning: 'with' },
+        { surface: 'entusiasmo', reading: null, baseForm: 'entusiasmo', contextualMeaning: 'enthusiasm' },
+        { surface: 'verso', reading: null, baseForm: 'verso', contextualMeaning: 'toward' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'prossima', reading: null, baseForm: 'prossimo', contextualMeaning: 'next' },
+        { surface: 'tappa.', reading: null, baseForm: 'tappa', contextualMeaning: 'stop / stage' },
       ],
     },
   ],
   ja: [
     {
-      fullSentence: '不思議に思いながらも、健太はその古い手掛かりが新しい発見につながると確信していました。',
-      englishTranslation: 'While thinking it was mysterious, Kenta was convinced that that old clue would lead to a new discovery.',
-      romanisation: 'Fushigi ni omoinagara mo, Kenta wa sono furui tegakari ga atarashii hakken ni tsunagaru to kakushin shite imashita.',
-      grammarNote: '「〜ながらも」 ("while / although") expresses two simultaneous contrasting feelings or actions.',
+      fullSentence: '遥は小さな懐中時計をもう一度見て、裏側の文字をゆっくり読みました。',
+      englishTranslation: 'Haruka looked at the small pocket watch once more and slowly read the letters on the back.',
+      romanisation: 'Haruka wa chiisana kaichuudokei wo mou ichido mite, uragawa no moji wo yukkuri yomimashita.',
+      grammarNote: '「もう一度」 ("mou ichido") means "once more / again", and the -て form 「見て」 connects two sequential actions.',
       tokens: [
-        { surface: '不思議', reading: 'ふしぎ', baseForm: '不思議', contextualMeaning: 'mysterious / strange' },
-        { surface: 'に', reading: null, baseForm: 'に', contextualMeaning: 'as (adverbial)' },
-        { surface: '思いながらも、', reading: 'おもいながらも、', baseForm: '思う', contextualMeaning: 'while thinking / feeling,' },
-        { surface: '健太', reading: 'けんた', baseForm: '健太', contextualMeaning: 'Kenta' },
+        { surface: '遥', reading: 'はるか', baseForm: '遥', contextualMeaning: 'Haruka' },
         { surface: 'は', reading: null, baseForm: 'は', contextualMeaning: '(topic)' },
-        { surface: 'その', reading: null, baseForm: 'その', contextualMeaning: 'that' },
+        { surface: '小さな', reading: 'ちいさな', baseForm: '小さい', contextualMeaning: 'small' },
+        { surface: '懐中時計', reading: 'かいちゅうどけい', baseForm: '懐中時計', contextualMeaning: 'pocket watch' },
+        { surface: 'を', reading: null, baseForm: 'を', contextualMeaning: '(object)' },
+        { surface: 'もう一度', reading: 'もういちど', baseForm: 'もう一度', contextualMeaning: 'once more' },
+        { surface: '見て、', reading: 'みて、', baseForm: '見る', contextualMeaning: 'looking at,' },
+        { surface: '裏側', reading: 'うらがわ', baseForm: '裏側', contextualMeaning: 'the back side' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: 'of' },
+        { surface: '文字', reading: 'もじ', baseForm: '文字', contextualMeaning: 'letters / inscription' },
+        { surface: 'を', reading: null, baseForm: 'を', contextualMeaning: '(object)' },
+        { surface: 'ゆっくり', reading: null, baseForm: 'ゆっくり', contextualMeaning: 'slowly' },
+        { surface: '読みました。', reading: 'よみました。', baseForm: '読む', contextualMeaning: 'read' },
+      ],
+    },
+    {
+      fullSentence: '「この古い地図の場所を知っていますか？」と遥は隣の蓮に聞きました。',
+      englishTranslation: '"Do you know the place on this old map?" Haruka asked Ren beside her.',
+      romanisation: '“Kono furui chizu no basho wo shitte imasu ka?” to Haruka wa tonari no Ren ni kikimashita.',
+      grammarNote: '「知っていますか」 ("shitte imasu ka") is the polite way to ask "Do you know?".',
+      tokens: [
+        { surface: '「この', reading: null, baseForm: 'この', contextualMeaning: 'this' },
         { surface: '古い', reading: 'ふるい', baseForm: '古い', contextualMeaning: 'old' },
-        { surface: '手掛かり', reading: 'てがかり', baseForm: '手掛かり', contextualMeaning: 'clue' },
-        { surface: 'が', reading: null, baseForm: 'が', contextualMeaning: '(subject)' },
-        { surface: '新しい', reading: 'あたらしい', baseForm: '新しい', contextualMeaning: 'new' },
-        { surface: '発見', reading: 'はっけん', baseForm: '発見', contextualMeaning: 'discovery' },
+        { surface: '地図', reading: 'ちず', baseForm: '地図', contextualMeaning: 'map' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: 'on / of' },
+        { surface: '場所', reading: 'ばしょ', baseForm: '場所', contextualMeaning: 'place' },
+        { surface: 'を', reading: null, baseForm: 'を', contextualMeaning: '(object)' },
+        { surface: '知って', reading: 'しって', baseForm: '知る', contextualMeaning: 'knowing' },
+        { surface: 'いますか？」', reading: null, baseForm: 'いる', contextualMeaning: 'do you?' },
+        { surface: 'と', reading: null, baseForm: 'と', contextualMeaning: '(quote)' },
+        { surface: '遥', reading: 'はるか', baseForm: '遥', contextualMeaning: 'Haruka' },
+        { surface: 'は', reading: null, baseForm: 'は', contextualMeaning: '(topic)' },
+        { surface: '隣', reading: 'となり', baseForm: '隣', contextualMeaning: 'next to / beside' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: '(modifier)' },
+        { surface: '蓮', reading: 'れん', baseForm: '蓮', contextualMeaning: 'Ren' },
         { surface: 'に', reading: null, baseForm: 'に', contextualMeaning: 'to' },
-        { surface: 'つながる', reading: null, baseForm: 'つながる', contextualMeaning: 'leads / connects' },
-        { surface: 'と', reading: null, baseForm: 'と', contextualMeaning: 'that (quotation)' },
-        { surface: '確信して', reading: 'かくしんして', baseForm: '確信する', contextualMeaning: 'being convinced' },
-        { surface: 'いました。', reading: null, baseForm: 'いる', contextualMeaning: 'was' },
+        { surface: '聞きました。', reading: 'ききました。', baseForm: '聞く', contextualMeaning: 'asked' },
+      ],
+    },
+    {
+      fullSentence: '蓮は少し考えてから、「ええ、駅の近くの静かな通りですよ」と答えました。',
+      englishTranslation: 'After thinking for a moment, Ren answered: "Yes, it is a quiet street near the station."',
+      romanisation: 'Ren wa sukoshi kangaete kara, “Ee, eki no chikaku no shizuka na toori desu yo,” to kotaemashita.',
+      grammarNote: '「〜てから」 ("kangaete kara") means "after doing ~" ("after thinking").',
+      tokens: [
+        { surface: '蓮', reading: 'れん', baseForm: '蓮', contextualMeaning: 'Ren' },
+        { surface: 'は', reading: null, baseForm: 'は', contextualMeaning: '(topic)' },
+        { surface: '少し', reading: 'すこし', baseForm: '少し', contextualMeaning: 'a little / a moment' },
+        { surface: '考えてから、', reading: 'かんがえてから、', baseForm: '考える', contextualMeaning: 'after thinking,' },
+        { surface: '「ええ、', reading: null, baseForm: 'ええ', contextualMeaning: 'yes,' },
+        { surface: '駅', reading: 'えき', baseForm: '駅', contextualMeaning: 'station' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: '’s' },
+        { surface: '近く', reading: 'ちかく', baseForm: '近く', contextualMeaning: 'near' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: 'of' },
+        { surface: '静かな', reading: 'しずかな', baseForm: '静か', contextualMeaning: 'quiet' },
+        { surface: '通り', reading: 'とおり', baseForm: '通り', contextualMeaning: 'street' },
+        { surface: 'ですよ」', reading: null, baseForm: 'です', contextualMeaning: 'it is!' },
+        { surface: 'と', reading: null, baseForm: 'と', contextualMeaning: '(quote)' },
+        { surface: '答えました。', reading: 'こたえました。', baseForm: '答える', contextualMeaning: 'answered' },
+      ],
+    },
+    {
+      fullSentence: '外の雨は少しずつ弱くなり、石畳の道がきれいに光っています。',
+      englishTranslation: 'The rain outside grows weaker little by little, and the cobblestone road is shining brightly.',
+      romanisation: 'Soto no ame wa sukoshizutsu yowaku nari, ishidatami no michi ga kirei ni hikatte imasu.',
+      grammarNote: '「少しずつ」 ("sukoshizutsu") means "little by little / gradually".',
+      tokens: [
+        { surface: '外', reading: 'そと', baseForm: '外', contextualMeaning: 'outside' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: '’s' },
+        { surface: '雨', reading: 'あめ', baseForm: '雨', contextualMeaning: 'rain' },
+        { surface: 'は', reading: null, baseForm: 'は', contextualMeaning: '(topic)' },
+        { surface: '少しずつ', reading: 'すこしずつ', baseForm: '少しずつ', contextualMeaning: 'little by little' },
+        { surface: '弱く', reading: 'よわく', baseForm: '弱い', contextualMeaning: 'weaker / lighter' },
+        { surface: 'なり、', reading: null, baseForm: 'なる', contextualMeaning: 'becomes,' },
+        { surface: '石畳', reading: 'いしだたみ', baseForm: '石畳', contextualMeaning: 'cobblestone' },
+        { surface: 'の', reading: null, baseForm: 'の', contextualMeaning: 'of' },
+        { surface: '道', reading: 'みち', baseForm: '道', contextualMeaning: 'road / path' },
+        { surface: 'が', reading: null, baseForm: 'が', contextualMeaning: '(subject)' },
+        { surface: 'きれいに', reading: null, baseForm: 'きれい', contextualMeaning: 'beautifully / brightly' },
+        { surface: '光って', reading: 'ひかって', baseForm: '光る', contextualMeaning: 'shining' },
+        { surface: 'います。', reading: null, baseForm: 'いる', contextualMeaning: 'is' },
+      ],
+    },
+    {
+      fullSentence: '二人は温かいお茶を飲んでから、大切な時計をかばんに入れました。',
+      englishTranslation: 'After the two of them drank warm tea, they put the precious watch into the bag.',
+      romanisation: 'Futari wa atatakai ocha wo nonde kara, taisetsu na tokei wo kaban ni iremashita.',
+      grammarNote: '「〜を…に入れました」 ("tokei wo kaban ni iremashita") means "put [object] into [place]".',
+      tokens: [
+        { surface: '二人', reading: 'ふたり', baseForm: '二人', contextualMeaning: 'the two of them' },
+        { surface: 'は', reading: null, baseForm: 'は', contextualMeaning: '(topic)' },
+        { surface: '温かい', reading: 'あたたかい', baseForm: '温かい', contextualMeaning: 'warm' },
+        { surface: 'お茶', reading: 'おちゃ', baseForm: 'お茶', contextualMeaning: 'green tea' },
+        { surface: 'を', reading: null, baseForm: 'を', contextualMeaning: '(object)' },
+        { surface: '飲んでから、', reading: 'のんでから、', baseForm: '飲む', contextualMeaning: 'after drinking,' },
+        { surface: '大切な', reading: 'たいせつな', baseForm: '大切', contextualMeaning: 'precious / important' },
+        { surface: '時計', reading: 'とけい', baseForm: '時計', contextualMeaning: 'watch' },
+        { surface: 'を', reading: null, baseForm: 'を', contextualMeaning: '(object)' },
+        { surface: 'かばん', reading: null, baseForm: 'かばん', contextualMeaning: 'bag' },
+        { surface: 'に', reading: null, baseForm: 'に', contextualMeaning: 'into' },
+        { surface: '入れました。', reading: 'いれました。', baseForm: '入れる', contextualMeaning: 'put in' },
       ],
     },
   ],
   es: [
     {
-      fullSentence: 'A medida que avanzaba la tarde, Elena comprendió que cada conversación revelaba una pieza fundamental del misterio.',
-      englishTranslation: 'As the afternoon progressed, Elena understood that every conversation revealed a fundamental piece of the mystery.',
+      fullSentence: 'Elena abre de nuevo el diario antiguo sobre la mesa de madera para revisar el mapa.',
+      englishTranslation: 'Elena opens the old journal again on the wooden table to check the map.',
       romanisation: null,
-      grammarNote: '"A medida que" ("as / to the extent that") describes two actions developing in parallel over time.',
+      grammarNote: '"De nuevo" means "again", and "para + infinitive" ("para revisar") expresses purpose ("in order to check").',
       tokens: [
-        { surface: 'A', reading: null, baseForm: 'a medida que', contextualMeaning: 'as (part 1)' },
-        { surface: 'medida', reading: null, baseForm: 'medida', contextualMeaning: 'measure / extent' },
-        { surface: 'que', reading: null, baseForm: 'que', contextualMeaning: 'that' },
-        { surface: 'avanzaba', reading: null, baseForm: 'avanzar', contextualMeaning: 'progressed / advanced' },
-        { surface: 'la', reading: null, baseForm: 'el', contextualMeaning: 'the' },
-        { surface: 'tarde,', reading: null, baseForm: 'tarde', contextualMeaning: 'afternoon' },
         { surface: 'Elena', reading: null, baseForm: 'Elena', contextualMeaning: 'Elena' },
-        { surface: 'comprendió', reading: null, baseForm: 'comprender', contextualMeaning: 'understood' },
-        { surface: 'que', reading: null, baseForm: 'que', contextualMeaning: 'that' },
-        { surface: 'cada', reading: null, baseForm: 'cada', contextualMeaning: 'each / every' },
-        { surface: 'conversación', reading: null, baseForm: 'conversación', contextualMeaning: 'conversation' },
-        { surface: 'revelaba', reading: null, baseForm: 'revelar', contextualMeaning: 'revealed' },
-        { surface: 'una', reading: null, baseForm: 'un', contextualMeaning: 'a' },
-        { surface: 'pieza', reading: null, baseForm: 'pieza', contextualMeaning: 'piece' },
-        { surface: 'fundamental', reading: null, baseForm: 'fundamental', contextualMeaning: 'fundamental / key' },
-        { surface: 'del', reading: null, baseForm: 'del', contextualMeaning: 'of the' },
-        { surface: 'misterio.', reading: null, baseForm: 'misterio', contextualMeaning: 'mystery' },
+        { surface: 'abre', reading: null, baseForm: 'abrir', contextualMeaning: 'opens' },
+        { surface: 'de', reading: null, baseForm: 'de nuevo', contextualMeaning: 'again (part 1)' },
+        { surface: 'nuevo', reading: null, baseForm: 'nuevo', contextualMeaning: 'again (part 2)' },
+        { surface: 'el', reading: null, baseForm: 'el', contextualMeaning: 'the' },
+        { surface: 'diario', reading: null, baseForm: 'diario', contextualMeaning: 'journal' },
+        { surface: 'antiguo', reading: null, baseForm: 'antiguo', contextualMeaning: 'old / ancient' },
+        { surface: 'sobre', reading: null, baseForm: 'sobre', contextualMeaning: 'on' },
+        { surface: 'la', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'mesa', reading: null, baseForm: 'mesa', contextualMeaning: 'table' },
+        { surface: 'de', reading: null, baseForm: 'de', contextualMeaning: 'of' },
+        { surface: 'madera', reading: null, baseForm: 'madera', contextualMeaning: 'wood' },
+        { surface: 'para', reading: null, baseForm: 'para', contextualMeaning: 'in order to' },
+        { surface: 'revisar', reading: null, baseForm: 'revisar', contextualMeaning: 'check / review' },
+        { surface: 'el', reading: null, baseForm: 'el', contextualMeaning: 'the' },
+        { surface: 'mapa.', reading: null, baseForm: 'mapa', contextualMeaning: 'map' },
+      ],
+    },
+    {
+      fullSentence: '« ¿Conoces bien ese sendero cerca del acantilado? » le pregunta Elena a Mateo.',
+      englishTranslation: '"Do you know that path near the cliff well?" Elena asks Mateo.',
+      romanisation: null,
+      grammarNote: 'Use "conocer" ("¿conoces?") when asking if someone is familiar with a place or route.',
+      tokens: [
+        { surface: '« ¿Conoces', reading: null, baseForm: 'conocer', contextualMeaning: 'do you know' },
+        { surface: 'bien', reading: null, baseForm: 'bien', contextualMeaning: 'well' },
+        { surface: 'ese', reading: null, baseForm: 'ese', contextualMeaning: 'that' },
+        { surface: 'sendero', reading: null, baseForm: 'sendero', contextualMeaning: 'path / trail' },
+        { surface: 'cerca', reading: null, baseForm: 'cerca de', contextualMeaning: 'near' },
+        { surface: 'del', reading: null, baseForm: 'del', contextualMeaning: 'the' },
+        { surface: 'acantilado? »', reading: null, baseForm: 'acantilado', contextualMeaning: 'cliff' },
+        { surface: 'le', reading: null, baseForm: 'le', contextualMeaning: 'to him' },
+        { surface: 'pregunta', reading: null, baseForm: 'preguntar', contextualMeaning: 'asks' },
+        { surface: 'Elena', reading: null, baseForm: 'Elena', contextualMeaning: 'Elena' },
+        { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'to' },
+        { surface: 'Mateo.', reading: null, baseForm: 'Mateo', contextualMeaning: 'Mateo' },
+      ],
+    },
+    {
+      fullSentence: 'Mateo asiente con calma mientras prepara una linterna grande y dos abrigos.',
+      englishTranslation: 'Mateo nods calmly while he prepares a big lantern and two coats.',
+      romanisation: null,
+      grammarNote: '"Mientras" ("while") connects two simultaneous actions in the present tense.',
+      tokens: [
+        { surface: 'Mateo', reading: null, baseForm: 'Mateo', contextualMeaning: 'Mateo' },
+        { surface: 'asiente', reading: null, baseForm: 'asentir', contextualMeaning: 'nods' },
+        { surface: 'con', reading: null, baseForm: 'con', contextualMeaning: 'with' },
+        { surface: 'calma', reading: null, baseForm: 'calma', contextualMeaning: 'calm' },
+        { surface: 'mientras', reading: null, baseForm: 'mientras', contextualMeaning: 'while' },
+        { surface: 'prepara', reading: null, baseForm: 'preparar', contextualMeaning: 'prepares' },
+        { surface: 'una', reading: null, baseForm: 'una', contextualMeaning: 'a' },
+        { surface: 'linterna', reading: null, baseForm: 'linterna', contextualMeaning: 'lantern / torch' },
+        { surface: 'grande', reading: null, baseForm: 'grande', contextualMeaning: 'big' },
+        { surface: 'y', reading: null, baseForm: 'y', contextualMeaning: 'and' },
+        { surface: 'dos', reading: null, baseForm: 'dos', contextualMeaning: 'two' },
+        { surface: 'abrigos.', reading: null, baseForm: 'abrigo', contextualMeaning: 'coats' },
+      ],
+    },
+    {
+      fullSentence: '« Sí, caminamos por allí todas las semanas cuando bajamos hacia el puerto, » responde él.',
+      englishTranslation: '"Yes, we walk that way every week when we go down toward the harbour," he replies.',
+      romanisation: null,
+      grammarNote: '"Todas las semanas" means "every week", and "hacia" indicates movement "toward" a destination.',
+      tokens: [
+        { surface: '« Sí,', reading: null, baseForm: 'sí', contextualMeaning: 'yes' },
+        { surface: 'caminamos', reading: null, baseForm: 'caminar', contextualMeaning: 'we walk' },
+        { surface: 'por', reading: null, baseForm: 'por', contextualMeaning: 'along / through' },
+        { surface: 'allí', reading: null, baseForm: 'allí', contextualMeaning: 'there' },
+        { surface: 'todas', reading: null, baseForm: 'todo', contextualMeaning: 'every / all' },
+        { surface: 'las', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'semanas', reading: null, baseForm: 'semana', contextualMeaning: 'weeks' },
+        { surface: 'quando', reading: null, baseForm: 'cuando', contextualMeaning: 'when' },
+        { surface: 'bajamos', reading: null, baseForm: 'bajar', contextualMeaning: 'we go down' },
+        { surface: 'hacia', reading: null, baseForm: 'hacia', contextualMeaning: 'toward' },
+        { surface: 'el', reading: null, baseForm: 'el', contextualMeaning: 'the' },
+        { surface: 'puerto, »', reading: null, baseForm: 'puerto', contextualMeaning: 'harbour' },
+        { surface: 'responde', reading: null, baseForm: 'responder', contextualMeaning: 'replies' },
+        { surface: 'él.', reading: null, baseForm: 'él', contextualMeaning: 'he' },
+      ],
+    },
+    {
+      fullSentence: 'Afuera, el viento del mar sopla suavemente y las gaviotas vuelan sobre el agua.',
+      englishTranslation: 'Outside, the sea wind blows gently and the seagulls fly over the water.',
+      romanisation: null,
+      grammarNote: 'Adverbs ending in "-mente" like "suavemente" ("gently") are formed from the feminine adjective ("suave").',
+      tokens: [
+        { surface: 'Afuera,', reading: null, baseForm: 'afuera', contextualMeaning: 'outside' },
+        { surface: 'el', reading: null, baseForm: 'el', contextualMeaning: 'the' },
+        { surface: 'viento', reading: null, baseForm: 'viento', contextualMeaning: 'wind' },
+        { surface: 'del', reading: null, baseForm: 'del', contextualMeaning: 'from the' },
+        { surface: 'mar', reading: null, baseForm: 'mar', contextualMeaning: 'sea' },
+        { surface: 'sopla', reading: null, baseForm: 'soplar', contextualMeaning: 'blows' },
+        { surface: 'suavemente', reading: null, baseForm: 'suavemente', contextualMeaning: 'gently' },
+        { surface: 'y', reading: null, baseForm: 'y', contextualMeaning: 'and' },
+        { surface: 'las', reading: null, baseForm: 'la', contextualMeaning: 'the' },
+        { surface: 'gaviotas', reading: null, baseForm: 'gaviota', contextualMeaning: 'seagulls' },
+        { surface: 'vuelan', reading: null, baseForm: 'volar', contextualMeaning: 'fly' },
+        { surface: 'sobre', reading: null, baseForm: 'sobre', contextualMeaning: 'over' },
+        { surface: 'el', reading: null, baseForm: 'el', contextualMeaning: 'the' },
+        { surface: 'agua.', reading: null, baseForm: 'agua', contextualMeaning: 'water' },
       ],
     },
   ],
   en: [
     {
-      fullSentence: 'While they walk through the market, Helena practises her English with every friendly shopkeeper she meets.',
-      englishTranslation: 'Enquanto elas caminham pelo mercado, Helena pratica seu inglês com cada lojista simpático que ela conhece.',
+      fullSentence: 'Helena opens her bag and puts the small blue notebook carefully inside.',
+      englishTranslation: 'Helena abre sua bolsa e coloca o pequeno caderno azul com cuidado lá dentro.',
       romanisation: null,
-      grammarNote: '"While" significa "enquanto" e conecta duas ações que acontecem ao mesmo tempo. No inglês britânico, o verbo "praticar" escreve-se com "s": "practises".',
+      grammarNote: 'Em inglês, os adjetivos de tamanho e cor vêm antes do substantivo: "the small blue notebook" (o pequeno caderno azul).',
       tokens: [
-        { surface: 'While', reading: null, baseForm: 'while', contextualMeaning: 'enquanto' },
-        { surface: 'they', reading: null, baseForm: 'they', contextualMeaning: 'elas' },
-        { surface: 'walk', reading: null, baseForm: 'walk', contextualMeaning: 'caminham' },
-        { surface: 'through', reading: null, baseForm: 'through', contextualMeaning: 'através de / pelo' },
-        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
-        { surface: 'market,', reading: null, baseForm: 'market', contextualMeaning: 'mercado' },
         { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
-        { surface: 'practises', reading: null, baseForm: 'practise', contextualMeaning: 'pratica' },
-        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
-        { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'inglês' },
-        { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
-        { surface: 'every', reading: null, baseForm: 'every', contextualMeaning: 'cada / todo' },
-        { surface: 'friendly', reading: null, baseForm: 'friendly', contextualMeaning: 'simpático' },
-        { surface: 'shopkeeper', reading: null, baseForm: 'shopkeeper', contextualMeaning: 'lojista / vendedor' },
-        { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'que ela' },
-        { surface: 'meets.', reading: null, baseForm: 'meet', contextualMeaning: 'conhece / encontra' },
+        { surface: 'opens', reading: null, baseForm: 'open', contextualMeaning: 'abre' },
+        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'sua / dela' },
+        { surface: 'bag', reading: null, baseForm: 'bag', contextualMeaning: 'bolsa' },
+        { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
+        { surface: 'puts', reading: null, baseForm: 'put', contextualMeaning: 'coloca' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'o' },
+        { surface: 'small', reading: null, baseForm: 'small', contextualMeaning: 'pequeno' },
+        { surface: 'blue', reading: null, baseForm: 'blue', contextualMeaning: 'azul' },
+        { surface: 'notebook', reading: null, baseForm: 'notebook', contextualMeaning: 'caderno' },
+        { surface: 'carefully', reading: null, baseForm: 'carefully', contextualMeaning: 'com cuidado' },
+        { surface: 'inside.', reading: null, baseForm: 'inside', contextualMeaning: 'lá dentro' },
       ],
     },
     {
-      fullSentence: 'Because she speaks slowly and politely, everyone understands her questions straight away.',
-      englishTranslation: 'Como ela fala devagar e educadamente, todos entendem suas perguntas imediatamente.',
+      fullSentence: '“Would you like a biscuit with your tea, Madam?” asks Oliver with a warm smile.',
+      englishTranslation: '“Você gostaria de um biscoito com o seu chá, Senhora?” pergunta Oliver com um sorriso acolhedor.',
       romanisation: null,
-      grammarNote: 'Em inglês, pronomes indefinidos como "everyone" (todos / todo mundo) usam o verbo no singular com "-s": "everyone understands" (todos entendem). No inglês britânico, "straight away" significa "imediatamente".',
+      grammarNote: 'No inglês britânico, usa-se a palavra "biscuit" para biscoito/bolacha doce acompanhando o chá, e "Would you like...?" para oferecer algo com educação.',
       tokens: [
-        { surface: 'Because', reading: null, baseForm: 'because', contextualMeaning: 'porque / como' },
+        { surface: '“Would', reading: null, baseForm: 'would', contextualMeaning: '(gostaria)' },
+        { surface: 'you', reading: null, baseForm: 'you', contextualMeaning: 'você' },
+        { surface: 'like', reading: null, baseForm: 'like', contextualMeaning: 'gostaria de' },
+        { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'um' },
+        { surface: 'biscuit', reading: null, baseForm: 'biscuit', contextualMeaning: 'biscoito (UK)' },
+        { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
+        { surface: 'your', reading: null, baseForm: 'your', contextualMeaning: 'o seu' },
+        { surface: 'tea,', reading: null, baseForm: 'tea', contextualMeaning: 'chá' },
+        { surface: 'Madam?”', reading: null, baseForm: 'madam', contextualMeaning: 'Senhora' },
+        { surface: 'asks', reading: null, baseForm: 'ask', contextualMeaning: 'pergunta' },
+        { surface: 'Oliver', reading: null, baseForm: 'Oliver', contextualMeaning: 'Oliver' },
+        { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
+        { surface: 'a', reading: null, baseForm: 'a', contextualMeaning: 'um' },
+        { surface: 'warm', reading: null, baseForm: 'warm', contextualMeaning: 'acolhedor / caloroso' },
+        { surface: 'smile.', reading: null, baseForm: 'smile', contextualMeaning: 'sorriso' },
+      ],
+    },
+    {
+      fullSentence: '“Yes, please! Everything here is lovely,” says Helena.',
+      englishTranslation: '“Sim, por favor! Tudo aqui é encantador,” diz Helena.',
+      romanisation: null,
+      grammarNote: 'No Reino Unido, "lovely" (encantador / ótimo / muito bom) é uma das palavras mais usadas no dia a dia para elogiar algo.',
+      tokens: [
+        { surface: '“Yes,', reading: null, baseForm: 'yes', contextualMeaning: 'sim' },
+        { surface: 'please!', reading: null, baseForm: 'please', contextualMeaning: 'por favor' },
+        { surface: 'Everything', reading: null, baseForm: 'everything', contextualMeaning: 'tudo' },
+        { surface: 'here', reading: null, baseForm: 'here', contextualMeaning: 'aqui' },
+        { surface: 'is', reading: null, baseForm: 'be', contextualMeaning: 'é' },
+        { surface: 'lovely,”', reading: null, baseForm: 'lovely', contextualMeaning: 'encantador / ótimo' },
+        { surface: 'says', reading: null, baseForm: 'say', contextualMeaning: 'diz' },
+        { surface: 'Helena.', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
+      ],
+    },
+    {
+      fullSentence: 'Outside the window, people walk past the red buses on the busy London street.',
+      englishTranslation: 'Do lado de fora da janela, as pessoas passam caminhando pelos ônibus vermelhos na movimentada rua de Londres.',
+      romanisation: null,
+      grammarNote: '"People" (as pessoas) é sempre plural em inglês, por isso o verbo não leva "-s": "people walk" (as pessoas caminham).',
+      tokens: [
+        { surface: 'Outside', reading: null, baseForm: 'outside', contextualMeaning: 'do lado de fora de' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+        { surface: 'window,', reading: null, baseForm: 'window', contextualMeaning: 'janela' },
+        { surface: 'people', reading: null, baseForm: 'people', contextualMeaning: 'as pessoas' },
+        { surface: 'walk', reading: null, baseForm: 'walk', contextualMeaning: 'caminham' },
+        { surface: 'past', reading: null, baseForm: 'past', contextualMeaning: 'passando por' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'os' },
+        { surface: 'red', reading: null, baseForm: 'red', contextualMeaning: 'vermelhos' },
+        { surface: 'buses', reading: null, baseForm: 'bus', contextualMeaning: 'ônibus' },
+        { surface: 'on', reading: null, baseForm: 'on', contextualMeaning: 'na' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'a' },
+        { surface: 'busy', reading: null, baseForm: 'busy', contextualMeaning: 'movimentada' },
+        { surface: 'London', reading: null, baseForm: 'London', contextualMeaning: 'de Londres' },
+        { surface: 'street.', reading: null, baseForm: 'street', contextualMeaning: 'rua' },
+      ],
+    },
+    {
+      fullSentence: 'While she drinks her warm tea, Helena reads the new English words in her notebook.',
+      englishTranslation: 'Enquanto ela bebe seu chá quentinho, Helena lê as novas palavras em inglês no seu caderno.',
+      romanisation: null,
+      grammarNote: '"While" significa "enquanto" e liga duas ações no presente: "While she drinks... Helena reads..." (Enquanto ela bebe... Helena lê...).',
+      tokens: [
+        { surface: 'While', reading: null, baseForm: 'while', contextualMeaning: 'enquanto' },
         { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
-        { surface: 'speaks', reading: null, baseForm: 'speak', contextualMeaning: 'fala' },
-        { surface: 'slowly', reading: null, baseForm: 'slowly', contextualMeaning: 'devagar / lentamente' },
-        { surface: 'and', reading: null, baseForm: 'and', contextualMeaning: 'e' },
-        { surface: 'politely,', reading: null, baseForm: 'politely', contextualMeaning: 'educadamente' },
-        { surface: 'everyone', reading: null, baseForm: 'everyone', contextualMeaning: 'todos / todo mundo' },
-        { surface: 'understands', reading: null, baseForm: 'understand', contextualMeaning: 'entendem (verbo no singular)' },
-        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'suas / dela' },
-        { surface: 'questions', reading: null, baseForm: 'question', contextualMeaning: 'perguntas' },
-        { surface: 'straight', reading: null, baseForm: 'straight', contextualMeaning: 'imediatamente (straight away)' },
-        { surface: 'away.', reading: null, baseForm: 'away', contextualMeaning: 'na hora (straight away)' },
+        { surface: 'drinks', reading: null, baseForm: 'drink', contextualMeaning: 'bebe' },
+        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
+        { surface: 'warm', reading: null, baseForm: 'warm', contextualMeaning: 'quentinho / morno' },
+        { surface: 'tea,', reading: null, baseForm: 'tea', contextualMeaning: 'chá' },
+        { surface: 'Helena', reading: null, baseForm: 'Helena', contextualMeaning: 'Helena' },
+        { surface: 'reads', reading: null, baseForm: 'read', contextualMeaning: 'lê' },
+        { surface: 'the', reading: null, baseForm: 'the', contextualMeaning: 'as' },
+        { surface: 'new', reading: null, baseForm: 'new', contextualMeaning: 'novas' },
+        { surface: 'English', reading: null, baseForm: 'English', contextualMeaning: 'em inglês' },
+        { surface: 'words', reading: null, baseForm: 'word', contextualMeaning: 'palavras' },
+        { surface: 'in', reading: null, baseForm: 'in', contextualMeaning: 'em / no' },
+        { surface: 'her', reading: null, baseForm: 'her', contextualMeaning: 'seu / dela' },
+        { surface: 'notebook.', reading: null, baseForm: 'notebook', contextualMeaning: 'caderno' },
+      ],
+    },
+    {
+      fullSentence: 'She practises each sentence quietly so she can speak with confidence.',
+      englishTranslation: 'Ela pratica cada frase baixinho para poder falar com confiança.',
+      romanisation: null,
+      grammarNote: 'No inglês britânico, o verbo "praticar" escreve-se com "s" ("practises"), e "so she can speak" significa "para que ela possa falar".',
+      tokens: [
+        { surface: 'She', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
+        { surface: 'practises', reading: null, baseForm: 'practise', contextualMeaning: 'pratica' },
+        { surface: 'each', reading: null, baseForm: 'each', contextualMeaning: 'cada' },
+        { surface: 'sentence', reading: null, baseForm: 'sentence', contextualMeaning: 'frase' },
+        { surface: 'quietly', reading: null, baseForm: 'quietly', contextualMeaning: 'baixinho / calmamente' },
+        { surface: 'so', reading: null, baseForm: 'so', contextualMeaning: 'para que' },
+        { surface: 'she', reading: null, baseForm: 'she', contextualMeaning: 'ela' },
+        { surface: 'can', reading: null, baseForm: 'can', contextualMeaning: 'possa / consiga' },
+        { surface: 'speak', reading: null, baseForm: 'speak', contextualMeaning: 'falar' },
+        { surface: 'with', reading: null, baseForm: 'with', contextualMeaning: 'com' },
+        { surface: 'confidence.', reading: null, baseForm: 'confidence', contextualMeaning: 'confiança' },
       ],
     },
   ],
 };
 
 /**
- * Creates a simplified (shorter, easier) or challenged (longer, more complex) version
- * of `baseChapter` offline when no Gemini API key is configured.
+ * Creates the Standard ('maintain') or Longer Text ('challenge') version
+ * of `baseChapter` offline or as a guaranteed fallback.
  */
 function createOfflineDifficultyVariant(baseChapter, level, profile) {
   const cleanBase = structuredClone(baseChapter);
@@ -15809,31 +16248,12 @@ function createOfflineDifficultyVariant(baseChapter, level, profile) {
       activeDifficulty: 'maintain',
       difficultyLabel:
         profile.id === 'en'
-          ? 'A1 Iniciante • Ideal (Padrão)'
-          : `${profile.cefrLevel} • Just Right (Standard)`,
+          ? 'A1 Iniciante • Texto Padrão'
+          : `${profile.cefrLevel} • Standard Text`,
     };
   }
 
-  if (level === 'simplify') {
-    // Simplify: keep 6 essential sentences (first 5 + closing sentence) so even simplified chapters are a substantial, engaging read
-    const all = cleanBase.sentences || [];
-    const coreSentences =
-      all.length > 6
-        ? [...all.slice(0, 5), all[all.length - 1]]
-        : all.slice(0, Math.max(4, all.length));
-    return {
-      ...cleanBase,
-      id: `${baseId}__simplify`,
-      activeDifficulty: 'simplify',
-      difficultyLabel:
-        profile.id === 'en'
-          ? 'A1 Iniciante • Mais Simples (Mais Curto e Fácil)'
-          : `${profile.cefrLevel} • Simplified (Shorter & Easier)`,
-      sentences: coreSentences,
-    };
-  }
-
-  // level === 'challenge': Keep all original sentences AND weave in longer, more complex extension sentences
+  // level === 'challenge': Keep all original sentences AND append 5-6 same-level extension sentences
   const extras = CHALLENGE_EXTENSION_BANK[profile.id] || CHALLENGE_EXTENSION_BANK.fr;
   return {
     ...cleanBase,
@@ -15841,16 +16261,15 @@ function createOfflineDifficultyVariant(baseChapter, level, profile) {
     activeDifficulty: 'challenge',
     difficultyLabel:
       profile.id === 'en'
-        ? 'A1 Iniciante • Mais Complexo (Mais Longo e Completo)'
-        : `${profile.cefrLevel} • More Complex (Longer & Richer)`,
+        ? 'A1 Iniciante • Texto Mais Longo'
+        : `${profile.cefrLevel} • Longer Text`,
     sentences: [...cleanBase.sentences, ...structuredClone(extras)],
   };
 }
 
 /**
- * Generates or adapts a specific difficulty version ('simplify' | 'maintain' | 'challenge')
- * of the CURRENT chapter (`baseChapter`) so the user can switch back and forth between
- * difficulty levels within the exact same chapter!
+ * Generates or adapts the Longer Text ('challenge') or Standard ('maintain') version
+ * of the CURRENT chapter (`baseChapter`) while keeping the same CEFR difficulty level.
  */
 async function generateChapterDifficultyVariant({
   profile,
@@ -15871,25 +16290,22 @@ async function generateChapterDifficultyVariant({
     ''
   );
 
+  const baseCount = (baseChapter.sentences || []).length;
+  const targetMinSentences = Math.max(14, baseCount + 6);
+
   const originalSentencesText = (baseChapter.sentences || [])
     .map((s, i) => `${i + 1}. ${s.fullSentence} (${s.englishTranslation || ''})`)
     .join('\n');
 
-  const rewriteDirective =
-    level === 'simplify'
-      ? `TASK — SIMPLIFY THIS CHAPTER ("Too Hard" -> Simpler Version):
-Rewrite the exact fiction story of this chapter into a SIMPLER, EASIER-TO-READ version (6 clear, engaging sentences).
-- Keep the exact same named characters, setting, plot events, and spoken dialogue as the original chapter below.
-- Include at least 2 short lines of direct spoken dialogue between the characters.
-- Use shorter sentences, simpler high-frequency vocabulary, and straightforward grammar strictly within ${profile.cefrLevel}.`
-      : `TASK — EXPAND & DEEPEN THIS CHAPTER ("Too Easy" -> Longer & More Complex Version):
-Rewrite and expand the exact fiction story of this chapter into a LONGER, RICHER, SLIGHTLY MORE COMPLEX version (10 to 12 longer sentences).
-- Keep the exact same named characters, setting, and plot events as the original chapter below, but add richer atmospheric detail, deeper character dialogue, natural connectors (e.g. although, while, therefore), and expressive phrasing.`;
+  const rewriteDirective = `TASK — EXPAND THIS CHAPTER INTO A LONGER TEXT (SAME DIFFICULTY LEVEL):
+Rewrite and expand the exact fiction story of this chapter into a MUCH LONGER version (${targetMinSentences} to ${targetMinSentences + 2} sentences total — at least 6 sentences longer than the original ${baseCount} sentences).
+- IMPORTANT: Keep the EXACT SAME ${profile.cefrLevel} difficulty level. Do NOT make the grammar or vocabulary harder or overly academic.
+- Instead, make the story longer so the learner goes deeper into the vocabulary, everyday expressions, dialogue, and situations of this chapter.
+- Keep all the original events and characters, and weave in additional natural dialogue exchanges, everyday actions, and repetitions of the chapter's key words in fresh sentences.`;
 
   const scriptSpecificRules =
     profile.id === 'ja'
       ? `JAPANESE RULES: Split into natural morphological word/particle tokens. Provide Hiragana "reading" ONLY for tokens containing Kanji (null for pure Hiragana/Katakana). Provide Hepburn Romaji in "romanisation".`
-
       : `LATIN SCRIPT RULES: Split into individual clickable word tokens. "reading" and "romanisation" MUST be null.`;
 
   const translationInstructions =
@@ -15897,9 +16313,9 @@ Rewrite and expand the exact fiction story of this chapter into a LONGER, RICHER
       ? `Every sentence MUST be in natural BRITISH ENGLISH (UK spelling and vocabulary), with "englishTranslation" containing the natural BRAZILIAN PORTUGUESE translation, every token's "contextualMeaning" in Brazilian Portuguese, and "grammarNote" as a 1-sentence plain-Portuguese explanation of the English grammar pattern. Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`
       : `Every sentence MUST include "englishTranslation" and a 1-sentence plain-English "grammarNote". Keep the chapterTitle the same as "${baseChapter.chapterTitle}".`;
 
-  const prompt = `You are an expert language teacher adapting Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).
+  const prompt = `You are an expert language teacher expanding Chapter ${baseChapter.chapterNumber} ("${baseChapter.chapterTitle}") in ${profile.nativeName || profile.name} (${profile.cefrLevel}).
 
-ORIGINAL "JUST RIGHT" CHAPTER SENTENCES:
+ORIGINAL STANDARD CHAPTER SENTENCES (${baseCount} sentences):
 ${originalSentencesText}
 
 ${rewriteDirective}
@@ -15937,33 +16353,40 @@ ${translationInstructions}`;
       return createOfflineDifficultyVariant(baseChapter, level, profile);
     }
 
+    let mappedSentences = parsed.sentences.map((s) => ({
+      fullSentence: s.fullSentence || '',
+      englishTranslation: s.englishTranslation || '',
+      romanisation: profile.isCJK ? s.romanisation || null : null,
+      grammarNote:
+        s.grammarNote ||
+        'Notice how the words group together to express a complete thought.',
+      tokens: (s.tokens || []).map((t) => ({
+        surface: t.surface || '',
+        reading: profile.hasFurigana ? t.reading || null : null,
+        baseForm: t.baseForm || t.surface || '',
+        contextualMeaning: t.contextualMeaning || '',
+      })),
+    }));
+
+    // Guarantee that the Longer Text version is ALWAYS at least 5 sentences longer than the Standard text
+    if (mappedSentences.length < baseCount + 5) {
+      const extras = CHALLENGE_EXTENSION_BANK[profile.id] || CHALLENGE_EXTENSION_BANK.fr;
+      mappedSentences = [...(baseChapter.sentences || []), ...structuredClone(extras)];
+    }
+
     return {
       ...baseChapter,
       id: `${baseId}__${level}`,
       activeDifficulty: level,
       difficultyLabel:
-        level === 'simplify'
-          ? `${profile.cefrLevel} • Simplified (Shorter & Easier)`
-          : `${profile.cefrLevel} • More Complex (Longer & Richer)`,
+        profile.id === 'en'
+          ? 'A1 Iniciante • Texto Mais Longo'
+          : `${profile.cefrLevel} • Longer Text`,
       chapterTitle: baseChapter.chapterTitle,
       recycledWordsUsed: Array.isArray(parsed.recycledWordsUsed)
         ? parsed.recycledWordsUsed
         : baseChapter.recycledWordsUsed || [],
-      sentences: parsed.sentences.map((s) => ({
-        fullSentence: s.fullSentence || '',
-        englishTranslation: s.englishTranslation || '',
-        romanisation: profile.isCJK ? s.romanisation || null : null,
-        grammarNote:
-          s.grammarNote ||
-          'Notice how the words group together to express a complete thought.',
-        tokens: (s.tokens || []).map((t) => ({
-          surface: t.surface || '',
-          reading:
-            profile.hasFurigana ? t.reading || null : null,
-          baseForm: t.baseForm || t.surface || '',
-          contextualMeaning: t.contextualMeaning || '',
-        })),
-      })),
+      sentences: mappedSentences,
     };
   } catch {
     return createOfflineDifficultyVariant(baseChapter, level, profile);
@@ -25180,18 +25603,9 @@ function InteractiveReader({
 
   const difficultyOptions = [
     {
-      id: 'simplify',
-      shortLabel: isPtBr ? 'Muito Difícil (Mais Simples)' : 'Too Hard (Simpler)',
-      title: isPtBr ? 'Muito Difícil — Deixar Mais Simples' : 'Too Hard — Make Simpler',
-      desc: isPtBr
-        ? 'Versão mais curta e fácil deste capítulo com frases mais simples'
-        : 'Shorter, easier version of this chapter with simpler sentences',
-      icon: SlidersHorizontal,
-    },
-    {
       id: 'maintain',
-      shortLabel: isPtBr ? 'Ideal (Padrão)' : 'Just Right (Standard)',
-      title: isPtBr ? 'Ideal — Padrão' : 'Just Right — Standard',
+      shortLabel: isPtBr ? 'Padrão' : 'Standard',
+      title: isPtBr ? 'Texto Padrão' : 'Standard Text',
       desc: isPtBr
         ? 'Versão original padrão deste capítulo'
         : 'Original baseline version of this chapter',
@@ -25199,12 +25613,12 @@ function InteractiveReader({
     },
     {
       id: 'challenge',
-      shortLabel: isPtBr ? 'Muito Fácil (Mais Complexo)' : 'Too Easy (More Complex)',
-      title: isPtBr ? 'Muito Fácil — Mais Complexo' : 'Too Easy — Challenge Me',
+      shortLabel: isPtBr ? 'Texto Mais Longo' : 'Longer Text',
+      title: isPtBr ? 'Texto Mais Longo (Aprofundar no Capítulo)' : 'Longer Text (Go Deeper)',
       desc: isPtBr
-        ? 'Versão mais longa e rica deste capítulo'
-        : 'Longer, richer version of this chapter with deeper grammar',
-      icon: Flame,
+        ? 'Versão expandida e mais longa deste capítulo com o mesmo nível de dificuldade'
+        : 'Expanded, longer version of this chapter at the same difficulty level',
+      icon: BookOpen,
     },
   ];
 
@@ -25340,12 +25754,12 @@ function InteractiveReader({
             </div>
           </div>
 
-          {/* Single Compact Sub-Toolbar: Difficulty Level + New Story Variant + Reading Hint */}
+          {/* Single Compact Sub-Toolbar: Text Length + New Story Variant + Reading Hint */}
           {!readerOnlyMode && (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2.5">
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
-                  {isPtBr ? 'Nível:' : 'Level:'}
+                  {isPtBr ? 'Tamanho do Texto:' : 'Text Length:'}
                 </span>
                 {difficultyOptions.map((opt) => {
                   const isSelected = activeDifficulty === opt.id;
@@ -25355,6 +25769,7 @@ function InteractiveReader({
                       type="button"
                       disabled={isGeneratingChapter}
                       onClick={() => onSelectDifficultyLevel?.(opt.id)}
+                      title={opt.desc}
                       className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition cursor-pointer disabled:opacity-50 ${
                         isSelected
                           ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-sm'
@@ -25362,19 +25777,7 @@ function InteractiveReader({
                       }`}
                     >
                       {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
-                      <span>
-                        {opt.id === 'simplify'
-                          ? isPtBr
-                            ? 'Mais Simples'
-                            : 'Simpler'
-                          : opt.id === 'maintain'
-                          ? isPtBr
-                            ? 'Padrão'
-                            : 'Standard'
-                          : isPtBr
-                          ? 'Mais Complexo'
-                          : 'More Complex'}
-                      </span>
+                      <span>{opt.shortLabel}</span>
                     </button>
                   );
                 })}
@@ -27117,9 +27520,14 @@ function App() {
       variants: undefined,
       activeDifficulty: 'maintain',
     };
+    const baseSentenceCount = (baseMaintainChapter.sentences || []).length;
 
-    // If this difficulty version is already cached on the chapter, switch to it immediately (0ms)
-    if (existingVariants[level]) {
+    // If this version is cached AND (for 'challenge') genuinely longer than the standard text, switch immediately
+    if (
+      existingVariants[level] &&
+      (level !== 'challenge' ||
+        (existingVariants[level].sentences || []).length >= baseSentenceCount + 5)
+    ) {
       const cachedVariant = existingVariants[level];
       setProfiles((prev) => {
         const latestProfile = prev[activeLang];

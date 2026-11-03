@@ -229,18 +229,9 @@ export default function InteractiveReader({
 
   const difficultyOptions = [
     {
-      id: 'simplify',
-      shortLabel: isPtBr ? 'Muito Difícil (Mais Simples)' : 'Too Hard (Simpler)',
-      title: isPtBr ? 'Muito Difícil — Deixar Mais Simples' : 'Too Hard — Make Simpler',
-      desc: isPtBr
-        ? 'Versão mais curta e fácil deste capítulo com frases mais simples'
-        : 'Shorter, easier version of this chapter with simpler sentences',
-      icon: SlidersHorizontal,
-    },
-    {
       id: 'maintain',
-      shortLabel: isPtBr ? 'Ideal (Padrão)' : 'Just Right (Standard)',
-      title: isPtBr ? 'Ideal — Padrão' : 'Just Right — Standard',
+      shortLabel: isPtBr ? 'Padrão' : 'Standard',
+      title: isPtBr ? 'Texto Padrão' : 'Standard Text',
       desc: isPtBr
         ? 'Versão original padrão deste capítulo'
         : 'Original baseline version of this chapter',
@@ -248,12 +239,12 @@ export default function InteractiveReader({
     },
     {
       id: 'challenge',
-      shortLabel: isPtBr ? 'Muito Fácil (Mais Complexo)' : 'Too Easy (More Complex)',
-      title: isPtBr ? 'Muito Fácil — Mais Complexo' : 'Too Easy — Challenge Me',
+      shortLabel: isPtBr ? 'Texto Mais Longo' : 'Longer Text',
+      title: isPtBr ? 'Texto Mais Longo (Aprofundar no Capítulo)' : 'Longer Text (Go Deeper)',
       desc: isPtBr
-        ? 'Versão mais longa e rica deste capítulo'
-        : 'Longer, richer version of this chapter with deeper grammar',
-      icon: Flame,
+        ? 'Versão expandida e mais longa deste capítulo com o mesmo nível de dificuldade'
+        : 'Expanded, longer version of this chapter at the same difficulty level',
+      icon: BookOpen,
     },
   ];
 
@@ -389,12 +380,12 @@ export default function InteractiveReader({
             </div>
           </div>
 
-          {/* Single Compact Sub-Toolbar: Difficulty Level + New Story Variant + Reading Hint */}
+          {/* Single Compact Sub-Toolbar: Text Length + New Story Variant + Reading Hint */}
           {!readerOnlyMode && (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E6ECE9] bg-[#F8FAF9] px-3.5 py-2.5">
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C6661] mr-1">
-                  {isPtBr ? 'Nível:' : 'Level:'}
+                  {isPtBr ? 'Tamanho do Texto:' : 'Text Length:'}
                 </span>
                 {difficultyOptions.map((opt) => {
                   const isSelected = activeDifficulty === opt.id;
@@ -404,6 +395,7 @@ export default function InteractiveReader({
                       type="button"
                       disabled={isGeneratingChapter}
                       onClick={() => onSelectDifficultyLevel?.(opt.id)}
+                      title={opt.desc}
                       className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition cursor-pointer disabled:opacity-50 ${
                         isSelected
                           ? 'border-[#2D5A46] bg-[#2D5A46] text-white shadow-sm'
@@ -411,19 +403,7 @@ export default function InteractiveReader({
                       }`}
                     >
                       {isSelected && <CheckCircle2 className="h-3 w-3 text-[#BCE0CE]" />}
-                      <span>
-                        {opt.id === 'simplify'
-                          ? isPtBr
-                            ? 'Mais Simples'
-                            : 'Simpler'
-                          : opt.id === 'maintain'
-                          ? isPtBr
-                            ? 'Padrão'
-                            : 'Standard'
-                          : isPtBr
-                          ? 'Mais Complexo'
-                          : 'More Complex'}
-                      </span>
+                      <span>{opt.shortLabel}</span>
                     </button>
                   );
                 })}

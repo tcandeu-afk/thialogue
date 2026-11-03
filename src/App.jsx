@@ -323,9 +323,14 @@ export default function App() {
       variants: undefined,
       activeDifficulty: 'maintain',
     };
+    const baseSentenceCount = (baseMaintainChapter.sentences || []).length;
 
-    // If this difficulty version is already cached on the chapter, switch to it immediately (0ms)
-    if (existingVariants[level]) {
+    // If this version is cached AND (for 'challenge') genuinely longer than the standard text, switch immediately
+    if (
+      existingVariants[level] &&
+      (level !== 'challenge' ||
+        (existingVariants[level].sentences || []).length >= baseSentenceCount + 5)
+    ) {
       const cachedVariant = existingVariants[level];
       setProfiles((prev) => {
         const latestProfile = prev[activeLang];

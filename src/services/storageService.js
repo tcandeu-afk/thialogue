@@ -45,17 +45,41 @@ export function loadProfiles() {
         isCurrentVersion && savedChapters.length > 0
           ? savedChapters.map((ch, idx) => {
               const starterCh = starterChapters[idx];
+              const isChallengeActive = ch.activeDifficulty === 'challenge';
+              const cachedChallenge = ch.variants?.challenge;
+              const starterSentenceCount = starterCh?.sentences?.length || 0;
+              const hasValidLongChallenge =
+                cachedChallenge &&
+                Array.isArray(cachedChallenge.sentences) &&
+                cachedChallenge.sentences.length >= starterSentenceCount + 5;
+
+              if (starterCh) {
+                return {
+                  ...ch,
+                  chapterNumber: idx + 1,
+                  chapterTitle: starterCh.chapterTitle,
+                  updatedArcSummary: starterCh.updatedArcSummary,
+                  activeDifficulty:
+                    isChallengeActive && hasValidLongChallenge ? 'challenge' : 'maintain',
+                  difficultyLabel:
+                    isChallengeActive && hasValidLongChallenge
+                      ? cachedChallenge.difficultyLabel
+                      : starterCh.difficultyLabel,
+                  sentences:
+                    isChallengeActive && hasValidLongChallenge
+                      ? cachedChallenge.sentences
+                      : starterCh.sentences,
+                  variants: {
+                    maintain: structuredClone(starterCh),
+                    ...(hasValidLongChallenge ? { challenge: cachedChallenge } : {}),
+                  },
+                };
+              }
+
               return {
                 ...ch,
                 chapterNumber: idx + 1,
-                ...(starterCh
-                  ? {
-                      chapterTitle: starterCh.chapterTitle,
-                      difficultyLabel: starterCh.difficultyLabel,
-                      updatedArcSummary: starterCh.updatedArcSummary,
-                      sentences: starterCh.sentences,
-                    }
-                  : {}),
+                activeDifficulty: ch.activeDifficulty === 'simplify' ? 'maintain' : ch.activeDifficulty,
               };
             })
           : starterChapters;
