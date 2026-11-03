@@ -25868,8 +25868,12 @@ function VocabSidebar({
       });
     });
 
-    return list;
-  }, [chapter]);
+    return list.sort((a, b) =>
+      (a.surface || '').localeCompare(b.surface || '', profile?.bcp47 || undefined, {
+        sensitivity: 'base',
+      })
+    );
+  }, [chapter, profile?.bcp47]);
 
   const handleDictionaryLookup = async (e) => {
     e?.preventDefault();
@@ -26145,15 +26149,15 @@ function VocabSidebar({
         </div>
       </div>
 
-      {/* 3. Chapter Word Vocab Table (Prominent Bottom-Right Desktop Reference Table) */}
+      {/* 3. Chapter Word Vocab Table (Full Alphabetical Reference Table without inner scrollbar) */}
       <div className="rounded-2xl border border-[#D5E1E8] bg-[#FFFFFF] p-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-[#E8ECEA] pb-2.5">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#234E68]">
             <BookOpen className="h-4 w-4 text-[#234E68]" />
             <span>
               {isPtBr
-                ? `Palavras do Capítulo ${chapter?.chapterNumber || 1}`
-                : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table`}
+                ? `Palavras do Capítulo ${chapter?.chapterNumber || 1} (A–Z)`
+                : `Chapter ${chapter?.chapterNumber || 1} Word Vocab Table (A–Z)`}
             </span>
           </div>
           <span className="rounded-full border border-[#C9DCE8] bg-[#F1F6FA] px-2 py-0.5 text-[11px] font-semibold text-[#1E3F54]">
@@ -26163,7 +26167,7 @@ function VocabSidebar({
           </span>
         </div>
 
-        <div className="mt-2 max-h-[340px] overflow-y-auto pr-1">
+        <div className="mt-2">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#E6ECE9] text-[10px] font-semibold uppercase tracking-wider text-[#5C6661]">
@@ -26191,7 +26195,7 @@ function VocabSidebar({
                         speakSingleWord(item.surface, profile.bcp47);
                         onAddCustomVocabWord?.(item);
                       }}
-                      className="text-left font-serif text-sm font-bold text-[#181D1B] hover:text-[#234E68]"
+                      className="text-left font-serif text-sm font-bold text-[#181D1B] hover:text-[#234E68] cursor-pointer"
                       title={
                         isPtBr
                           ? 'Clique para ouvir a pronúncia e salvar no Banco de Vocabulário'
@@ -26219,7 +26223,7 @@ function VocabSidebar({
                     <button
                       type="button"
                       onClick={() => speakSingleWord(item.surface, profile.bcp47)}
-                      className="inline-flex items-center justify-center rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6]"
+                      className="inline-flex items-center justify-center rounded-lg border border-[#DCE2DF] bg-[#F7F9F8] p-1.5 text-[#234E68] hover:bg-[#E4EFF6] cursor-pointer"
                       title={
                         isPtBr
                           ? `Ouvir "${item.surface}"`
@@ -26233,33 +26237,6 @@ function VocabSidebar({
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* 4. Running Story Arc Summary Card */}
-      <div className="rounded-2xl border border-[#E2E7E4] bg-[#FFFFFF] p-4 shadow-2xs">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#464E70]">
-          <ScrollText className="h-4 w-4" />
-          <span>
-            {isPtBr
-              ? 'Resumo da História até Agora'
-              : 'Running Story Arc Summary'}
-          </span>
-        </div>
-        <p className="mt-1.5 text-xs leading-relaxed text-[#2C3531]">
-          {profile.storyArcSummary}
-        </p>
-        <div className="mt-2.5 flex items-center justify-between border-t border-[#E8ECEA] pt-2 text-[11px] text-[#737F79]">
-          <span>
-            {isPtBr
-              ? 'Usado pela IA para criar o próximo capítulo'
-              : 'Fed into Gemini 2.5 Flash on next chapter'}
-          </span>
-          <span className="font-semibold text-[#464E70]">
-            {isPtBr
-              ? `${profile.chapters?.length || 1} Capítulos`
-              : `${profile.chapters?.length || 1} Chapters`}
-          </span>
         </div>
       </div>
     </aside>
