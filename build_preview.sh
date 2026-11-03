@@ -10,7 +10,11 @@ cat << 'HEADER' > "$OUT"
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thialogue — Comprehensible Input & StoryLearning Reader</title>
+    <meta name="application-name" content="Thialogue" />
+    <meta name="apple-mobile-web-app-title" content="Thialogue" />
+    <title>Thialogue</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23234E68'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='bold' text-anchor='middle' fill='%23FFFFFF'%3ET%3C/text%3E%3Ccircle cx='49' cy='16' r='5' fill='%23EA580C'/%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23234E68'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='bold' text-anchor='middle' fill='%23FFFFFF'%3ET%3C/text%3E%3Ccircle cx='49' cy='16' r='5' fill='%23EA580C'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet">
